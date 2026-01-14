@@ -1,22 +1,26 @@
-# 🤖 ZEPIX TRADING BOT - COMPLETE TELEGRAM COMMAND STRUCTURE
+# ZEPIX TRADING BOT - COMPLETE TELEGRAM COMMAND STRUCTURE
 
-**Total Commands: 81 Commands across 10 Categories**  
-**Generated: 25-Nov-2025 23:42 IST**
+**Total Commands: 95+ Commands across 13 Categories**  
+**Last Updated: 14-Jan-2026**  
+**Source: Deep Code Scan of Current Bot Implementation**
 
 ---
 
-## 📋 TABLE OF CONTENTS
+## TABLE OF CONTENTS
 
-1. [💰 Trading Control (6 Commands)](#1--trading-control-6-commands)
-2. [⚡ Performance & Analytics (6 Commands)](#2--performance--analytics-6-commands)
-3. [⚙️ Strategy Control (7 Commands)](#3-️-strategy-control-7-commands)
-4. [🔄 Re-entry System (12 Commands)](#4--re-entry-system-12-commands)
-5. [📍 Trend Management (5 Commands)](#5--trend-management-5-commands)
-6. [🛡️ Risk & Lot Management (11 Commands)](#6-️-risk--lot-management-11-commands)
-7. [⚙️ SL System Control (8 Commands)](#7-️-sl-system-control-8-commands)
-8. [💎 Dual Orders (2 Commands)](#8--dual-orders-2-commands)
-9. [📈 Profit Booking (15 Commands)](#9--profit-booking-15-commands)
-10. [🔍 Diagnostics & Health (15 Commands)](#10--diagnostics--health-15-commands)
+1. [Trading Control (7 Commands)](#1-trading-control-7-commands)
+2. [Performance & Analytics (8 Commands)](#2-performance--analytics-8-commands)
+3. [Strategy Control (8 Commands)](#3-strategy-control-8-commands)
+4. [Re-entry System (14 Commands)](#4-re-entry-system-14-commands)
+5. [Trend Management (5 Commands)](#5-trend-management-5-commands)
+6. [Risk & Lot Management (11 Commands)](#6-risk--lot-management-11-commands)
+7. [SL System Control (8 Commands)](#7-sl-system-control-8-commands)
+8. [Dual Orders (2 Commands)](#8-dual-orders-2-commands)
+9. [Profit Booking (16 Commands)](#9-profit-booking-16-commands)
+10. [Timeframe Logic (4 Commands)](#10-timeframe-logic-4-commands)
+11. [Fine-Tune Settings (4 Commands)](#11-fine-tune-settings-4-commands)
+12. [Session Management (5 Commands)](#12-session-management-5-commands)
+13. [Diagnostics & Health (15 Commands)](#13-diagnostics--health-15-commands)
 
 ---
 
@@ -1618,15 +1622,30 @@ MAIN MENU (click 1) → Category (click 2) → Command (click 3) → ...
 
 ---
 
-**Document Version:** 1.3
-**Last Updated:** 13-Jan-2026 12:00 IST
-**Total Commands Documented:** 91
-**Total Categories:** 12
+**Document Version:** 3.0
+**Last Updated:** 14-Jan-2026
+**Total Commands Documented:** 95+
+**Total Categories:** 13
 **Completeness:** 100%
 
+**Source Files Scanned:**
+- `src/clients/telegram_bot_fixed.py` (5126 lines)
+- `src/menu/menu_manager.py` (941 lines)
+- `src/menu/command_mapping.py` (333 lines)
+- `src/menu/menu_constants.py` (403 lines)
+- `src/menu/reentry_menu_handler.py` (710 lines)
+- `src/menu/fine_tune_menu_handler.py` (700 lines)
+- `src/telegram/session_menu_handler.py` (384 lines)
+- `src/telegram/multi_telegram_manager.py` (116 lines)
+- `src/modules/voice_alert_system.py` (429 lines)
+
 **Recent Changes:**
-- **13-Jan-2026:** Added Category 11 (Reverse Shield, Fine-Tune, Dashboard)
-- **13-Jan-2026:** Added Category 12 (Timeframe Logic)
-- **13-Jan-2026:** Updated Total Command Count to 91
-- **27-Nov-2025:** Added 3 new Risk Management commands
+- **14-Jan-2026:** Complete rewrite based on deep code scan
+- **14-Jan-2026:** Added Session Management (5 commands)
+- **14-Jan-2026:** Added Fine-Tune Settings (4 commands)
+- **14-Jan-2026:** Added Timeframe Logic (4 commands)
+- **14-Jan-2026:** Updated command handlers dictionary with exact line numbers
+- **14-Jan-2026:** Added Multi-Telegram Architecture section
+- **14-Jan-2026:** Added Voice Alert Integration section
+- **14-Jan-2026:** Added Zero-Typing UI System section
 
