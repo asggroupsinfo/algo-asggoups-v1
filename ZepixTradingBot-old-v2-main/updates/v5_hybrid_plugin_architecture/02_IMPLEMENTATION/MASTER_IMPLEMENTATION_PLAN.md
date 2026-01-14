@@ -18,7 +18,7 @@
 | 05 | Telegram UX & Rate Limiting | PASSED | [x] | [x] | [x] | [x] |
 | 06 | Sticky Header & Notification Router | PASSED | [x] | [x] | [x] | [x] |
 | 07 | Shared Service API Layer | PASSED | [x] | [x] | [x] | [x] |
-| 08 | V3 Combined Logic Plugin | PENDING | [ ] | [ ] | [ ] | [ ] |
+| 08 | V3 Combined Logic Plugin | PASSED | [x] | [x] | [x] | [x] |
 | 09 | Config Hot-Reload & DB Isolation | PENDING | [ ] | [ ] | [ ] | [ ] |
 | 10 | V6 Price Action Plugin Foundation | PENDING | [ ] | [ ] | [ ] | [ ] |
 | 11 | Plugin Health & Versioning | PENDING | [ ] | [ ] | [ ] | [ ] |
@@ -396,11 +396,51 @@
 - Shadow mode tests
 
 **Validation Checklist:**
-- [ ] All 12 V3 signals handled correctly
-- [ ] Dual orders (A+B) placed correctly
-- [ ] 4-pillar trend validation works
-- [ ] LOGIC1/2/3 routing correct
-- [ ] Legacy behavior 100% preserved
+- [x] All 12 V3 signals handled correctly
+- [x] Dual orders (A+B) placed correctly
+- [x] 4-pillar trend validation works
+- [x] LOGIC1/2/3 routing correct
+- [x] Legacy behavior 100% preserved
+
+**Implementation Notes (Batch 08 - COMPLETED 2026-01-14):**
+- Created 5 new files in `src/logic_plugins/combined_v3/`:
+  - `__init__.py` - Module documentation and exports
+  - `config.json` - Plugin configuration with 12 signal types, routing matrix, dual order settings
+  - `plugin.py` - CombinedV3Plugin class (600+ lines) extending BaseLogicPlugin
+    - Implements all required hooks: on_alert, on_tick, on_trade_update, on_config_change
+    - 2-tier routing matrix: Signal Override (Priority 1) → Timeframe Routing (Priority 2)
+    - Shadow mode support for testing without real orders
+    - Plugin status and statistics tracking
+  - `signal_handlers.py` - V3SignalHandlers class (400+ lines)
+    - Handles all 12 signal types: institutional_launchpad, liquidity_trap, momentum_breakout, mitigation_test, golden_pocket_flip, volatility_squeeze, bullish_exit, bearish_exit, screener_full_bullish, screener_full_bearish, trend_pulse, sideways_breakout
+    - Signal-specific routing logic (screener → LOGIC3, golden_pocket → LOGIC2)
+    - Info-only signals (volatility_squeeze) don't place orders
+    - DB update signals (trend_pulse) update market_trends table
+  - `order_manager.py` - V3OrderManager class (620 lines)
+    - Dual order system: Order A (V3 Smart SL) + Order B (Fixed $10 SL)
+    - Consensus-to-multiplier mapping (0-9 → 0.2-1.0)
+    - 4-step position sizing: base lot → V3 multiplier → logic multiplier → 50/50 split
+    - Aggressive reversal detection for exit signals
+  - `trend_validator.py` - V3TrendValidator class (400+ lines)
+    - MTF 4-pillar extraction: indices [2:6] from 6-value trend string (ignores 1m/5m noise)
+    - Trend alignment validation: requires 3/4 pillars aligned with direction
+    - Bypass logic for entry_v3 signals (always bypass trend check)
+    - Market trends database updates
+- Key Features Implemented:
+  - 12 Signal Types: All V3 signals from Pine Script fully supported
+  - 2-Tier Routing: Signal override takes priority, then timeframe routing
+  - Dual Order System: Order A uses V3 Smart SL, Order B uses Fixed $10 SL (IGNORES V3 SL)
+  - 4-Pillar MTF: Extracts 15m, 1h, 4h, Daily trends (ignores 1m/5m noise)
+  - Position Sizing: 4-step flow with consensus multiplier and logic multiplier
+  - Shadow Mode: Plugin can run without placing real orders for testing
+  - Zero Regression: V3 behavior 100% preserved from existing trading_engine.py
+- Backward Compatibility:
+  - Routing logic matches existing _route_v3_to_logic() in trading_engine.py
+  - Multipliers match existing LOGIC_MULTIPLIERS dictionary
+  - Dual order parameters match existing _place_hybrid_dual_orders_v3()
+  - MTF extraction matches existing ZepixV3Alert.get_mtf_pillars()
+- Created comprehensive unit tests: `tests/test_batch_08_v3_plugin.py` (42 tests, all passing)
+- Test categories: CombinedV3Plugin (3), V3RoutingMatrix (12), V3SignalHandlers (3), V3DualOrderSystem (6), V3MTF4Pillar (10), V3PositionSizing (1), V3ShadowMode (2), V3BackwardCompatibility (3), V3Integration (2)
 
 ---
 
