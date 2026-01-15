@@ -5,6 +5,8 @@ The user has invoked the **"WRATH OF GOD TEST"**. This is a **Zero Tolerance Aud
 
 **Core Premise:** The V5 transformation split the Telegram bot into 3 (Controller, Notification, Analytics), but the user suspects **massive functionality loss** (`Command Loss`, `UI Regression`, `Config Gaps`, `Missing Controls`).
 
+**User's Final Command:** *"Devin autonomous mode mein complete bot scan karke sab kuch dhundho jo mujhse choot gaya ya address nahi hua. Purane bot mein jo tha aur V5 upgrade ke saath upgrade nahi hua ya connect nahi hua - SAB KUCH DHUNDHO."*
+
 ## 🎯 AUDIT SENSORS (WHAT TO CHECK)
 
 ### 1. Telegram Connection & Configuration Integrity
@@ -48,9 +50,16 @@ The user has invoked the **"WRATH OF GOD TEST"**. This is a **Zero Tolerance Aud
   - `docs/developer_notes/LOGGING_SYSTEM_IMPLEMENTATION_REPORT.md`
 - **Check:** Are `FineTuneMenu` and `ProfitProtectionManager` wired to the `ControllerBot` menus?
 
+### 8. AUTONOMOUS UNKNOWN DISCOVERY (The "Deep Hunt")
+**Check for things the user didn't even mention.**
+- Look for `TODO` comments.
+- Look for commented-out code blocks (dead logic).
+- Look for `pass` statements in exception handlers (silent failures).
+- Compare `src/constants.py` vs `config.json` usage.
+
 ---
 
-## � THE "FUTURE CONTROL" SUGGESTIONS (USER REQUEST)
+## 💡 THE "FUTURE CONTROL" SUGGESTIONS (USER REQUEST)
 The user demands not just an audit, but **Innovation**.
 Based on the V5 Architecture (Plugins/Service API), what **NEW CONTROLS** can we build?
 
@@ -88,7 +97,7 @@ Create a section "V5 Control Possibilities".
 
 ## 📤 DELIVERABLE
 Create `updates/v5_hybrid_plugin_architecture/10_WRATH_OF_GOD_AUDIT/01_AUDIT_REPORT.md`.
-- **Part A:** The Brutal Audit (What is broken/missing).
+- **Part A:** The Brutal Audit (What is broken/missing + Hidden discoveries).
 - **Part B:** The Innovation Plan (Better controls, Live Updates).
 
 **START NOW.**
