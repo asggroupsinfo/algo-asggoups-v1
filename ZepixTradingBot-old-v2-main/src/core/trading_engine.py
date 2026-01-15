@@ -24,6 +24,8 @@ from src.core.plugin_system.plugin_registry import PluginRegistry
 from src.core.plugin_system.service_api import ServiceAPI
 from src.telegram.multi_telegram_manager import MultiTelegramManager
 from src.core.shadow_mode_manager import ShadowModeManager, ExecutionMode
+from src.modules.voice_alert_system import VoiceAlertSystem, AlertPriority
+from src.modules.fixed_clock_system import get_clock_system
 import json
 import uuid
 
@@ -119,6 +121,43 @@ class TradingEngine:
         # Plan 07: Initialize Multi-Telegram Manager (3-Bot System)
         self.telegram_manager: Optional[MultiTelegramManager] = None
         self._init_telegram_manager()
+        
+        # Phase 9: Initialize Voice Alert System (Legacy Restoration)
+        self.voice_alerts: Optional[VoiceAlertSystem] = None
+        self._init_voice_alerts()
+        
+        # Phase 9: Initialize Clock System (Legacy Restoration)
+        self.clock_system = get_clock_system()
+    
+    def _init_voice_alerts(self):
+        """Initialize Voice Alert System (Phase 9: Legacy Restoration)"""
+        try:
+            if self.telegram_bot and hasattr(self.telegram_bot, 'bot'):
+                chat_id = self.config.get("telegram_chat_id", "")
+                self.voice_alerts = VoiceAlertSystem(
+                    bot=self.telegram_bot.bot,
+                    chat_id=chat_id
+                )
+                logger.info("Voice Alert System initialized successfully")
+            else:
+                logger.warning("Voice Alert System not initialized - Telegram bot not available")
+        except Exception as e:
+            logger.error(f"Failed to initialize Voice Alert System: {e}")
+            self.voice_alerts = None
+    
+    async def send_voice_alert(self, message: str, priority: AlertPriority = AlertPriority.MEDIUM):
+        """
+        Send voice alert through Voice Alert System (Phase 9: Legacy Restoration)
+        
+        Args:
+            message: Alert message text
+            priority: Alert priority level
+        """
+        if self.voice_alerts:
+            try:
+                await self.voice_alerts.send_voice_alert(message, priority)
+            except Exception as e:
+                logger.error(f"Voice alert failed: {e}")
     
     def _init_telegram_manager(self):
         """Initialize the 3-bot Telegram system if config available"""
@@ -154,36 +193,59 @@ class TradingEngine:
     async def on_trade_opened(self, trade_data: Dict[str, Any]):
         """
         Called when a trade is opened - sends notification through 3-bot system
+        Also triggers voice alert (Phase 9: Legacy Restoration)
         
         Args:
             trade_data: Dict with trade details
         """
+        symbol = trade_data.get('symbol', 'UNKNOWN')
+        direction = trade_data.get('direction', 'UNKNOWN')
+        price = trade_data.get('price', 0)
+        
+        # Send Telegram notification
         if self.telegram_manager:
             await self.telegram_manager.send_trade_notification({
                 'type': 'trade_opened',
                 **trade_data
             })
         elif self.telegram_bot:
-            symbol = trade_data.get('symbol', 'UNKNOWN')
-            direction = trade_data.get('direction', 'UNKNOWN')
             self.telegram_bot.send_message(f"Trade Opened: {direction} {symbol}")
+        
+        # Phase 9: Send voice alert
+        voice_message = f"Trade opened. {direction} {symbol} at {price:.5f}"
+        await self.send_voice_alert(voice_message, AlertPriority.HIGH)
     
     async def on_trade_closed(self, trade_data: Dict[str, Any]):
         """
         Called when a trade is closed - sends notification through 3-bot system
+        Also triggers voice alert (Phase 9: Legacy Restoration)
         
         Args:
             trade_data: Dict with trade details
         """
+        symbol = trade_data.get('symbol', 'UNKNOWN')
+        profit = trade_data.get('profit', 0)
+        reason = trade_data.get('reason', 'closed')
+        
+        # Send Telegram notification
         if self.telegram_manager:
             await self.telegram_manager.send_trade_notification({
                 'type': 'trade_closed',
                 **trade_data
             })
         elif self.telegram_bot:
-            symbol = trade_data.get('symbol', 'UNKNOWN')
-            profit = trade_data.get('profit', 0)
             self.telegram_bot.send_message(f"Trade Closed: {symbol} P/L: ${profit:.2f}")
+        
+        # Phase 9: Send voice alert based on close reason
+        if 'sl' in reason.lower() or 'stop' in reason.lower():
+            voice_message = f"Stop loss hit. {symbol} closed with {profit:.2f} dollars"
+            await self.send_voice_alert(voice_message, AlertPriority.MEDIUM)
+        elif 'tp' in reason.lower() or 'profit' in reason.lower():
+            voice_message = f"Take profit reached. {symbol} closed with {profit:.2f} dollars profit"
+            await self.send_voice_alert(voice_message, AlertPriority.MEDIUM)
+        else:
+            voice_message = f"Trade closed. {symbol} with {profit:.2f} dollars"
+            await self.send_voice_alert(voice_message, AlertPriority.MEDIUM)
     
     # ==================== End Plan 07 Notification Methods ====================
     
