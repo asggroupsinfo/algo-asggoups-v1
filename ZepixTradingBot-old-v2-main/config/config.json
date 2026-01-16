@@ -1,8 +1,8 @@
 {
-    "telegram_token": "8526101969:AAF9fqQlPbNUkb1fg3vylwG4uDNiz-Z9IY4",
-    "telegram_controller_token": "",
-    "telegram_notification_token": "",
-    "telegram_analytics_token": "",
+    "telegram_token": "8598624206:AAGWD7y35HUkrSDvSCrFuTL-FZZx8bjqwwo",
+    "telegram_controller_token": "8598624206:AAGWD7y35HUkrSDvSCrFuTL-FZZx8bjqwwo",
+    "telegram_notification_token": "8311364103:AAHArQ0kHnS8e_hLGdBMzf9u8bLGlUKK4vM",
+    "telegram_analytics_token": "8513021073:AAHxk9Z9CxKpc2UKNVn1vhYUIGshDJ2L1Ys",
     "telegram_chat_id": 2139792302,
     "allowed_telegram_user": 2139792302,
     "mt5_login": 308646228,
