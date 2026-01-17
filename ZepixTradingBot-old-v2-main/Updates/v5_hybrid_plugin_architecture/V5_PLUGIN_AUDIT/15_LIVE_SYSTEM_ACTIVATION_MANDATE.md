@@ -15,7 +15,7 @@ We need to prove the bot actually RUNS, connects to Telegram, and executes Trade
 
 ### PHASE 1: STARTUP INTEGRITY CHECK
 **.** Run the bot locally and verify clean startup.
-- **Command:** `python main.py`
+- **Command:** `python scripts/start_bot_standalone.py` (or run `START_BOT.bat`)
 - **Success Criteria:**
   - No Python Crashes/Tracebacks.
   - Logs show: `✅ Zepix Trading Bot V5 Started`.
