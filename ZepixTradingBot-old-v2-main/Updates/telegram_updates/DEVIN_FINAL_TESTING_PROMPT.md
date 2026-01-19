@@ -250,7 +250,13 @@ python -m src.telegram.controller_bot
 
 ---
 
-### 📊 BOT 2: NOTIFICATION BOT (44 Notification Types)
+### 📊 BOT 2: NOTIFICATION BOT (75+ Notification Types)
+
+⚠️ **CRITICAL: According to planning documents, there should be 50+ notification types. Currently only 44 implemented. MUST ADD MISSING TYPES!**
+
+**Reference Documents:**
+- `Updates/telegram_updates/02_NOTIFICATION_SYSTEMS_COMPLETE.md`
+- `Important_Doc_Trading_Bot/05_Unsorted/developer_notes/TELEGRAM_NOTIFICATIONS.md`
 
 **Start Command:**
 ```bash
@@ -258,11 +264,89 @@ cd Trading_Bot
 python -m src.telegram.notification_bot
 ```
 
-**Test ALL 44 Notification Types by Category:**
+---
+
+## ⚠️ TASK 0: ADD MISSING NOTIFICATION TYPES FIRST!
+
+**Before testing, add these missing NotificationTypes to `notification_router.py`:**
+
+### Missing Autonomous System Notifications (5)
+```python
+# Add to NotificationType enum:
+TP_CONTINUATION_TRIGGERED = "tp_continuation_triggered"
+SL_HUNT_ACTIVATED = "sl_hunt_activated"
+RECOVERY_SUCCESS = "recovery_success"
+RECOVERY_FAILED = "recovery_failed"
+PROFIT_ORDER_PROTECTION = "profit_order_protection"
+```
+
+### Missing Re-entry System Notifications (5)
+```python
+TP_REENTRY_STARTED = "tp_reentry_started"
+TP_REENTRY_EXECUTED = "tp_reentry_executed"
+TP_REENTRY_COMPLETED = "tp_reentry_completed"
+SL_HUNT_MONITORING = "sl_hunt_monitoring"
+RECOVERY_WINDOW_TIMEOUT = "recovery_window_timeout"
+```
+
+### Missing Signal Notifications (4)
+```python
+SIGNAL_RECEIVED = "signal_received"
+SIGNAL_IGNORED = "signal_ignored"
+SIGNAL_FILTERED = "signal_filtered"
+TREND_CHANGED = "trend_changed"
+```
+
+### Missing Trade Events (3)
+```python
+PARTIAL_CLOSE = "partial_close"
+REVERSAL_EXIT = "reversal_exit"
+MANUAL_EXIT = "manual_exit"
+```
+
+### Missing System Events (5)
+```python
+MT5_CONNECTED = "mt5_connected"
+LIFETIME_LOSS_LIMIT = "lifetime_loss_limit"
+HEALTH_CHECK_OK = "health_check_ok"
+HEALTH_CHECK_WARNING = "health_check_warning"
+DATABASE_ERROR = "database_error"
+ORDER_FAILED = "order_failed"
+```
+
+### Missing Session Notifications (4)
+```python
+SESSION_TOGGLED = "session_toggled"
+SYMBOL_TOGGLED = "symbol_toggled"
+TIME_ADJUSTED = "time_adjusted"
+FORCE_CLOSE_TOGGLED = "force_close_toggled"
+```
+
+### Missing Voice Alert Types (5)
+```python
+VOICE_ENTRY = "voice_entry"
+VOICE_TP = "voice_tp"
+VOICE_SL = "voice_sl"
+VOICE_RISK_LIMIT = "voice_risk_limit"
+VOICE_RECOVERY = "voice_recovery"
+```
+
+### Missing Dashboard Types (2)
+```python
+DASHBOARD_UPDATE = "dashboard_update"
+AUTONOMOUS_DASHBOARD = "autonomous_dashboard"
+```
+
+**TOTAL TO ADD: 33 new notification types**
+**NEW TOTAL: 44 + 33 = 77 notification types**
 
 ---
 
-#### 🔹 TRADE EVENTS (7 Types)
+**Test ALL 77 Notification Types by Category:**
+
+---
+
+#### 🔹 TRADE EVENTS (10 Types)
 
 | # | Type | Enum | Trigger | Expected Format | Test Status |
 |---|------|------|---------|-----------------|-------------|
@@ -273,19 +357,63 @@ python -m src.telegram.notification_bot
 | 5 | Profit Booking | PROFIT_BOOKING | Partial close | Amount booked, Remaining | ⬜ |
 | 6 | SL Modified | SL_MODIFIED | SL level changed | Old SL, New SL | ⬜ |
 | 7 | Breakeven | BREAKEVEN | BE set | Entry price as new SL | ⬜ |
+| 8 | Partial Close | PARTIAL_CLOSE | Partial position closed | Closed %, Remaining | ⬜ |
+| 9 | Reversal Exit | REVERSAL_EXIT | Opposite signal exit | Old direction, New direction | ⬜ |
+| 10 | Manual Exit | MANUAL_EXIT | Manual close | Exit reason | ⬜ |
 
 ---
 
-#### 🔹 SYSTEM EVENTS (6 Types)
+#### 🔹 SYSTEM EVENTS (12 Types)
 
 | # | Type | Enum | Trigger | Expected Format | Test Status |
 |---|------|------|---------|-----------------|-------------|
-| 8 | Bot Started | BOT_STARTED | Bot starts | Startup message | ⬜ |
-| 9 | Bot Stopped | BOT_STOPPED | Bot stops | Shutdown message | ⬜ |
-| 10 | Emergency Stop | EMERGENCY_STOP | Panic triggered | Emergency alert | ⬜ |
-| 11 | MT5 Disconnect | MT5_DISCONNECT | Connection lost | Disconnect warning | ⬜ |
-| 12 | MT5 Reconnect | MT5_RECONNECT | Connection restored | Reconnect success | ⬜ |
-| 13 | Daily Loss Limit | DAILY_LOSS_LIMIT | Limit reached | Limit alert | ⬜ |
+| 11 | Bot Started | BOT_STARTED | Bot starts | Startup message | ⬜ |
+| 12 | Bot Stopped | BOT_STOPPED | Bot stops | Shutdown message | ⬜ |
+| 13 | Emergency Stop | EMERGENCY_STOP | Panic triggered | Emergency alert | ⬜ |
+| 14 | MT5 Connected | MT5_CONNECTED | Connection established | Connect success | ⬜ |
+| 15 | MT5 Disconnect | MT5_DISCONNECT | Connection lost | Disconnect warning | ⬜ |
+| 16 | MT5 Reconnect | MT5_RECONNECT | Connection restored | Reconnect success | ⬜ |
+| 17 | Daily Loss Limit | DAILY_LOSS_LIMIT | Daily limit reached | Limit alert | ⬜ |
+| 18 | Lifetime Loss Limit | LIFETIME_LOSS_LIMIT | Lifetime limit reached | Critical alert | ⬜ |
+| 19 | Health Check OK | HEALTH_CHECK_OK | Health check passed | All systems normal | ⬜ |
+| 20 | Health Check Warning | HEALTH_CHECK_WARNING | Issues detected | Warning details | ⬜ |
+| 21 | Database Error | DATABASE_ERROR | DB operation failed | Error details | ⬜ |
+| 22 | Order Failed | ORDER_FAILED | Order rejected | Rejection reason | ⬜ |
+
+---
+
+#### 🔹 AUTONOMOUS SYSTEM (5 Types)
+
+| # | Type | Enum | Trigger | Expected Format | Test Status |
+|---|------|------|---------|-----------------|-------------|
+| 23 | TP Continuation | TP_CONTINUATION_TRIGGERED | TP continue activated | Level, Entry details | ⬜ |
+| 24 | SL Hunt Activated | SL_HUNT_ACTIVATED | Recovery triggered | Recovery entry | ⬜ |
+| 25 | Recovery Success | RECOVERY_SUCCESS | Recovery worked | Chain resumed | ⬜ |
+| 26 | Recovery Failed | RECOVERY_FAILED | Recovery failed | Chain stopped | ⬜ |
+| 27 | Profit Protection | PROFIT_ORDER_PROTECTION | Profits protected | Protection details | ⬜ |
+
+---
+
+#### 🔹 RE-ENTRY SYSTEM (5 Types)
+
+| # | Type | Enum | Trigger | Expected Format | Test Status |
+|---|------|------|---------|-----------------|-------------|
+| 28 | TP Reentry Started | TP_REENTRY_STARTED | Chain started | Chain info | ⬜ |
+| 29 | TP Reentry Executed | TP_REENTRY_EXECUTED | Reentry placed | Order details | ⬜ |
+| 30 | TP Reentry Completed | TP_REENTRY_COMPLETED | Chain complete | Total profit | ⬜ |
+| 31 | SL Hunt Monitoring | SL_HUNT_MONITORING | Monitor active | Watch status | ⬜ |
+| 32 | Recovery Timeout | RECOVERY_WINDOW_TIMEOUT | Window expired | Timeout message | ⬜ |
+
+---
+
+#### 🔹 SIGNAL EVENTS (4 Types)
+
+| # | Type | Enum | Trigger | Expected Format | Test Status |
+|---|------|------|---------|-----------------|-------------|
+| 33 | Signal Received | SIGNAL_RECEIVED | TradingView alert | Signal details | ⬜ |
+| 34 | Signal Ignored | SIGNAL_IGNORED | Signal filtered | Ignore reason | ⬜ |
+| 35 | Signal Filtered | SIGNAL_FILTERED | Duplicate filtered | Filter reason | ⬜ |
+| 36 | Trend Changed | TREND_CHANGED | Trend updated | Old/New trend | ⬜ |
 
 ---
 
@@ -293,9 +421,9 @@ python -m src.telegram.notification_bot
 
 | # | Type | Enum | Trigger | Expected Format | Test Status |
 |---|------|------|---------|-----------------|-------------|
-| 14 | Plugin Loaded | PLUGIN_LOADED | Plugin starts | Plugin name, version | ⬜ |
-| 15 | Plugin Error | PLUGIN_ERROR | Plugin fails | Error details | ⬜ |
-| 16 | Config Reload | CONFIG_RELOAD | Config changes | Reload confirmation | ⬜ |
+| 37 | Plugin Loaded | PLUGIN_LOADED | Plugin starts | Plugin name, version | ⬜ |
+| 38 | Plugin Error | PLUGIN_ERROR | Plugin fails | Error details | ⬜ |
+| 39 | Config Reload | CONFIG_RELOAD | Config changes | Reload confirmation | ⬜ |
 
 ---
 
@@ -303,10 +431,10 @@ python -m src.telegram.notification_bot
 
 | # | Type | Enum | Trigger | Expected Format | Test Status |
 |---|------|------|---------|-----------------|-------------|
-| 17 | Alert Received | ALERT_RECEIVED | TradingView alert | Alert details | ⬜ |
-| 18 | Alert Processed | ALERT_PROCESSED | Alert executed | Processing result | ⬜ |
-| 19 | Alert Ignored | ALERT_IGNORED | Alert filtered | Ignore reason | ⬜ |
-| 20 | Alert Error | ALERT_ERROR | Alert failed | Error details | ⬜ |
+| 40 | Alert Received | ALERT_RECEIVED | TradingView alert | Alert details | ⬜ |
+| 41 | Alert Processed | ALERT_PROCESSED | Alert executed | Processing result | ⬜ |
+| 42 | Alert Ignored | ALERT_IGNORED | Alert filtered | Ignore reason | ⬜ |
+| 43 | Alert Error | ALERT_ERROR | Alert failed | Error details | ⬜ |
 
 ---
 
@@ -314,10 +442,21 @@ python -m src.telegram.notification_bot
 
 | # | Type | Enum | Trigger | Expected Format | Test Status |
 |---|------|------|---------|-----------------|-------------|
-| 21 | Daily Summary | DAILY_SUMMARY | End of day | Daily stats | ⬜ |
-| 22 | Weekly Summary | WEEKLY_SUMMARY | End of week | Weekly stats | ⬜ |
-| 23 | Performance Report | PERFORMANCE_REPORT | On request | Performance metrics | ⬜ |
-| 24 | Risk Alert | RISK_ALERT | Risk threshold | Risk warning | ⬜ |
+| 44 | Daily Summary | DAILY_SUMMARY | End of day | Daily stats | ⬜ |
+| 45 | Weekly Summary | WEEKLY_SUMMARY | End of week | Weekly stats | ⬜ |
+| 46 | Performance Report | PERFORMANCE_REPORT | On request | Performance metrics | ⬜ |
+| 47 | Risk Alert | RISK_ALERT | Risk threshold | Risk warning | ⬜ |
+
+---
+
+#### 🔹 SESSION EVENTS (4 Types)
+
+| # | Type | Enum | Trigger | Expected Format | Test Status |
+|---|------|------|---------|-----------------|-------------|
+| 48 | Session Toggled | SESSION_TOGGLED | Session on/off | Session status | ⬜ |
+| 49 | Symbol Toggled | SYMBOL_TOGGLED | Symbol on/off | Symbol status | ⬜ |
+| 50 | Time Adjusted | TIME_ADJUSTED | Time changed | New time | ⬜ |
+| 51 | Force Close Toggled | FORCE_CLOSE_TOGGLED | Force close on/off | Force close status | ⬜ |
 
 ---
 
@@ -325,9 +464,30 @@ python -m src.telegram.notification_bot
 
 | # | Type | Enum | Trigger | Expected Format | Test Status |
 |---|------|------|---------|-----------------|-------------|
-| 25 | Info | INFO | Info message | Info text | ⬜ |
-| 26 | Warning | WARNING | Warning condition | Warning text | ⬜ |
-| 27 | Error | ERROR | Error occurs | Error text | ⬜ |
+| 52 | Info | INFO | Info message | Info text | ⬜ |
+| 53 | Warning | WARNING | Warning condition | Warning text | ⬜ |
+| 54 | Error | ERROR | Error occurs | Error text | ⬜ |
+
+---
+
+#### 🔹 VOICE ALERT EVENTS (5 Types)
+
+| # | Type | Enum | Trigger | Expected Format | Test Status |
+|---|------|------|---------|-----------------|-------------|
+| 55 | Voice Entry | VOICE_ENTRY | Trade entry | TTS announcement | ⬜ |
+| 56 | Voice TP | VOICE_TP | TP hit | TTS announcement | ⬜ |
+| 57 | Voice SL | VOICE_SL | SL hit | TTS announcement | ⬜ |
+| 58 | Voice Risk Limit | VOICE_RISK_LIMIT | Limit reached | TTS announcement | ⬜ |
+| 59 | Voice Recovery | VOICE_RECOVERY | Recovery started | TTS announcement | ⬜ |
+
+---
+
+#### 🔹 DASHBOARD EVENTS (2 Types)
+
+| # | Type | Enum | Trigger | Expected Format | Test Status |
+|---|------|------|---------|-----------------|-------------|
+| 60 | Dashboard Update | DASHBOARD_UPDATE | Dashboard refresh | Live dashboard | ⬜ |
+| 61 | Autonomous Dashboard | AUTONOMOUS_DASHBOARD | Auto status | Autonomous status | ⬜ |
 
 ---
 
@@ -335,18 +495,18 @@ python -m src.telegram.notification_bot
 
 | # | Type | Enum | Trigger | Expected Format | Test Status |
 |---|------|------|---------|-----------------|-------------|
-| 28 | V6 Entry 15M | V6_ENTRY_15M | V6 15M signal | V6 format with TF | ⬜ |
-| 29 | V6 Entry 30M | V6_ENTRY_30M | V6 30M signal | V6 format with TF | ⬜ |
-| 30 | V6 Entry 1H | V6_ENTRY_1H | V6 1H signal | V6 format with TF | ⬜ |
-| 31 | V6 Entry 4H | V6_ENTRY_4H | V6 4H signal | V6 format with TF | ⬜ |
-| 32 | V6 Exit | V6_EXIT | V6 trade closed | V6 exit format | ⬜ |
-| 33 | V6 TP Hit | V6_TP_HIT | V6 TP triggered | V6 TP format | ⬜ |
-| 34 | V6 SL Hit | V6_SL_HIT | V6 SL triggered | V6 SL format | ⬜ |
-| 35 | V6 TF Enabled | V6_TIMEFRAME_ENABLED | TF turned on | Enable message | ⬜ |
-| 36 | V6 TF Disabled | V6_TIMEFRAME_DISABLED | TF turned off | Disable message | ⬜ |
-| 37 | V6 Daily Summary | V6_DAILY_SUMMARY | End of day | V6 daily stats | ⬜ |
-| 38 | V6 Signal | V6_SIGNAL | V6 signal detected | Signal details | ⬜ |
-| 39 | V6 Breakeven | V6_BREAKEVEN | V6 BE set | V6 BE message | ⬜ |
+| 62 | V6 Entry 15M | V6_ENTRY_15M | V6 15M signal | V6 format with TF | ⬜ |
+| 63 | V6 Entry 30M | V6_ENTRY_30M | V6 30M signal | V6 format with TF | ⬜ |
+| 64 | V6 Entry 1H | V6_ENTRY_1H | V6 1H signal | V6 format with TF | ⬜ |
+| 65 | V6 Entry 4H | V6_ENTRY_4H | V6 4H signal | V6 format with TF | ⬜ |
+| 66 | V6 Exit | V6_EXIT | V6 trade closed | V6 exit format | ⬜ |
+| 67 | V6 TP Hit | V6_TP_HIT | V6 TP triggered | V6 TP format | ⬜ |
+| 68 | V6 SL Hit | V6_SL_HIT | V6 SL triggered | V6 SL format | ⬜ |
+| 69 | V6 TF Enabled | V6_TIMEFRAME_ENABLED | TF turned on | Enable message | ⬜ |
+| 70 | V6 TF Disabled | V6_TIMEFRAME_DISABLED | TF turned off | Disable message | ⬜ |
+| 71 | V6 Daily Summary | V6_DAILY_SUMMARY | End of day | V6 daily stats | ⬜ |
+| 72 | V6 Signal | V6_SIGNAL | V6 signal detected | Signal details | ⬜ |
+| 73 | V6 Breakeven | V6_BREAKEVEN | V6 BE set | V6 BE message | ⬜ |
 
 ---
 
@@ -354,11 +514,15 @@ python -m src.telegram.notification_bot
 
 | # | Type | Enum | Trigger | Expected Format | Test Status |
 |---|------|------|---------|-----------------|-------------|
-| 40 | V3 Entry | V3_ENTRY | V3 trade opened | V3 entry format | ⬜ |
-| 41 | V3 Exit | V3_EXIT | V3 trade closed | V3 exit format | ⬜ |
-| 42 | V3 TP Hit | V3_TP_HIT | V3 TP triggered | V3 TP format | ⬜ |
-| 43 | V3 SL Hit | V3_SL_HIT | V3 SL triggered | V3 SL format | ⬜ |
-| 44 | V3 Logic Toggled | V3_LOGIC_TOGGLED | Logic on/off | Toggle message | ⬜ |
+| 74 | V3 Entry | V3_ENTRY | V3 trade opened | V3 entry format | ⬜ |
+| 75 | V3 Exit | V3_EXIT | V3 trade closed | V3 exit format | ⬜ |
+| 76 | V3 TP Hit | V3_TP_HIT | V3 TP triggered | V3 TP format | ⬜ |
+| 77 | V3 SL Hit | V3_SL_HIT | V3 SL triggered | V3 SL format | ⬜ |
+| 78 | V3 Logic Toggled | V3_LOGIC_TOGGLED | Logic on/off | Toggle message | ⬜ |
+
+---
+
+**TOTAL NOTIFICATION TYPES: 78**
 
 ---
 
@@ -548,7 +712,7 @@ START_BOT.bat
 
 1. ✅ ALL 105 commands respond correctly
 2. ✅ ALL 15+ menus open and buttons work
-3. ✅ ALL 44 notification types send properly
+3. ✅ ALL 78 notification types implemented and send properly
 4. ✅ ALL 15+ analytics features calculate correctly
 5. ✅ Notification filtering works (quiet hours, priority, plugin filter)
 6. ✅ V6 timeframe controls work (all 8 commands)
@@ -565,11 +729,25 @@ START_BOT.bat
 |----------|-------|
 | **Commands** | 105 |
 | **Menus** | 15+ |
-| **Notification Types** | 44 |
+| **Notification Types** | 78 (add 34 missing) |
 | **Analytics Features** | 15+ |
 | **Notification Filter Tests** | 7 |
 | **Integration Tests** | 5 |
-| **TOTAL TESTS** | 191+ |
+| **TOTAL TESTS** | 225+ |
+
+---
+
+## ⚠️ CRITICAL: MISSING NOTIFICATION TYPES TO ADD
+
+**Reference Documents:**
+- `Updates/telegram_updates/02_NOTIFICATION_SYSTEMS_COMPLETE.md` (50+ types required)
+- `Important_Doc_Trading_Bot/05_Unsorted/developer_notes/TELEGRAM_NOTIFICATIONS.md` (50+ documented)
+
+**Current:** 44 types
+**Required:** 78 types
+**Missing:** 34 types
+
+**DEVIN MUST ADD THESE TO `notification_router.py` BEFORE TESTING!**
 
 ---
 
