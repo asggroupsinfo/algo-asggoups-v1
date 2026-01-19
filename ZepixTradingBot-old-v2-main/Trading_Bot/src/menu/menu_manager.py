@@ -13,6 +13,7 @@ from .menu_constants import (
     DATE_PRESETS
 )
 from .v6_control_menu_handler import V6ControlMenuHandler
+from .analytics_menu_handler import AnalyticsMenuHandler
 from datetime import datetime
 import pytz # Will need to check if pytz is available or use standard timezone handling
 import logging
@@ -32,6 +33,10 @@ class MenuManager:
         # V6 Control Menu Handler (Telegram V5 Upgrade)
         self._v6_handler = V6ControlMenuHandler(telegram_bot)
         logger.info("[MenuManager] V6ControlMenuHandler initialized")
+        
+        # Analytics Menu Handler (Telegram V5 Upgrade)
+        self._analytics_handler = AnalyticsMenuHandler(telegram_bot)
+        logger.info("[MenuManager] AnalyticsMenuHandler initialized")
     
     def _get_tier_buttons_with_current(self, command: str) -> List[Dict[str, str]]:
         """
@@ -1010,4 +1015,45 @@ class MenuManager:
         """
         v6_prefixes = ["menu_v6", "v6_toggle", "v6_enable", "v6_disable", "v6_view", "v6_config", "v6_adj", "v6_set"]
         return any(callback_data.startswith(prefix) for prefix in v6_prefixes)
+    
+    # =========================================================================
+    # ANALYTICS MENU METHODS (Telegram V5 Upgrade)
+    # =========================================================================
+    
+    def show_analytics_menu(self, user_id: int, message_id: int):
+        """
+        Show Analytics menu.
+        
+        Args:
+            user_id: Telegram user ID
+            message_id: Message ID to edit
+        """
+        self._analytics_handler.show_analytics_menu(user_id, message_id)
+    
+    def handle_analytics_callback(self, callback_data: str, user_id: int, message_id: int) -> bool:
+        """
+        Handle Analytics menu callback.
+        
+        Args:
+            callback_data: Callback data from button press
+            user_id: Telegram user ID
+            message_id: Message ID to edit
+        
+        Returns:
+            True if handled, False otherwise
+        """
+        return self._analytics_handler.handle_callback(callback_data, user_id, message_id)
+    
+    def is_analytics_callback(self, callback_data: str) -> bool:
+        """
+        Check if callback is an Analytics menu callback.
+        
+        Args:
+            callback_data: Callback data to check
+        
+        Returns:
+            True if Analytics callback, False otherwise
+        """
+        analytics_prefixes = ["menu_analytics", "analytics_"]
+        return any(callback_data.startswith(prefix) for prefix in analytics_prefixes)
 
