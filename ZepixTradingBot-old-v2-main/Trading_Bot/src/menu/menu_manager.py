@@ -14,6 +14,7 @@ from .menu_constants import (
 )
 from .v6_control_menu_handler import V6ControlMenuHandler
 from .analytics_menu_handler import AnalyticsMenuHandler
+from .dual_order_menu_handler import DualOrderMenuHandler, ReentryMenuHandler
 from datetime import datetime
 import pytz # Will need to check if pytz is available or use standard timezone handling
 import logging
@@ -37,6 +38,14 @@ class MenuManager:
         # Analytics Menu Handler (Telegram V5 Upgrade)
         self._analytics_handler = AnalyticsMenuHandler(telegram_bot)
         logger.info("[MenuManager] AnalyticsMenuHandler initialized")
+        
+        # Dual Order Menu Handler (Telegram V5 Upgrade)
+        self._dual_order_handler = DualOrderMenuHandler(telegram_bot)
+        logger.info("[MenuManager] DualOrderMenuHandler initialized")
+        
+        # Re-entry Menu Handler (Telegram V5 Upgrade)
+        self._reentry_handler = ReentryMenuHandler(telegram_bot)
+        logger.info("[MenuManager] ReentryMenuHandler initialized")
     
     def _get_tier_buttons_with_current(self, command: str) -> List[Dict[str, str]]:
         """
@@ -1056,4 +1065,86 @@ class MenuManager:
         """
         analytics_prefixes = ["menu_analytics", "analytics_"]
         return any(callback_data.startswith(prefix) for prefix in analytics_prefixes)
+    
+    # =========================================================================
+    # DUAL ORDER MENU METHODS (Telegram V5 Upgrade)
+    # =========================================================================
+    
+    def show_dual_order_menu(self, user_id: int, message_id: int):
+        """
+        Show Dual Order System menu.
+        
+        Args:
+            user_id: Telegram user ID
+            message_id: Message ID to edit
+        """
+        self._dual_order_handler.show_dual_order_menu(user_id, message_id)
+    
+    def handle_dual_order_callback(self, callback_data: str, user_id: int, message_id: int) -> bool:
+        """
+        Handle Dual Order menu callback.
+        
+        Args:
+            callback_data: Callback data from button press
+            user_id: Telegram user ID
+            message_id: Message ID to edit
+        
+        Returns:
+            True if handled, False otherwise
+        """
+        return self._dual_order_handler.handle_callback(callback_data, user_id, message_id)
+    
+    def is_dual_order_callback(self, callback_data: str) -> bool:
+        """
+        Check if callback is a Dual Order menu callback.
+        
+        Args:
+            callback_data: Callback data to check
+        
+        Returns:
+            True if Dual Order callback, False otherwise
+        """
+        dual_prefixes = ["menu_dual_order", "dual_"]
+        return any(callback_data.startswith(prefix) for prefix in dual_prefixes)
+    
+    # =========================================================================
+    # RE-ENTRY MENU METHODS (Telegram V5 Upgrade)
+    # =========================================================================
+    
+    def show_reentry_menu(self, user_id: int, message_id: int):
+        """
+        Show Re-entry System menu.
+        
+        Args:
+            user_id: Telegram user ID
+            message_id: Message ID to edit
+        """
+        self._reentry_handler.show_reentry_menu(user_id, message_id)
+    
+    def handle_reentry_callback(self, callback_data: str, user_id: int, message_id: int) -> bool:
+        """
+        Handle Re-entry menu callback.
+        
+        Args:
+            callback_data: Callback data from button press
+            user_id: Telegram user ID
+            message_id: Message ID to edit
+        
+        Returns:
+            True if handled, False otherwise
+        """
+        return self._reentry_handler.handle_callback(callback_data, user_id, message_id)
+    
+    def is_reentry_callback(self, callback_data: str) -> bool:
+        """
+        Check if callback is a Re-entry menu callback.
+        
+        Args:
+            callback_data: Callback data to check
+        
+        Returns:
+            True if Re-entry callback, False otherwise
+        """
+        reentry_prefixes = ["menu_reentry", "reentry_"]
+        return any(callback_data.startswith(prefix) for prefix in reentry_prefixes)
 
