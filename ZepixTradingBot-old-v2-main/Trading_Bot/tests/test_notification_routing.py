@@ -135,7 +135,7 @@ class NotificationRoutingTester:
         
         return all_passed
     
-    async def test_live_notification_send(self) -> bool:
+    def test_live_notification_send(self) -> bool:
         """Test sending a sample notification via the notification bot"""
         try:
             # Format a sample notification
@@ -153,8 +153,8 @@ class NotificationRoutingTester:
             else:
                 message = "<b>ENTRY NOTIFICATION TEST</b>\n\nSymbol: XAUUSD\nType: BUY\nPrice: 2650.50"
             
-            # Send via notification bot
-            msg = await self.notification_bot.send_message(
+            # Send via notification bot (synchronous)
+            msg = self.notification_bot.send_message(
                 chat_id=CHAT_ID,
                 text=message,
                 parse_mode='HTML'
@@ -168,12 +168,13 @@ class NotificationRoutingTester:
             self.results["errors"].append(f"Live notification: {e}")
             return False
     
-    async def test_notification_categories(self) -> bool:
+    def test_notification_categories(self) -> bool:
         """Test sending notifications from different categories"""
+        import time
         test_notifications = [
             ("Autonomous System", NotificationType.TP_CONTINUATION, {"symbol": "EURUSD", "continuation_type": "TP1"}),
             ("Re-entry System", NotificationType.TP_REENTRY_EXECUTED, {"symbol": "GBPUSD", "reentry_price": 1.2650}),
-            ("Signal Events", NotificationType.TREND_CHANGED, {"symbol": "USDJPY", "old_trend": "UP", "new_trend": "DOWN"}),
+            ("Signal Events", NotificationType.TREND_CHANGED, {"symbol": "XAUUSD", "old_trend": "UP", "new_trend": "DOWN"}),
             ("Voice Alerts", NotificationType.VOICE_TP_HIT, {"symbol": "XAUUSD", "profit": 200.00}),
         ]
         
@@ -185,13 +186,13 @@ class NotificationRoutingTester:
                 else:
                     message = f"<b>{category.upper()} TEST</b>\n\nType: {notif_type.value}\nData: {data}"
                 
-                msg = await self.notification_bot.send_message(
+                msg = self.notification_bot.send_message(
                     chat_id=CHAT_ID,
                     text=message,
                     parse_mode='HTML'
                 )
                 print(f"[PASS] {category}: sent (ID: {msg.message_id})")
-                await asyncio.sleep(1)  # Rate limiting
+                time.sleep(1)  # Rate limiting
             except TelegramError as e:
                 print(f"[FAIL] {category}: {e}")
                 all_passed = False
@@ -204,7 +205,7 @@ class NotificationRoutingTester:
         
         return all_passed
     
-    async def run_all_tests(self):
+    def run_all_tests(self):
         """Run all notification routing tests"""
         print("\n" + "="*60)
         print("NOTIFICATION ROUTING TESTS")
@@ -233,12 +234,12 @@ class NotificationRoutingTester:
         # Test 5: Live Notification Send
         print("\nTesting Live Notification Send...")
         print("-" * 40)
-        await self.test_live_notification_send()
+        self.test_live_notification_send()
         
         # Test 6: Category Notifications
         print("\nTesting Category Notifications...")
         print("-" * 40)
-        await self.test_notification_categories()
+        self.test_notification_categories()
         
         # Print Results
         print("\n" + "="*60)
@@ -258,12 +259,12 @@ class NotificationRoutingTester:
         return self.results["failed"] == 0
 
 
-async def main():
+def main():
     tester = NotificationRoutingTester()
-    success = await tester.run_all_tests()
+    success = tester.run_all_tests()
     return 0 if success else 1
 
 
 if __name__ == "__main__":
-    exit_code = asyncio.run(main())
+    exit_code = main()
     sys.exit(exit_code)

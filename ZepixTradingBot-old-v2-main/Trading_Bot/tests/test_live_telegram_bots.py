@@ -7,12 +7,13 @@ This script tests:
 2. Message sending capability
 3. HTML formatting support
 
-Version: 1.0.0
-Date: 2026-01-19
+Version: 1.0.1
+Date: 2026-01-20
+Fixed: Synchronous API compatibility
 """
-import asyncio
 import sys
 import os
+import time
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from telegram import Bot
@@ -33,10 +34,10 @@ class LiveBotTester:
         self.results = {"passed": 0, "failed": 0, "errors": []}
         self.bot_usernames = {}
     
-    async def test_bot_connection(self, bot: Bot, name: str) -> bool:
+    def test_bot_connection(self, bot: Bot, name: str) -> bool:
         """Test if bot can connect and get info"""
         try:
-            info = await bot.get_me()
+            info = bot.get_me()
             print(f"[PASS] {name} connected: @{info.username}")
             self.bot_usernames[name] = info.username
             self.results["passed"] += 1
@@ -47,10 +48,10 @@ class LiveBotTester:
             self.results["errors"].append(f"{name}: {e}")
             return False
     
-    async def test_send_message(self, bot: Bot, name: str, message: str) -> bool:
+    def test_send_message(self, bot: Bot, name: str, message: str) -> bool:
         """Test sending a message"""
         try:
-            msg = await bot.send_message(
+            msg = bot.send_message(
                 chat_id=CHAT_ID,
                 text=message,
                 parse_mode='HTML'
@@ -64,7 +65,7 @@ class LiveBotTester:
             self.results["errors"].append(f"{name} send: {e}")
             return False
     
-    async def run_all_tests(self):
+    def run_all_tests(self):
         """Run all live bot tests"""
         print("\n" + "="*60)
         print("LIVE TELEGRAM BOT TESTING")
@@ -73,31 +74,31 @@ class LiveBotTester:
         # Test 1: Bot Connections
         print("Testing Bot Connections...")
         print("-" * 40)
-        await self.test_bot_connection(self.controller_bot, "Controller Bot")
-        await self.test_bot_connection(self.notification_bot, "Notification Bot")
-        await self.test_bot_connection(self.analytics_bot, "Analytics Bot")
+        self.test_bot_connection(self.controller_bot, "Controller Bot")
+        self.test_bot_connection(self.notification_bot, "Notification Bot")
+        self.test_bot_connection(self.analytics_bot, "Analytics Bot")
         
         # Test 2: Send Test Messages
         print("\nTesting Message Sending...")
         print("-" * 40)
-        await self.test_send_message(
+        self.test_send_message(
             self.controller_bot, 
             "Controller Bot",
-            "<b>CONTROLLER BOT TEST</b>\n\n[PASS] Live connection verified!\n105 commands ready\n\nTimestamp: " + str(asyncio.get_event_loop().time())
+            "<b>CONTROLLER BOT TEST</b>\n\n[PASS] Live connection verified!\n105 commands ready\n\nTimestamp: " + str(time.time())
         )
-        await asyncio.sleep(1)  # Rate limiting
+        time.sleep(1)  # Rate limiting
         
-        await self.test_send_message(
+        self.test_send_message(
             self.notification_bot,
             "Notification Bot", 
-            "<b>NOTIFICATION BOT TEST</b>\n\n[PASS] Live connection verified!\n78 notification types ready\n\nTimestamp: " + str(asyncio.get_event_loop().time())
+            "<b>NOTIFICATION BOT TEST</b>\n\n[PASS] Live connection verified!\n78 notification types ready\n\nTimestamp: " + str(time.time())
         )
-        await asyncio.sleep(1)
+        time.sleep(1)
         
-        await self.test_send_message(
+        self.test_send_message(
             self.analytics_bot,
             "Analytics Bot",
-            "<b>ANALYTICS BOT TEST</b>\n\n[PASS] Live connection verified!\nAnalytics features ready\n\nTimestamp: " + str(asyncio.get_event_loop().time())
+            "<b>ANALYTICS BOT TEST</b>\n\n[PASS] Live connection verified!\nAnalytics features ready\n\nTimestamp: " + str(time.time())
         )
         
         # Print Results
@@ -123,12 +124,12 @@ class LiveBotTester:
         return self.results["failed"] == 0
 
 
-async def main():
+def main():
     tester = LiveBotTester()
-    success = await tester.run_all_tests()
+    success = tester.run_all_tests()
     return 0 if success else 1
 
 
 if __name__ == "__main__":
-    exit_code = asyncio.run(main())
+    exit_code = main()
     sys.exit(exit_code)
