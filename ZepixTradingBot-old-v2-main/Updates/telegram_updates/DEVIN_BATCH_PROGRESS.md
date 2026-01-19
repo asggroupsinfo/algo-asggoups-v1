@@ -1,6 +1,6 @@
 # Devin Batch Implementation Progress
 
-## Overall Status: 0/5 Batches Complete
+## Overall Status: 1/5 Batches Complete
 
 ---
 
@@ -13,17 +13,28 @@
 - 02_V6_TIMEFRAME_MENU_PLAN.md
 
 **Status:**
-- [ ] Documents Read
-- [ ] Plan Created (batch_plans/BATCH_1_IMPLEMENTATION_PLAN.md)
-- [ ] Implementation Done
-- [ ] Tests Passing
-- [ ] Pushed to GitLab
+- [x] Documents Read
+- [x] Plan Created (batch_plans/BATCH_1_IMPLEMENTATION_PLAN.md)
+- [x] Implementation Done
+- [x] Tests Passing (36 tests)
+- [x] Pushed to GitLab
 
 **Files Created/Modified:**
-- (To be filled by Devin)
+- NEW: src/telegram/notification_preferences.py (350 lines)
+- NEW: src/menu/notification_preferences_menu.py (530 lines)
+- MODIFIED: src/menu/menu_manager.py (+40 lines)
+- MODIFIED: tests/test_telegram_v5_upgrade.py (+193 lines, 13 new tests)
+- NEW: Updates/telegram_updates/batch_plans/BATCH_1_IMPLEMENTATION_PLAN.md
 
 **Features Implemented:**
-- (To be filled by Devin)
+- NotificationPreferences system for user notification filtering
+- Per-category notification toggles (15 categories)
+- Plugin filtering (V3 only / V6 only / Both / None)
+- Quiet hours configuration with critical alert override
+- Priority level filtering (All / Critical Only / High+ / Medium+)
+- V6 timeframe notification filtering (15m, 30m, 1h, 4h)
+- NotificationPreferencesMenuHandler for Telegram menu integration
+- MenuManager integration with notification preferences handler
 
 ---
 
@@ -164,7 +175,7 @@
 
 | Batch | Completed On | Commit Hash | Notes |
 |-------|--------------|-------------|-------|
-| 1 | - | - | - |
+| 1 | 2026-01-19 | 1d9f538 | Notification Preferences System - 36 tests passing |
 | 2 | - | - | - |
 | 3 | - | - | - |
 | 4 | - | - | - |
