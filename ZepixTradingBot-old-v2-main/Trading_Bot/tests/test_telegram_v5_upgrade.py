@@ -521,7 +521,190 @@ class TestMenuManagerNotificationPrefsIntegration:
         
         assert hasattr(manager, 'show_notification_prefs_menu')
         assert hasattr(manager, 'handle_notification_prefs_callback')
-        assert hasattr(manager, 'is_notification_prefs_callback')
+
+
+class TestControllerBot105Commands:
+    """Tests for all 105 command handlers in ControllerBot (Final Testing)
+    
+    This test class verifies that all 105 commands are properly wired in controller_bot.py
+    by analyzing the source code directly (avoiding import issues with relative imports).
+    """
+    
+    # All 105 commands organized by category
+    SYSTEM_COMMANDS = ["/start", "/status", "/pause", "/resume", "/help", "/health", "/version", "/restart", "/shutdown", "/config"]
+    TRADING_COMMANDS = ["/trade", "/buy", "/sell", "/close", "/closeall", "/positions", "/orders", "/history", "/pnl", "/balance", "/equity", "/margin", "/symbols", "/price", "/spread"]
+    RISK_COMMANDS = ["/risk", "/setlot", "/setsl", "/settp", "/dailylimit", "/maxloss", "/maxprofit", "/risktier", "/slsystem", "/trailsl", "/breakeven", "/protection"]
+    STRATEGY_COMMANDS = ["/strategy", "/logic1", "/logic2", "/logic3", "/v3", "/v6", "/v6_status", "/v6_control", "/tf15m_on", "/tf15m_off", "/tf30m_on", "/tf30m_off", "/tf1h_on", "/tf1h_off", "/tf4h_on", "/tf4h_off", "/signals", "/filters", "/multiplier", "/mode"]
+    TIMEFRAME_COMMANDS = ["/timeframe", "/tf1m", "/tf5m", "/tf15m", "/tf1h", "/tf4h", "/tf1d", "/trends"]
+    REENTRY_COMMANDS = ["/reentry", "/slhunt", "/tpcontinue", "/recovery", "/cooldown", "/chains", "/autonomous", "/chainlimit"]
+    PROFIT_COMMANDS = ["/profit", "/booking", "/levels", "/partial", "/orderb", "/dualorder"]
+    ANALYTICS_COMMANDS = ["/analytics", "/performance", "/daily", "/weekly", "/monthly", "/stats", "/winrate", "/drawdown"]
+    SESSION_COMMANDS = ["/session", "/london", "/newyork", "/tokyo", "/sydney", "/overlap"]
+    PLUGIN_COMMANDS = ["/plugin", "/plugins", "/enable", "/disable", "/upgrade", "/rollback", "/shadow", "/compare"]
+    VOICE_COMMANDS = ["/voice", "/voicetest", "/mute", "/unmute"]
+    
+    @staticmethod
+    def _get_controller_bot_source():
+        """Read controller_bot.py source code for analysis"""
+        import os
+        controller_path = os.path.join(os.path.dirname(__file__), '..', 'src', 'telegram', 'controller_bot.py')
+        with open(controller_path, 'r') as f:
+            return f.read()
+    
+    def test_controller_bot_has_all_105_handlers_wired(self):
+        """Test ControllerBot has all 105 command handlers wired in _wire_default_handlers"""
+        source = self._get_controller_bot_source()
+        
+        all_commands = (
+            self.SYSTEM_COMMANDS + self.TRADING_COMMANDS + self.RISK_COMMANDS +
+            self.STRATEGY_COMMANDS + self.TIMEFRAME_COMMANDS + self.REENTRY_COMMANDS +
+            self.PROFIT_COMMANDS + self.ANALYTICS_COMMANDS + self.SESSION_COMMANDS +
+            self.PLUGIN_COMMANDS + self.VOICE_COMMANDS
+        )
+        
+        # Verify total count
+        assert len(all_commands) == 105, f"Expected 105 commands, got {len(all_commands)}"
+        
+        # Verify all handlers are wired by checking source code
+        missing_handlers = []
+        for cmd in all_commands:
+            # Check if command is wired in _wire_default_handlers (e.g., self._command_handlers["/start"])
+            wiring_pattern = f'self._command_handlers["{cmd}"]'
+            if wiring_pattern not in source:
+                missing_handlers.append(cmd)
+        
+        assert len(missing_handlers) == 0, f"Missing handlers for: {missing_handlers}"
+    
+    def test_system_commands_wired(self):
+        """Test all 10 system commands are wired"""
+        source = self._get_controller_bot_source()
+        
+        for cmd in self.SYSTEM_COMMANDS:
+            wiring_pattern = f'self._command_handlers["{cmd}"]'
+            assert wiring_pattern in source, f"Missing handler wiring for {cmd}"
+    
+    def test_trading_commands_wired(self):
+        """Test all 15 trading commands are wired"""
+        source = self._get_controller_bot_source()
+        
+        for cmd in self.TRADING_COMMANDS:
+            wiring_pattern = f'self._command_handlers["{cmd}"]'
+            assert wiring_pattern in source, f"Missing handler wiring for {cmd}"
+    
+    def test_risk_commands_wired(self):
+        """Test all 12 risk commands are wired"""
+        source = self._get_controller_bot_source()
+        
+        for cmd in self.RISK_COMMANDS:
+            wiring_pattern = f'self._command_handlers["{cmd}"]'
+            assert wiring_pattern in source, f"Missing handler wiring for {cmd}"
+    
+    def test_strategy_commands_wired(self):
+        """Test all 20 strategy commands are wired"""
+        source = self._get_controller_bot_source()
+        
+        for cmd in self.STRATEGY_COMMANDS:
+            wiring_pattern = f'self._command_handlers["{cmd}"]'
+            assert wiring_pattern in source, f"Missing handler wiring for {cmd}"
+    
+    def test_timeframe_commands_wired(self):
+        """Test all 8 timeframe commands are wired"""
+        source = self._get_controller_bot_source()
+        
+        for cmd in self.TIMEFRAME_COMMANDS:
+            wiring_pattern = f'self._command_handlers["{cmd}"]'
+            assert wiring_pattern in source, f"Missing handler wiring for {cmd}"
+    
+    def test_reentry_commands_wired(self):
+        """Test all 8 re-entry commands are wired"""
+        source = self._get_controller_bot_source()
+        
+        for cmd in self.REENTRY_COMMANDS:
+            wiring_pattern = f'self._command_handlers["{cmd}"]'
+            assert wiring_pattern in source, f"Missing handler wiring for {cmd}"
+    
+    def test_profit_commands_wired(self):
+        """Test all 6 profit commands are wired"""
+        source = self._get_controller_bot_source()
+        
+        for cmd in self.PROFIT_COMMANDS:
+            wiring_pattern = f'self._command_handlers["{cmd}"]'
+            assert wiring_pattern in source, f"Missing handler wiring for {cmd}"
+    
+    def test_analytics_commands_wired(self):
+        """Test all 8 analytics commands are wired"""
+        source = self._get_controller_bot_source()
+        
+        for cmd in self.ANALYTICS_COMMANDS:
+            wiring_pattern = f'self._command_handlers["{cmd}"]'
+            assert wiring_pattern in source, f"Missing handler wiring for {cmd}"
+    
+    def test_session_commands_wired(self):
+        """Test all 6 session commands are wired"""
+        source = self._get_controller_bot_source()
+        
+        for cmd in self.SESSION_COMMANDS:
+            wiring_pattern = f'self._command_handlers["{cmd}"]'
+            assert wiring_pattern in source, f"Missing handler wiring for {cmd}"
+    
+    def test_plugin_commands_wired(self):
+        """Test all 8 plugin commands are wired"""
+        source = self._get_controller_bot_source()
+        
+        for cmd in self.PLUGIN_COMMANDS:
+            wiring_pattern = f'self._command_handlers["{cmd}"]'
+            assert wiring_pattern in source, f"Missing handler wiring for {cmd}"
+    
+    def test_voice_commands_wired(self):
+        """Test all 4 voice commands are wired"""
+        source = self._get_controller_bot_source()
+        
+        for cmd in self.VOICE_COMMANDS:
+            wiring_pattern = f'self._command_handlers["{cmd}"]'
+            assert wiring_pattern in source, f"Missing handler wiring for {cmd}"
+    
+    def test_all_handlers_have_implementations(self):
+        """Test all command handlers have method implementations"""
+        source = self._get_controller_bot_source()
+        
+        # Map commands to their expected handler method names
+        handler_methods = [
+            "handle_start", "handle_status", "handle_pause", "handle_resume", "handle_help",
+            "handle_health_command", "handle_version_command", "handle_restart", "handle_shutdown", "handle_config",
+            "handle_trade_menu", "handle_buy", "handle_sell", "handle_close", "handle_close_all",
+            "handle_positions", "handle_orders", "handle_history", "handle_pnl", "handle_balance",
+            "handle_equity", "handle_margin", "handle_symbols", "handle_price", "handle_spread",
+            "handle_risk_menu", "handle_set_lot", "handle_set_sl", "handle_set_tp", "handle_daily_limit",
+            "handle_max_loss", "handle_max_profit", "handle_risk_tier", "handle_sl_system", "handle_trail_sl",
+            "handle_breakeven", "handle_protection", "handle_strategy_menu", "handle_logic1", "handle_logic2",
+            "handle_logic3", "handle_v3", "handle_v6", "handle_v6_status", "handle_v6_control",
+            "handle_v6_tf15m_on", "handle_v6_tf15m_off", "handle_v6_tf30m_on", "handle_v6_tf30m_off",
+            "handle_v6_tf1h_on", "handle_v6_tf1h_off", "handle_v6_tf4h_on", "handle_v6_tf4h_off",
+            "handle_signals", "handle_filters", "handle_multiplier", "handle_mode",
+            "handle_timeframe_menu", "handle_tf_1m", "handle_tf_5m", "handle_tf_15m", "handle_tf_1h",
+            "handle_tf_4h", "handle_tf_1d", "handle_trends", "handle_reentry_menu", "handle_sl_hunt",
+            "handle_tp_continue", "handle_recovery", "handle_cooldown", "handle_chains", "handle_autonomous",
+            "handle_chain_limit", "handle_profit_menu", "handle_booking", "handle_levels", "handle_partial",
+            "handle_order_b", "handle_dual_order", "handle_analytics_menu", "handle_performance", "handle_daily",
+            "handle_weekly", "handle_monthly", "handle_stats", "handle_winrate", "handle_drawdown",
+            "handle_session_menu", "handle_london", "handle_newyork", "handle_tokyo", "handle_sydney",
+            "handle_overlap", "handle_plugin_menu", "handle_plugins", "handle_enable", "handle_disable",
+            "handle_upgrade_command", "handle_rollback_command", "handle_shadow", "handle_compare",
+            "handle_voice_menu", "handle_voice_test", "handle_mute", "handle_unmute"
+        ]
+        
+        missing_methods = []
+        for method in handler_methods:
+            # Check if method is defined (def method_name)
+            method_pattern = f"def {method}(self"
+            if method_pattern not in source:
+                missing_methods.append(method)
+        
+        assert len(missing_methods) == 0, f"Missing handler method implementations: {missing_methods}"
+
+
+class TestMenuManagerNotificationPrefsCallback:
+    """Tests for MenuManager notification preferences callback"""
     
     def test_menu_manager_is_notification_prefs_callback(self):
         """Test MenuManager.is_notification_prefs_callback correctly identifies notification prefs callbacks"""
