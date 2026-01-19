@@ -1,0 +1,36 @@
+{
+  "enabled": true,
+  "categories": {
+    "trade_entry": true,
+    "trade_exit": true,
+    "tp_hit": true,
+    "sl_hit": true,
+    "profit_booking": true,
+    "sl_modified": false,
+    "breakeven": false,
+    "daily_summary": true,
+    "weekly_summary": true,
+    "trend_pulse": true,
+    "price_action": false,
+    "shadow_trade": true,
+    "system_alert": true,
+    "error_alert": true,
+    "plugin_status": true
+  },
+  "plugin_filter": "all",
+  "priority_level": "all",
+  "quiet_hours": {
+    "enabled": false,
+    "start": "22:00",
+    "end": "06:00",
+    "allow_critical": true
+  },
+  "v6_timeframe_filter": {
+    "15m": true,
+    "30m": true,
+    "1h": true,
+    "4h": true
+  },
+  "sound_enabled": true,
+  "voice_alerts_enabled": false
+}
