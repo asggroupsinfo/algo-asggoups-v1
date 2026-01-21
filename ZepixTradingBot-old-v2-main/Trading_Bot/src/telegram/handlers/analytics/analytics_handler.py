@@ -3,7 +3,7 @@ Analytics Handler - Performance & Reporting
 
 Implements all analytics commands: daily, weekly, compare, export.
 
-Version: 1.0.0
+Version: 1.1.0 (Logic Integration)
 Created: 2026-01-21
 Part of: TELEGRAM_V5_CORE
 """
@@ -19,9 +19,8 @@ class AnalyticsHandler(BaseCommandHandler):
         self.command_name = "analytics"
 
     async def execute(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        # Delegate to bot's restored analytics methods for now
-        # Ideally, we move the logic here.
-        pass
+        if hasattr(self.bot, 'handle_analytics_menu'):
+            await self.bot.handle_analytics_menu(update, context)
 
     async def handle_daily(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         if hasattr(self.bot, 'handle_daily'):
@@ -34,3 +33,7 @@ class AnalyticsHandler(BaseCommandHandler):
     async def handle_compare(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         if hasattr(self.bot, 'handle_compare'):
             await self.bot.handle_compare(update, context)
+
+    async def handle_export(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        if hasattr(self.bot, 'handle_export'):
+            await self.bot.handle_export(update, context)

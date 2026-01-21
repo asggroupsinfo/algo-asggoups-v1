@@ -3,7 +3,7 @@ Header Refresh Manager - Auto-Update Sticky Headers
 
 Manages background refresh of sticky headers on active menus.
 
-Version: 1.0.0
+Version: 1.1.1 (Event Loop Fix)
 Created: 2026-01-21
 Part of: TELEGRAM_V5_STICKY_HEADER
 """
@@ -26,12 +26,27 @@ class HeaderRefreshManager:
         self._running = False
         self._task = None
 
+        # Determine dependencies for builder if possible
+        if hasattr(bot_instance, 'trading_engine'):
+             self.builder.set_dependencies(
+                 mt5_client=getattr(bot_instance.trading_engine, 'mt5_client', None),
+                 trading_engine=bot_instance.trading_engine
+             )
+
     def start(self):
-        """Start refresh loop"""
+        """Start refresh loop safely"""
         if not self._running:
             self._running = True
-            self._task = asyncio.create_task(self._refresh_loop())
-            logger.info("[HeaderRefresh] Started background refresh loop")
+            try:
+                loop = asyncio.get_running_loop()
+                self._task = loop.create_task(self._refresh_loop())
+                logger.info("[HeaderRefresh] Started background refresh loop")
+            except RuntimeError:
+                # No running loop, defer start?
+                # This happens if called during init before main loop.
+                # Just ignore, MultiBotManager.start_bots will eventually run.
+                logger.warning("[HeaderRefresh] Could not start refresh loop: No event loop")
+                self._running = False
 
     def stop(self):
         """Stop refresh loop"""
@@ -40,7 +55,7 @@ class HeaderRefreshManager:
             self._task.cancel()
 
     def register_message(self, chat_id: int, message_id: int):
-        """Register a message for auto-updates"""
+        """Register a message for auto-updates (overwrites previous for chat)"""
         self.active_messages[chat_id] = message_id
 
     def unregister(self, chat_id: int):
@@ -53,18 +68,10 @@ class HeaderRefreshManager:
         while self._running:
             await asyncio.sleep(self.interval)
 
-            # Create snapshot of active messages to avoid modification during iteration
-            for chat_id, message_id in list(self.active_messages.items()):
-                try:
-                    # Logic to update header only
-                    # Requires storing original body text or rebuilding complete menu?
-                    # Menu rebuilding is safer.
-                    # This requires knowing WHICH menu is active.
-                    # For now, simplistic PnL update on header.
+            # Create snapshot
+            items = list(self.active_messages.items())
+            if not items:
+                continue
 
-                    # NOTE: Updating entire message text just to change header
-                    # requires holding state of the body content.
-                    pass
-                except Exception as e:
-                    logger.warning(f"[HeaderRefresh] Update failed for {chat_id}: {e}")
-                    self.unregister(chat_id)
+            # Logic implementation placeholder...
+            pass

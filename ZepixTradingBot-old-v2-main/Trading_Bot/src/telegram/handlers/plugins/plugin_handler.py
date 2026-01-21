@@ -3,7 +3,7 @@ Plugin Handler - Strategy Management
 
 Implements plugin control: enable, disable, config.
 
-Version: 1.0.0
+Version: 1.1.0 (Logic Integration)
 Created: 2026-01-21
 Part of: TELEGRAM_V5_CORE
 """
@@ -21,3 +21,11 @@ class PluginHandler(BaseCommandHandler):
     async def execute(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         if hasattr(self.bot, 'handle_plugins'):
             await self.bot.handle_plugins(update, context)
+
+    async def handle_enable(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        if hasattr(self.bot, 'handle_enable'):
+            await self.bot.handle_enable(update, context)
+
+    async def handle_disable(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        if hasattr(self.bot, 'handle_disable'):
+            await self.bot.handle_disable(update, context)
