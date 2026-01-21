@@ -169,6 +169,11 @@ class CommandRegistry:
         "/monthly": CommandDefinition("/monthly", CommandCategory.ANALYTICS, "Monthly summary", "handle_monthly"),
         "/stats": CommandDefinition("/stats", CommandCategory.ANALYTICS, "Statistics", "handle_stats"),
         "/winrate": CommandDefinition("/winrate", CommandCategory.ANALYTICS, "Win rate analysis", "handle_winrate"),
+        "/avgprofit": CommandDefinition("/avgprofit", CommandCategory.ANALYTICS, "Average profit per trade", "handle_avgprofit"),
+        "/avgloss": CommandDefinition("/avgloss", CommandCategory.ANALYTICS, "Average loss per trade", "handle_avgloss"),
+        "/bestday": CommandDefinition("/bestday", CommandCategory.ANALYTICS, "Best trading day", "handle_bestday"),
+        "/worstday": CommandDefinition("/worstday", CommandCategory.ANALYTICS, "Worst trading day", "handle_worstday"),
+        "/correlation": CommandDefinition("/correlation", CommandCategory.ANALYTICS, "Symbol correlation", "handle_correlation"),
         "/drawdown": CommandDefinition("/drawdown", CommandCategory.ANALYTICS, "Drawdown analysis", "handle_drawdown"),
         
         # ==================== SESSION COMMANDS (6) ====================
