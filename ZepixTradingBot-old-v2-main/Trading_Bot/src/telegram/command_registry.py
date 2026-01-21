@@ -121,10 +121,6 @@ class CommandRegistry:
         "/v3": CommandDefinition("/v3", CommandCategory.STRATEGY, "V3 Combined settings", "handle_v3"),
         "/v6": CommandDefinition("/v6", CommandCategory.STRATEGY, "V6 Price Action settings", "handle_v6"),
         "/v6_status": CommandDefinition("/v6_status", CommandCategory.STRATEGY, "V6 system status", "handle_v6_status"),
-<<<<<<< HEAD
-=======
-        "/v6_control": CommandDefinition("/v6_control", CommandCategory.STRATEGY, "V6 control menu", "handle_v6_control"),
->>>>>>> e2430dd41a1f472887c871c0bfa7eb726ddd103f
         "/v3status": CommandDefinition("/v3status", CommandCategory.STRATEGY, "V3 plugin detailed status", "handle_v3_status"),
         "/v3config": CommandDefinition("/v3config", CommandCategory.STRATEGY, "V3 configuration menu", "handle_v3_config"),
         "/v3toggle": CommandDefinition("/v3toggle", CommandCategory.STRATEGY, "Toggle V3 plugin on/off", "handle_v3_toggle"),
@@ -143,10 +139,7 @@ class CommandRegistry:
         "/tf1m_off": CommandDefinition("/tf1m_off", CommandCategory.STRATEGY, "Disable V6 1M timeframe", "handle_v6_tf1m_off"),
         "/tf5m_on": CommandDefinition("/tf5m_on", CommandCategory.STRATEGY, "Enable V6 5M timeframe", "handle_v6_tf5m_on"),
         "/tf5m_off": CommandDefinition("/tf5m_off", CommandCategory.STRATEGY, "Disable V6 5M timeframe", "handle_v6_tf5m_off"),
-<<<<<<< HEAD
         # V6 Timeframe Commands (Telegram V5 Upgrade)
-=======
->>>>>>> e2430dd41a1f472887c871c0bfa7eb726ddd103f
         "/tf15m_on": CommandDefinition("/tf15m_on", CommandCategory.STRATEGY, "Enable V6 15M timeframe", "handle_v6_tf15m_on"),
         "/tf15m_off": CommandDefinition("/tf15m_off", CommandCategory.STRATEGY, "Disable V6 15M timeframe", "handle_v6_tf15m_off"),
         "/tf30m_on": CommandDefinition("/tf30m_on", CommandCategory.STRATEGY, "Enable V6 30M timeframe", "handle_v6_tf30m_on"),
@@ -170,17 +163,10 @@ class CommandRegistry:
         "/tf4h": CommandDefinition("/tf4h", CommandCategory.TIMEFRAME, "4-hour settings", "handle_tf4h"),
         "/tf1d": CommandDefinition("/tf1d", CommandCategory.TIMEFRAME, "Daily settings", "handle_tf_1d"),
         "/trends": CommandDefinition("/trends", CommandCategory.TIMEFRAME, "Show trends", "handle_trends"),
-<<<<<<< HEAD
         "/tfconfig15m": CommandDefinition("/tfconfig15m", CommandCategory.TIMEFRAME, "Configure 15M timeframe settings", "handle_tfconfig_15m"),
         "/tfconfig30m": CommandDefinition("/tfconfig30m", CommandCategory.TIMEFRAME, "Configure 30M timeframe settings", "handle_tfconfig_30m"),
         
         # ==================== REENTRY COMMANDS (6) ====================
-=======
-        "/tfconfig15m": CommandDefinition("/tfconfig15m", CommandCategory.TIMEFRAME, "Configure 15M timeframe", "handle_tf_config_15m"),
-        "/tfconfig30m": CommandDefinition("/tfconfig30m", CommandCategory.TIMEFRAME, "Configure 30M timeframe", "handle_tf_config_30m"),
-        
-        # ==================== RE-ENTRY COMMANDS (11) ====================
->>>>>>> e2430dd41a1f472887c871c0bfa7eb726ddd103f
         "/reentry": CommandDefinition("/reentry", CommandCategory.REENTRY, "Re-entry settings", "handle_reentry_menu"),
         "/slhunt": CommandDefinition("/slhunt", CommandCategory.REENTRY, "SL hunt settings", "handle_slhunt"),
         "/tpcontinue": CommandDefinition("/tpcontinue", CommandCategory.REENTRY, "TP continuation", "handle_tpcontinue"),
@@ -189,15 +175,9 @@ class CommandRegistry:
         "/chains": CommandDefinition("/chains", CommandCategory.REENTRY, "Show active chains", "handle_chains"),
         "/autonomous": CommandDefinition("/autonomous", CommandCategory.REENTRY, "Autonomous system", "handle_autonomous"),
         "/chainlimit": CommandDefinition("/chainlimit", CommandCategory.REENTRY, "Chain level limit", "handle_chain_limit"),
-<<<<<<< HEAD
         "/reconfig": CommandDefinition("/reconfig", CommandCategory.REENTRY, "Reconfigure re-entry parameters", "handle_reentry_reconfig"),
         "/slstats": CommandDefinition("/slstats", CommandCategory.REENTRY, "SL hit statistics and patterns", "handle_sl_stats"),
         "/tpstats": CommandDefinition("/tpstats", CommandCategory.REENTRY, "TP hit statistics and patterns", "handle_tp_stats"),
-=======
-        "/reconfig": CommandDefinition("/reconfig", CommandCategory.REENTRY, "Re-entry configuration menu", "handle_reentry_config"),
-        "/slstats": CommandDefinition("/slstats", CommandCategory.REENTRY, "SL hunt statistics", "handle_sl_stats"),
-        "/tpstats": CommandDefinition("/tpstats", CommandCategory.REENTRY, "TP continuation statistics", "handle_tp_stats"),
->>>>>>> e2430dd41a1f472887c871c0bfa7eb726ddd103f
         
         # ==================== PROFIT BOOKING COMMANDS (6) ====================
         "/profit": CommandDefinition("/profit", CommandCategory.PROFIT, "Profit booking menu", "handle_profit_menu"),
@@ -221,7 +201,6 @@ class CommandRegistry:
         "/worstday": CommandDefinition("/worstday", CommandCategory.ANALYTICS, "Worst trading day", "handle_worstday"),
         "/correlation": CommandDefinition("/correlation", CommandCategory.ANALYTICS, "Symbol correlation", "handle_correlation"),
         "/drawdown": CommandDefinition("/drawdown", CommandCategory.ANALYTICS, "Drawdown analysis", "handle_drawdown"),
-<<<<<<< HEAD
         "/avgprofit": CommandDefinition("/avgprofit", CommandCategory.ANALYTICS, "Average profit per trade", "handle_avg_profit"),
         "/avgloss": CommandDefinition("/avgloss", CommandCategory.ANALYTICS, "Average loss per trade", "handle_avg_loss"),
         "/bestday": CommandDefinition("/bestday", CommandCategory.ANALYTICS, "Best trading day analysis", "handle_best_day"),
@@ -232,13 +211,6 @@ class CommandRegistry:
         "/pairreport": CommandDefinition("/pairreport", CommandCategory.ANALYTICS, "Detailed pair performance report", "handle_pair_report"),
         "/strategyreport": CommandDefinition("/strategyreport", CommandCategory.ANALYTICS, "Strategy comparison report", "handle_strategy_report"),
         "/tpreport": CommandDefinition("/tpreport", CommandCategory.ANALYTICS, "TP levels hit rate report", "handle_tp_report"),
-=======
-        "/dashboard": CommandDefinition("/dashboard", CommandCategory.ANALYTICS, "Main analytics dashboard", "handle_dashboard"),
-        "/export": CommandDefinition("/export", CommandCategory.ANALYTICS, "Export reports to PDF/CSV", "handle_export"),
-        "/pairreport": CommandDefinition("/pairreport", CommandCategory.ANALYTICS, "Performance by trading pair", "handle_pair_report"),
-        "/strategyreport": CommandDefinition("/strategyreport", CommandCategory.ANALYTICS, "Performance by strategy", "handle_strategy_report"),
-        "/tpreport": CommandDefinition("/tpreport", CommandCategory.ANALYTICS, "TP achievement rate report", "handle_tp_report"),
->>>>>>> e2430dd41a1f472887c871c0bfa7eb726ddd103f
         
         # ==================== VOICE COMMANDS (4) ====================
         "/session": CommandDefinition("/session", CommandCategory.SESSION, "Session menu", "handle_session_menu"),
@@ -263,18 +235,8 @@ class CommandRegistry:
         "/voicetest": CommandDefinition("/voicetest", CommandCategory.VOICE, "Test voice alert", "handle_voice_test"),
         "/mute": CommandDefinition("/mute", CommandCategory.VOICE, "Mute voice alerts", "handle_mute"),
         "/unmute": CommandDefinition("/unmute", CommandCategory.VOICE, "Unmute voice alerts", "handle_unmute"),
-<<<<<<< HEAD
         "/notifications": CommandDefinition("/notifications", CommandCategory.VOICE, "Configure notification preferences", "handle_notifications"),
         "/clock": CommandDefinition("/clock", CommandCategory.VOICE, "Session time clock and countdown", "handle_clock"),
-=======
-        "/notifications": CommandDefinition("/notifications", CommandCategory.VOICE, "Notification settings", "handle_notifications"),
-        "/clock": CommandDefinition("/clock", CommandCategory.VOICE, "Time/clock display", "handle_clock"),
-        
-        # ==================== SETTINGS COMMANDS (8) ====================
-        "/settings": CommandDefinition("/settings", CommandCategory.SYSTEM, "General settings menu", "handle_settings"),
-        "/info": CommandDefinition("/info", CommandCategory.SYSTEM, "Bot information display", "handle_info"),
-        "/theme": CommandDefinition("/theme", CommandCategory.SYSTEM, "UI theme settings", "handle_theme"),
->>>>>>> e2430dd41a1f472887c871c0bfa7eb726ddd103f
     }
     
     # ========================================

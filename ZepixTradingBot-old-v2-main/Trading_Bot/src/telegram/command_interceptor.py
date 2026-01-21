@@ -11,7 +11,7 @@ Part of: TELEGRAM_V5_PLUGIN_SELECTION_UPGRADE
 
 import logging
 from typing import Dict, Callable, Optional, List, Set
-from .plugin_context_manager import PluginContextManager
+from .interceptors.plugin_context_manager import PluginContextManager
 
 logger = logging.getLogger(__name__)
 
