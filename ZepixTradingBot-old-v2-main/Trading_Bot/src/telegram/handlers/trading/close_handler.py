@@ -8,7 +8,7 @@ Created: 2026-01-21
 Part of: TELEGRAM_V5_CORE
 """
 
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Update as TelegramUpdate, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes
 from ...core.base_command_handler import BaseCommandHandler
 
@@ -18,7 +18,7 @@ class CloseHandler(BaseCommandHandler):
         super().__init__(bot)
         self.command_name = "close"
 
-    async def execute(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def execute(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         # Show options to close
         text = (
             "❌ **CLOSE POSITIONS**\n"
@@ -37,4 +37,6 @@ class CloseHandler(BaseCommandHandler):
             ]
         ]
 
-        await self.edit_message_with_header(update, text, keyboard)
+        await self.edit_message_with_header(TelegramUpdate, text, keyboard)
+
+

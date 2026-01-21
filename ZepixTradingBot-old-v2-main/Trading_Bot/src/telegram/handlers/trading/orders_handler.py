@@ -8,7 +8,7 @@ Created: 2026-01-21
 Part of: TELEGRAM_V5_CORE
 """
 
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Update as TelegramUpdate, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes
 from ...core.base_command_handler import BaseCommandHandler
 
@@ -18,12 +18,12 @@ class OrdersHandler(BaseCommandHandler):
         super().__init__(bot)
         self.command_name = "orders"
 
-    async def execute(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def execute(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         chat_id = update.effective_chat.id
 
         # Mock implementation if MT5 client methods vary
         if not hasattr(self.bot, 'mt5_client') or not self.bot.mt5_client:
-             await self.send_error_message(update, "MT5 Client not connected")
+             await self.send_error_message(TelegramUpdate, "MT5 Client not connected")
              return
 
         # Fetch orders (using fake method or actual if known)
@@ -32,7 +32,7 @@ class OrdersHandler(BaseCommandHandler):
 
         if not orders:
             await self.edit_message_with_header(
-                update,
+                TelegramUpdate,
                 "📋 **PENDING ORDERS**\n\nNo pending orders found.",
                 [[InlineKeyboardButton("⬅️ Back", callback_data="menu_trading")]]
             )
@@ -44,4 +44,6 @@ class OrdersHandler(BaseCommandHandler):
 
         keyboard = [[InlineKeyboardButton("⬅️ Back", callback_data="menu_trading")]]
 
-        await self.edit_message_with_header(update, text, keyboard)
+        await self.edit_message_with_header(TelegramUpdate, text, keyboard)
+
+

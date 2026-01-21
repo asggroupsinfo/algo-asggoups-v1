@@ -16,7 +16,7 @@ Version: 1.0
 Created: 2026-01-11
 """
 
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Update as TelegramUpdate, InlineKeyboardButton, InlineKeyboardMarkup
 from typing import Optional
 import logging
 import sys
@@ -48,7 +48,7 @@ class SessionMenuHandler:
         self.logger = logging.getLogger(__name__)
         self.logger.info("SessionMenuHandler initialized")
     
-    def show_session_dashboard(self, update: Update, context):
+    def show_session_dashboard(self, update: TelegramUpdate, context):
         """
         Display Session Manager dashboard with current status.
         
@@ -100,7 +100,7 @@ class SessionMenuHandler:
         
         self.logger.info("Dashboard displayed")
     
-    def show_session_edit_menu(self, update: Update, context):
+    def show_session_edit_menu(self, update: TelegramUpdate, context):
         """
         Show list of all 5 Forex sessions to edit.
         """
@@ -135,7 +135,7 @@ class SessionMenuHandler:
         
         self.logger.info("Session edit menu displayed")
     
-    def show_session_details(self, update: Update, context, session_id: str):
+    def show_session_details(self, update: TelegramUpdate, context, session_id: str):
         """
         Show detailed edit screen for a specific session.
         """
@@ -214,7 +214,7 @@ class SessionMenuHandler:
         
         self.logger.info(f"Session edit screen displayed for: {session_id}")
     
-    def handle_symbol_toggle(self, update: Update, context):
+    def handle_symbol_toggle(self, update: TelegramUpdate, context):
         """
         Handle symbol ON/OFF toggle.
         """
@@ -235,11 +235,11 @@ class SessionMenuHandler:
         self.session_mgr.toggle_symbol(session_id, symbol)
         
         # Refresh the edit menu
-        self.show_session_details(update, context, session_id)
+        self.show_session_details(TelegramUpdate, context, session_id)
         
         self.logger.info(f"Toggled symbol {symbol} for session {session_id}")
     
-    def handle_time_adjustment(self, update: Update, context):
+    def handle_time_adjustment(self, update: TelegramUpdate, context):
         """
         Handle session time adjustment.
         """
@@ -261,11 +261,11 @@ class SessionMenuHandler:
         self.session_mgr.adjust_session_time(session_id, f"{field}_time", delta_minutes)
         
         # Refresh the edit menu
-        self.show_session_details(update, context, session_id)
+        self.show_session_details(TelegramUpdate, context, session_id)
         
         self.logger.info(f"Adjusted {field}_time for {session_id} by {delta_minutes} minutes")
     
-    def handle_master_switch(self, update: Update, context):
+    def handle_master_switch(self, update: TelegramUpdate, context):
         """
         Toggle master switch.
         """
@@ -279,11 +279,11 @@ class SessionMenuHandler:
             pass
         
         # Refresh dashboard
-        self.show_session_dashboard(update, context)
+        self.show_session_dashboard(TelegramUpdate, context)
         
         self.logger.info(f"Master switch toggled to: {new_state}")
     
-    def handle_force_close_toggle(self, update: Update, context):
+    def handle_force_close_toggle(self, update: TelegramUpdate, context):
         """
         Toggle force close for a session.
         """
@@ -304,7 +304,7 @@ class SessionMenuHandler:
         new_state = self.session_mgr.toggle_force_close(session_id)
         
         # Refresh the edit menu
-        self.show_session_details(update, context, session_id)
+        self.show_session_details(TelegramUpdate, context, session_id)
         
     def handle_callback_query(self, callback_data: str, chat_id: int, message_id: int):
         """
@@ -381,3 +381,5 @@ if __name__ == "__main__":
     
     print("SessionMenuHandler initialized successfully")
     print(f"Status: {handler.get_status()}")
+
+

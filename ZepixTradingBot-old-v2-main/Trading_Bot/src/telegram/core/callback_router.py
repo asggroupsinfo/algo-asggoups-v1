@@ -10,8 +10,8 @@ Part of: TELEGRAM_V5_CORE
 """
 
 import logging
-from telegram import Update
-from telegram.ext import ContextTypes
+import telegram as python_telegram_bot$([System.Environment]::NewLine)from python_telegram_bot import Update
+from telegram.ext import Co as TelegramUpdatentextTypes
 
 logger = logging.getLogger(__name__)
 
@@ -61,7 +61,7 @@ class CallbackRouter:
         self.menus[name] = menu_instance
         logger.info(f"[CallbackRouter] Registered menu: {name}")
 
-    async def handle_callback(self, update: Update, context: ContextTypes.DEFAULT_TYPE) -> bool:
+    async def handle_callback(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE) -> bool:
         """
         Main entry point for callback routing.
         Returns True if handled, False otherwise.
@@ -83,7 +83,7 @@ class CallbackRouter:
                 except:
                     pass
 
-                await self.handlers[prefix](update, context)
+                await self.handlers[prefix](TelegramUpdate, context)
                 return True
             except Exception as e:
                 logger.error(f"Error handling callback {data}: {e}", exc_info=True)
@@ -93,31 +93,31 @@ class CallbackRouter:
 
     # --- Routing Logic ---
 
-    async def _route_system(self, update, context):
+    async def _route_system(self, TelegramUpdate, context):
         data = update.callback_query.data
         action = data.replace("system_", "")
 
         handler_name = f"handle_system_{action}"
         if hasattr(self.bot, handler_name):
-             await getattr(self.bot, handler_name)(update, context)
+             await getattr(self.bot, handler_name)(TelegramUpdate, context)
         else:
              # Fallback
-             await self.bot.handle_status(update, context)
+             await self.bot.handle_status(TelegramUpdate, context)
 
-    async def _route_navigation(self, update, context):
+    async def _route_navigation(self, TelegramUpdate, context):
         query = update.callback_query
         data = query.data
 
         if data == "nav_main_menu":
             if "main" in self.menus:
-                await self.menus["main"].send_menu(update, context)
+                await self.menus["main"].send_menu(TelegramUpdate, context)
             else:
-                await self.bot.handle_start(update, context)
+                await self.bot.handle_start(TelegramUpdate, context)
         elif data == "nav_back":
             if "main" in self.menus:
-                await self.menus["main"].send_menu(update, context)
+                await self.menus["main"].send_menu(TelegramUpdate, context)
 
-    async def _route_plugin_selection(self, update, context):
+    async def _route_plugin_selection(self, TelegramUpdate, context):
         """Handle plugin selection callbacks (plugin_select_TYPE_COMMAND)"""
         query = update.callback_query
         data = query.data
@@ -129,7 +129,7 @@ class CallbackRouter:
 
         if parts[1] != 'select':
             # It's a standard plugin command like plugin_status
-            await self._route_domain(update, context)
+            await self._route_domain(TelegramUpdate, context)
             return
 
         if len(parts) < 4:
@@ -151,11 +151,11 @@ class CallbackRouter:
         handler_name = f"handle_{command_name}"
         if hasattr(self.bot, handler_name):
             logger.info(f"Context set to {plugin_type}, executing {handler_name}")
-            await getattr(self.bot, handler_name)(update, context)
+            await getattr(self.bot, handler_name)(TelegramUpdate, context)
         else:
             await query.edit_message_text(f"❌ Command handler not found: {command_name}")
 
-    async def _route_menu(self, update, context):
+    async def _route_menu(self, TelegramUpdate, context):
         """Handle menu navigation (menu_trading, menu_risk, etc.)"""
         query = update.callback_query
         data = query.data
@@ -164,12 +164,12 @@ class CallbackRouter:
         category = data.split('_')[1]
 
         if category in self.menus:
-            await self.menus[category].send_menu(update, context)
+            await self.menus[category].send_menu(TelegramUpdate, context)
         else:
             logger.warning(f"Menu category not found: {category}")
             await query.edit_message_text(f"⚠️ Menu not available: {category}")
 
-    async def _route_domain(self, update, context):
+    async def _route_domain(self, TelegramUpdate, context):
         """Generic router for domain prefixes (trading_*, risk_*, v3_*)"""
         data = update.callback_query.data
         # data = prefix_action
@@ -187,16 +187,18 @@ class CallbackRouter:
         # 1. Try specific handler: handle_prefix_action
         handler_name = f"handle_{data}"
         if hasattr(self.bot, handler_name):
-            await getattr(self.bot, handler_name)(update, context)
+            await getattr(self.bot, handler_name)(TelegramUpdate, context)
             return
 
         # 2. Try generic handler: handle_action (Legacy compatibility)
         handler_name_legacy = f"handle_{action}"
         if hasattr(self.bot, handler_name_legacy):
-            await getattr(self.bot, handler_name_legacy)(update, context)
+            await getattr(self.bot, handler_name_legacy)(TelegramUpdate, context)
             return
 
         # 3. Try domain handler: handle_prefix_command
         # e.g. handle_trading_command(action) - not standard in python-telegram-bot
 
         await update.callback_query.edit_message_text(f"🛠️ {data} not implemented yet.")
+
+

@@ -8,8 +8,8 @@ Created: 2026-01-21
 Part of: TELEGRAM_V5_CORE
 """
 
-from telegram import Update
-from telegram.ext import ContextTypes
+import telegram as python_telegram_bot$([System.Environment]::NewLine)from python_telegram_bot import Update
+from telegram.ext import Co as TelegramUpdatentextTypes
 from ...core.base_command_handler import BaseCommandHandler
 
 class SessionHandler(BaseCommandHandler):
@@ -18,18 +18,20 @@ class SessionHandler(BaseCommandHandler):
         super().__init__(bot)
         self.command_name = "session"
 
-    async def execute(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def execute(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         if hasattr(self.bot, 'handle_session_menu'):
-            await self.bot.handle_session_menu(update, context)
+            await self.bot.handle_session_menu(TelegramUpdate, context)
 
-    async def handle_london(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_london(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         if hasattr(self.bot, 'handle_london'):
-            await self.bot.handle_london(update, context)
+            await self.bot.handle_london(TelegramUpdate, context)
 
-    async def handle_newyork(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_newyork(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         if hasattr(self.bot, 'handle_newyork'):
-            await self.bot.handle_newyork(update, context)
+            await self.bot.handle_newyork(TelegramUpdate, context)
 
-    async def handle_tokyo(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_tokyo(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         if hasattr(self.bot, 'handle_tokyo'):
-            await self.bot.handle_tokyo(update, context)
+            await self.bot.handle_tokyo(TelegramUpdate, context)
+
+

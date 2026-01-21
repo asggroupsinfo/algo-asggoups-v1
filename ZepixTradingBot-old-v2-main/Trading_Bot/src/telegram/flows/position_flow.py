@@ -10,8 +10,8 @@ Created: 2026-01-21
 Part of: TELEGRAM_V5_ZERO_TYPING_UI
 """
 
-from telegram import Update
-from telegram.ext import ContextTypes
+import telegram as python_telegram_bot$([System.Environment]::NewLine)from python_telegram_bot import Update
+from telegram.ext import Co as TelegramUpdatentextTypes
 from .base_flow import BaseFlow
 
 class PositionFlow(BaseFlow):
@@ -20,14 +20,14 @@ class PositionFlow(BaseFlow):
     def flow_name(self) -> str:
         return "position_flow"
 
-    async def start_close(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def start_close(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         chat_id = update.effective_chat.id
         state = self.state_manager.start_flow(chat_id, self.flow_name)
         state.add_data("action", "CLOSE")
         state.step = 0
-        await self.show_step(update, context, 0)
+        await self.show_step(TelegramUpdate, context, 0)
 
-    async def show_step(self, update: Update, context: ContextTypes.DEFAULT_TYPE, step: int):
+    async def show_step(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE, step: int):
         # Implementation of position selection step
         text = "Select position to close (Placeholder)"
         keyboard = [[self.btn.create_button("Cancel", "flow_pos_cancel")]]
@@ -35,11 +35,13 @@ class PositionFlow(BaseFlow):
         if update.callback_query:
             await update.callback_query.edit_message_text(text, reply_markup=self.btn.create_confirmation_menu("flow_pos_confirm", "flow_pos_cancel"))
 
-    async def process_step(self, update: Update, context: ContextTypes.DEFAULT_TYPE, state):
+    async def process_step(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE, state):
         query = update.callback_query
         data = query.data
         if "flow_pos_confirm" in data:
             await query.edit_message_text("Position closed.")
             self.state_manager.clear_state(update.effective_chat.id)
         elif "flow_pos_cancel" in data:
-            await self.cancel(update, context)
+            await self.cancel(TelegramUpdate, context)
+
+

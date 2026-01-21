@@ -8,7 +8,7 @@ Part of: TELEGRAM_V5_CORE
 
 from abc import ABC, abstractmethod
 from typing import List, Dict
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+import telegram as python_telegram_bot$([System.Environment]::NewLine)from python_telegram_bot import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
 from .button_builder import ButtonBuilder
 
@@ -27,13 +27,13 @@ class BaseMenuBuilder(ABC):
         """
         pass
 
-    async def send_menu(self, update: Update, context: ContextTypes.DEFAULT_TYPE, **kwargs):
+    async def send_menu(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE, **kwargs):
         """Standard method to send/edit menu with sticky header"""
         menu_data = self.build_menu(**kwargs)
 
         if update.callback_query:
             await self.bot.edit_message_with_header(
-                update,
+                TelegramUpdate,
                 menu_data["text"],
                 menu_data["reply_markup"]
             )
@@ -64,3 +64,5 @@ class BaseMenuBuilder(ABC):
         ]
 
         return self.btn.add_navigation(menu, back_callback="nav_main_menu")
+
+

@@ -8,8 +8,8 @@ Created: 2026-01-21
 Part of: TELEGRAM_V5_CORE
 """
 
-from telegram import Update
-from telegram.ext import ContextTypes
+import telegram as python_telegram_bot$([System.Environment]::NewLine)from python_telegram_bot import Update
+from telegram.ext import Co as TelegramUpdatentextTypes
 from ...core.base_command_handler import BaseCommandHandler
 
 class VoiceHandler(BaseCommandHandler):
@@ -18,18 +18,20 @@ class VoiceHandler(BaseCommandHandler):
         super().__init__(bot)
         self.command_name = "voice"
 
-    async def execute(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def execute(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         if hasattr(self.bot, 'handle_voice_menu'):
-            await self.bot.handle_voice_menu(update, context)
+            await self.bot.handle_voice_menu(TelegramUpdate, context)
 
-    async def handle_test(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_test(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         if hasattr(self.bot, 'handle_voice_test'):
-            await self.bot.handle_voice_test(update, context)
+            await self.bot.handle_voice_test(TelegramUpdate, context)
 
-    async def handle_mute(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_mute(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         if hasattr(self.bot, 'handle_mute'):
-            await self.bot.handle_mute(update, context)
+            await self.bot.handle_mute(TelegramUpdate, context)
 
-    async def handle_unmute(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_unmute(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         if hasattr(self.bot, 'handle_unmute'):
-            await self.bot.handle_unmute(update, context)
+            await self.bot.handle_unmute(TelegramUpdate, context)
+
+

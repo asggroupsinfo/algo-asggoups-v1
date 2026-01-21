@@ -12,7 +12,7 @@ Created: 2026-01-21
 Part of: TELEGRAM_V5_ZERO_TYPING_UI
 """
 
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Update as TelegramUpdate, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes
 from .base_flow import BaseFlow
 import logging
@@ -25,23 +25,23 @@ class TradingFlow(BaseFlow):
     def flow_name(self) -> str:
         return "trading_flow"
 
-    async def start_buy(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def start_buy(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         chat_id = update.effective_chat.id
         logger.info(f"Starting BUY flow for {chat_id}")
         state = self.state_manager.start_flow(chat_id, self.flow_name)
         state.add_data("direction", "BUY")
         state.step = 0
-        await self.show_step(update, context, 0)
+        await self.show_step(TelegramUpdate, context, 0)
 
-    async def start_sell(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def start_sell(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         chat_id = update.effective_chat.id
         logger.info(f"Starting SELL flow for {chat_id}")
         state = self.state_manager.start_flow(chat_id, self.flow_name)
         state.add_data("direction", "SELL")
         state.step = 0
-        await self.show_step(update, context, 0)
+        await self.show_step(TelegramUpdate, context, 0)
 
-    async def show_step(self, update: Update, context: ContextTypes.DEFAULT_TYPE, step: int):
+    async def show_step(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE, step: int):
         chat_id = update.effective_chat.id
         state = self.state_manager.get_state(chat_id)
         direction = state.get_data("direction", "TRADE")
@@ -112,7 +112,7 @@ class TradingFlow(BaseFlow):
         else:
             await self.bot.send_message(text, reply_markup=keyboard)
 
-    async def process_step(self, update: Update, context: ContextTypes.DEFAULT_TYPE, state):
+    async def process_step(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE, state):
         query = update.callback_query
         data = query.data
         chat_id = update.effective_chat.id
@@ -124,13 +124,13 @@ class TradingFlow(BaseFlow):
                 symbol = data.split("_")[-1]
                 state.add_data("symbol", symbol)
                 state.step = 1
-                await self.show_step(update, context, 1)
+                await self.show_step(TelegramUpdate, context, 1)
 
             elif "flow_trade_lot_" in data:
                 lot = data.split("_")[-1]
                 state.add_data("lot", lot)
                 state.step = 2
-                await self.show_step(update, context, 2)
+                await self.show_step(TelegramUpdate, context, 2)
 
             elif "flow_trade_confirm" in data:
                 # Execute Trade
@@ -162,4 +162,6 @@ class TradingFlow(BaseFlow):
                 self.state_manager.clear_state(chat_id)
 
             elif "flow_trade_cancel" in data:
-                await self.cancel(update, context)
+                await self.cancel(TelegramUpdate, context)
+
+

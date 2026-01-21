@@ -17,7 +17,7 @@ import os
 import csv
 import io
 
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Update as TelegramUpdate, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes, CommandHandler, CallbackQueryHandler
 
 from .base_bot import BaseIndependentBot
@@ -204,13 +204,13 @@ class ControllerBot(BaseIndependentBot):
     # CORE HANDLERS
     # =========================================================================
 
-    async def handle_start(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_start(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         """Handle /start command - Entry point to V5 Menu System"""
         user_id = update.effective_user.id
         logger.info(f"[ControllerBot] /start called by {user_id}")
-        await self.main_menu.send_menu(update, context)
+        await self.main_menu.send_menu(TelegramUpdate, context)
 
-    async def handle_callback(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_callback(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         """Handle all callback queries via Router"""
         query = update.callback_query
         data = query.data
@@ -218,7 +218,7 @@ class ControllerBot(BaseIndependentBot):
         
         # 1. Intercept Plugin Selection (Phase 3)
         if data.startswith("plugin_select_"):
-            result = await self.command_interceptor.handle_selection(update, context)
+            result = await self.command_interceptor.handle_selection(TelegramUpdate, context)
             if result:
                 plugin_name = result['plugin'].upper()
                 await query.edit_message_text(f"✅ Context set to **{plugin_name}**\n\nPlease retry your command.", parse_mode='Markdown')
@@ -226,14 +226,14 @@ class ControllerBot(BaseIndependentBot):
 
         # 2. Check for Active Flows (Doc 4 Priority)
         if data.startswith("flow_trade"):
-            if await self.trading_flow.handle_callback(update, context):
+            if await self.trading_flow.handle_callback(TelegramUpdate, context):
                 return
         if data.startswith("flow_risk"):
-            if await self.risk_flow.handle_callback(update, context):
+            if await self.risk_flow.handle_callback(TelegramUpdate, context):
                 return
 
         # 3. Try V5 Router
-        if await self.callback_router.handle_callback(update, context):
+        if await self.callback_router.handle_callback(TelegramUpdate, context):
             return
 
         # 4. Fallback to Legacy Handlers
@@ -243,17 +243,17 @@ class ControllerBot(BaseIndependentBot):
             pass
 
         if data == "dashboard":
-            await self.handle_dashboard(update, context)
+            await self.handle_dashboard(TelegramUpdate, context)
         elif data == "settings":
-            await self.handle_settings(update, context)
+            await self.handle_settings(TelegramUpdate, context)
         elif data == "status":
-            await self.handle_status(update, context)
+            await self.handle_status(TelegramUpdate, context)
         elif data == "help":
-            await self.handle_help(update, context)
+            await self.handle_help(TelegramUpdate, context)
 
         # V6 Menu Fallback
         elif self.v6_menu_builder and (data.startswith("v6_") or data.startswith("tf")):
-            await self._handle_v6_callback(update, context)
+            await self._handle_v6_callback(TelegramUpdate, context)
 
         else:
             await query.edit_message_text(f"❓ Unknown option: {data}")
@@ -263,139 +263,139 @@ class ControllerBot(BaseIndependentBot):
     # =========================================================================
 
     # --- Flow Triggers ---
-    async def handle_buy_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_buy_command(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         """Trigger Buy Wizard (Intercepted)"""
         # Phase 3: Intercept
-        if await self.command_interceptor.intercept(update, context, "/buy"):
+        if await self.command_interceptor.intercept(TelegramUpdate, context, "/buy"):
             return
 
-        await self.trading_flow.start_buy(update, context)
+        await self.trading_flow.start_buy(TelegramUpdate, context)
 
-    async def handle_sell_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_sell_command(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         """Trigger Sell Wizard (Intercepted)"""
-        if await self.command_interceptor.intercept(update, context, "/sell"):
+        if await self.command_interceptor.intercept(TelegramUpdate, context, "/sell"):
             return
 
-        await self.trading_flow.start_sell(update, context)
+        await self.trading_flow.start_sell(TelegramUpdate, context)
 
-    async def handle_trading_buy_start(self, update, context):
+    async def handle_trading_buy_start(self, TelegramUpdate, context):
         """Callback Trigger for Buy Wizard"""
         # Callbacks also need interception if no context
-        if await self.command_interceptor.intercept(update, context, "/buy"):
+        if await self.command_interceptor.intercept(TelegramUpdate, context, "/buy"):
             return
-        await self.trading_flow.start_buy(update, context)
+        await self.trading_flow.start_buy(TelegramUpdate, context)
 
-    async def handle_trading_sell_start(self, update, context):
+    async def handle_trading_sell_start(self, TelegramUpdate, context):
         """Callback Trigger for Sell Wizard"""
-        if await self.command_interceptor.intercept(update, context, "/sell"):
+        if await self.command_interceptor.intercept(TelegramUpdate, context, "/sell"):
             return
-        await self.trading_flow.start_sell(update, context)
+        await self.trading_flow.start_sell(TelegramUpdate, context)
 
-    async def handle_risk_setlot_start(self, update, context):
+    async def handle_risk_setlot_start(self, TelegramUpdate, context):
         """Callback Trigger for Lot Wizard"""
-        if await self.command_interceptor.intercept(update, context, "/setlot"):
+        if await self.command_interceptor.intercept(TelegramUpdate, context, "/setlot"):
             return
-        await self.risk_flow.start_set_lot(update, context)
+        await self.risk_flow.start_set_lot(TelegramUpdate, context)
 
     # --- Trading Handlers ---
-    async def handle_trading_positions(self, update, context):
-        await self.positions_handler.handle(update, context)
+    async def handle_trading_positions(self, TelegramUpdate, context):
+        await self.positions_handler.handle(TelegramUpdate, context)
 
-    async def handle_trading_orders(self, update, context):
-        await self.orders_handler.handle(update, context)
+    async def handle_trading_orders(self, TelegramUpdate, context):
+        await self.orders_handler.handle(TelegramUpdate, context)
 
-    async def handle_trading_close(self, update, context):
-        await self.close_handler.handle(update, context)
+    async def handle_trading_close(self, TelegramUpdate, context):
+        await self.close_handler.handle(TelegramUpdate, context)
 
-    async def handle_trading_closeall(self, update, context):
-        await self.close_handler.handle(update, context)
+    async def handle_trading_closeall(self, TelegramUpdate, context):
+        await self.close_handler.handle(TelegramUpdate, context)
 
     # --- Risk Handlers ---
-    async def handle_risk_menu(self, update, context):
-        await self.risk_settings_handler.handle(update, context)
+    async def handle_risk_menu(self, TelegramUpdate, context):
+        await self.risk_settings_handler.handle(TelegramUpdate, context)
 
     # --- Analytics Handlers ---
-    async def handle_analytics_daily(self, update, context):
-        await self.analytics_handler.handle_daily(update, context)
+    async def handle_analytics_daily(self, TelegramUpdate, context):
+        await self.analytics_handler.handle_daily(TelegramUpdate, context)
 
-    async def handle_analytics_weekly(self, update, context):
-        await self.analytics_handler.handle_weekly(update, context)
+    async def handle_analytics_weekly(self, TelegramUpdate, context):
+        await self.analytics_handler.handle_weekly(TelegramUpdate, context)
 
-    async def handle_analytics_compare(self, update, context):
-        await self.analytics_handler.handle_compare(update, context)
+    async def handle_analytics_compare(self, TelegramUpdate, context):
+        await self.analytics_handler.handle_compare(TelegramUpdate, context)
 
-    async def handle_analytics_export(self, update, context):
-        await self.analytics_handler.handle_export(update, context)
+    async def handle_analytics_export(self, TelegramUpdate, context):
+        await self.analytics_handler.handle_export(TelegramUpdate, context)
 
     # --- Plugin Handlers ---
-    async def handle_plugin_enable(self, update, context):
-        await self.plugin_handler.handle_enable(update, context)
+    async def handle_plugin_enable(self, TelegramUpdate, context):
+        await self.plugin_handler.handle_enable(TelegramUpdate, context)
 
-    async def handle_plugin_disable(self, update, context):
-        await self.plugin_handler.handle_disable(update, context)
+    async def handle_plugin_disable(self, TelegramUpdate, context):
+        await self.plugin_handler.handle_disable(TelegramUpdate, context)
 
     # --- Session Handlers ---
-    async def handle_session_london(self, update, context):
-        await self.session_handler.handle_london(update, context)
+    async def handle_session_london(self, TelegramUpdate, context):
+        await self.session_handler.handle_london(TelegramUpdate, context)
 
-    async def handle_session_newyork(self, update, context):
-        await self.session_handler.handle_newyork(update, context)
+    async def handle_session_newyork(self, TelegramUpdate, context):
+        await self.session_handler.handle_newyork(TelegramUpdate, context)
 
-    async def handle_session_tokyo(self, update, context):
-        await self.session_handler.handle_tokyo(update, context)
+    async def handle_session_tokyo(self, TelegramUpdate, context):
+        await self.session_handler.handle_tokyo(TelegramUpdate, context)
 
     # --- Voice Handlers ---
-    async def handle_voice_test(self, update, context):
-        await self.voice_handler.handle_test(update, context)
+    async def handle_voice_test(self, TelegramUpdate, context):
+        await self.voice_handler.handle_test(TelegramUpdate, context)
 
-    async def handle_voice_mute(self, update, context):
-        await self.voice_handler.handle_mute(update, context)
+    async def handle_voice_mute(self, TelegramUpdate, context):
+        await self.voice_handler.handle_mute(TelegramUpdate, context)
 
-    async def handle_voice_unmute(self, update, context):
-        await self.voice_handler.handle_unmute(update, context)
+    async def handle_voice_unmute(self, TelegramUpdate, context):
+        await self.voice_handler.handle_unmute(TelegramUpdate, context)
     
     # =========================================================================
     # RESTORED LEGACY HANDLERS (Bridge Strategy)
     # =========================================================================
     
     # --- V3 Logic Toggles ---
-    async def handle_v3_logic1_on(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_v3_logic1_on(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         """Enable V3 Logic 1"""
         if self.trading_engine:
             self.trading_engine.enable_logic(1)
-        await self.edit_message_with_header(update, "✅ <b>V3 LOGIC 1 ENABLED</b>", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_v3")]])
+        await self.edit_message_with_header(TelegramUpdate, "✅ <b>V3 LOGIC 1 ENABLED</b>", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_v3")]])
 
-    async def handle_v3_logic1_off(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_v3_logic1_off(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         """Disable V3 Logic 1"""
         if self.trading_engine:
             self.trading_engine.disable_logic(1)
-        await self.edit_message_with_header(update, "❌ <b>V3 LOGIC 1 DISABLED</b>", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_v3")]])
+        await self.edit_message_with_header(TelegramUpdate, "❌ <b>V3 LOGIC 1 DISABLED</b>", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_v3")]])
 
-    async def handle_v3_logic2_on(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_v3_logic2_on(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         """Enable V3 Logic 2"""
         if self.trading_engine:
             self.trading_engine.enable_logic(2)
-        await self.edit_message_with_header(update, "✅ <b>V3 LOGIC 2 ENABLED</b>", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_v3")]])
+        await self.edit_message_with_header(TelegramUpdate, "✅ <b>V3 LOGIC 2 ENABLED</b>", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_v3")]])
 
-    async def handle_v3_logic2_off(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_v3_logic2_off(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         """Disable V3 Logic 2"""
         if self.trading_engine:
             self.trading_engine.disable_logic(2)
-        await self.edit_message_with_header(update, "❌ <b>V3 LOGIC 2 DISABLED</b>", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_v3")]])
+        await self.edit_message_with_header(TelegramUpdate, "❌ <b>V3 LOGIC 2 DISABLED</b>", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_v3")]])
 
-    async def handle_v3_logic3_on(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_v3_logic3_on(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         """Enable V3 Logic 3"""
         if self.trading_engine:
             self.trading_engine.enable_logic(3)
-        await self.edit_message_with_header(update, "✅ <b>V3 LOGIC 3 ENABLED</b>", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_v3")]])
+        await self.edit_message_with_header(TelegramUpdate, "✅ <b>V3 LOGIC 3 ENABLED</b>", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_v3")]])
 
-    async def handle_v3_logic3_off(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_v3_logic3_off(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         """Disable V3 Logic 3"""
         if self.trading_engine:
             self.trading_engine.disable_logic(3)
-        await self.edit_message_with_header(update, "❌ <b>V3 LOGIC 3 DISABLED</b>", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_v3")]])
+        await self.edit_message_with_header(TelegramUpdate, "❌ <b>V3 LOGIC 3 DISABLED</b>", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_v3")]])
 
-    async def handle_v3_status(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_v3_status(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         """Show V3 Status"""
         # Logic to check status
         l1 = "✅" if self.trading_engine and self.trading_engine.logic_states.get(1, True) else "❌"
@@ -409,21 +409,21 @@ class ControllerBot(BaseIndependentBot):
             f"Logic 2 (15m): {l2}\n"
             f"Logic 3 (1h): {l3}"
         )
-        await self.edit_message_with_header(update, text, [[InlineKeyboardButton("⬅️ Back", callback_data="menu_v3")]])
+        await self.edit_message_with_header(TelegramUpdate, text, [[InlineKeyboardButton("⬅️ Back", callback_data="menu_v3")]])
 
-    async def handle_v3_toggle(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_v3_toggle(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         """Toggle all V3"""
         # Placeholder
-        await self.edit_message_with_header(update, "ℹ️ Use individual logic toggles.", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_v3")]])
+        await self.edit_message_with_header(TelegramUpdate, "ℹ️ Use individual logic toggles.", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_v3")]])
 
     # --- V6 Toggles ---
-    async def _toggle_v6(self, update, tf, enable):
+    async def _toggle_v6(self, TelegramUpdate, tf, enable):
         if self.trading_engine and hasattr(self.trading_engine, 'toggle_v6_timeframe'):
              self.trading_engine.toggle_v6_timeframe(tf, enable)
         status = "ENABLED" if enable else "DISABLED"
         emoji = "✅" if enable else "❌"
         await self.edit_message_with_header(
-            update,
+            TelegramUpdate,
             f"{emoji} <b>V6 {tf.upper()} {status}</b>",
             [[InlineKeyboardButton("⬅️ Back", callback_data="menu_v6")]]
         )
@@ -437,52 +437,52 @@ class ControllerBot(BaseIndependentBot):
     async def handle_v6_tf4h_on(self, u, c): await self._toggle_v6(u, '4h', True)
     async def handle_v6_tf4h_off(self, u, c): await self._toggle_v6(u, '4h', False)
 
-    async def handle_v6_status(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_v6_status(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         text = "🟢 <b>V6 PRICE ACTION STATUS</b>\n━━━━━━━━━━━━━━━━━━━━━━━━\nCheck individual timeframes."
-        await self.edit_message_with_header(update, text, [[InlineKeyboardButton("⬅️ Back", callback_data="menu_v6")]])
+        await self.edit_message_with_header(TelegramUpdate, text, [[InlineKeyboardButton("⬅️ Back", callback_data="menu_v6")]])
 
     # --- System Controls ---
-    async def handle_system_pause(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_system_pause(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         self.is_paused = True
         if self.trading_engine and hasattr(self.trading_engine, 'pause_trading'):
             self.trading_engine.pause_trading()
-        await self.edit_message_with_header(update, "🔴 <b>SYSTEM PAUSED</b>", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_system")]])
+        await self.edit_message_with_header(TelegramUpdate, "🔴 <b>SYSTEM PAUSED</b>", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_system")]])
 
-    async def handle_system_resume(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_system_resume(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         self.is_paused = False
         if self.trading_engine and hasattr(self.trading_engine, 'resume_trading'):
             self.trading_engine.resume_trading()
-        await self.edit_message_with_header(update, "🟢 <b>SYSTEM RESUMED</b>", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_system")]])
+        await self.edit_message_with_header(TelegramUpdate, "🟢 <b>SYSTEM RESUMED</b>", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_system")]])
 
-    async def handle_system_status(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        await self.handle_status(update, context)
+    async def handle_system_status(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
+        await self.handle_status(TelegramUpdate, context)
 
     # --- Analytics Placeholders ---
     # Moved to AnalyticsHandler logic where applicable
 
     # --- Plugin Placeholders ---
-    async def handle_plugin_status(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        await self.edit_message_with_header(update, "🔌 <b>PLUGIN STATUS</b>\n\nV3: Active\nV6: Active", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_plugin")]])
+    async def handle_plugin_status(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
+        await self.edit_message_with_header(TelegramUpdate, "🔌 <b>PLUGIN STATUS</b>\n\nV3: Active\nV6: Active", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_plugin")]])
 
     # --- Session Placeholders ---
-    async def handle_session_status(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        await self.edit_message_with_header(update, "🕐 <b>SESSION STATUS</b>\n\nLondon: Open\nNew York: Open", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_session")]])
+    async def handle_session_status(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
+        await self.edit_message_with_header(TelegramUpdate, "🕐 <b>SESSION STATUS</b>\n\nLondon: Open\nNew York: Open", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_session")]])
 
     # --- Voice Placeholders ---
-    async def handle_voice_status(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        await self.edit_message_with_header(update, "🔊 <b>VOICE STATUS</b>\n\nSystem: Ready", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_voice")]])
+    async def handle_voice_status(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
+        await self.edit_message_with_header(TelegramUpdate, "🔊 <b>VOICE STATUS</b>\n\nSystem: Ready", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_voice")]])
 
-    async def handle_voice_test(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_voice_test(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         # Trigger actual test if possible
         if self.trading_engine and hasattr(self.trading_engine, 'voice_system'):
              self.trading_engine.voice_system.speak("Voice test initiated.")
-        await self.edit_message_with_header(update, "🔊 Test signal sent.", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_voice")]])
+        await self.edit_message_with_header(TelegramUpdate, "🔊 Test signal sent.", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_voice")]])
 
     # =========================================================================
     # UTILS
     # =========================================================================
 
-    async def edit_message_with_header(self, update: Update, text: str, reply_markup: InlineKeyboardMarkup):
+    async def edit_message_with_header(self, update: TelegramUpdate, text: str, reply_markup: InlineKeyboardMarkup):
         """
         Updates the message with a sticky header.
         Required by CallbackRouter/BaseMenuBuilder.
@@ -573,40 +573,40 @@ class ControllerBot(BaseIndependentBot):
     # LEGACY COMMANDS (Simplified)
     # =========================================================================
 
-    async def handle_help(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_help(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("Use /start to open the main menu.")
 
-    async def handle_status(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_status(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         uptime = datetime.now() - self.startup_time
         await update.message.reply_text(f"🟢 Active (Uptime: {str(uptime).split('.')[0]})")
 
-    async def handle_settings(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_settings(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("Settings are now in the Main Menu > Settings.")
 
-    async def handle_stop_bot(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_stop_bot(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         self.is_paused = True
         await update.message.reply_text("🔴 Bot Paused.")
 
-    async def handle_resume_bot(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_resume_bot(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         self.is_paused = False
         await update.message.reply_text("🟢 Bot Resumed.")
         
-    async def handle_pause_bot(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        await self.handle_stop_bot(update, context)
+    async def handle_pause_bot(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
+        await self.handle_stop_bot(TelegramUpdate, context)
 
-    async def handle_restart(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_restart(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("🔄 Restarting...")
 
-    async def handle_info(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_info(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("ZepixTradingBot V6 (V5 Foundation)")
 
-    async def handle_version(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_version(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("Version: 3.7.0")
 
-    async def handle_dashboard(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        await self.handle_start(update, context)
+    async def handle_dashboard(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
+        await self.handle_start(TelegramUpdate, context)
         
-    async def handle_v6_menu(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_v6_menu(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         if self.v6_menu_builder:
             menu_data = self.v6_menu_builder.build_v6_submenu()
             await update.message.reply_text(
@@ -615,10 +615,10 @@ class ControllerBot(BaseIndependentBot):
                 parse_mode=menu_data.get("parse_mode", "Markdown")
             )
 
-    async def handle_v6_status(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_v6_status(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("V6 Status: Active")
 
-    async def _handle_v6_callback(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def _handle_v6_callback(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         """Legacy V6 callback handling logic"""
         if not self.v6_menu_builder: return
         query = update.callback_query
@@ -631,3 +631,5 @@ class ControllerBot(BaseIndependentBot):
                 reply_markup=menu_data["reply_markup"],
                 parse_mode="Markdown"
             )
+
+

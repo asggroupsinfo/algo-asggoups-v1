@@ -9,7 +9,7 @@ Created: 2026-01-21
 Part of: TELEGRAM_V5_CORE
 """
 
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Update as TelegramUpdate, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes
 from ...core.base_command_handler import BaseCommandHandler
 
@@ -20,7 +20,7 @@ class PositionsHandler(BaseCommandHandler):
         self.command_name = "positions"
         self.requires_plugin_selection = False # Allow viewing all by default
 
-    async def execute(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def execute(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         """Fetch and display open positions"""
 
         # 1. Get Context (Optional filtering)
@@ -29,7 +29,7 @@ class PositionsHandler(BaseCommandHandler):
 
         # 2. Fetch Trades
         if not self.bot.db:
-            await self.send_error_message(update, "Database not available")
+            await self.send_error_message(TelegramUpdate, "Database not available")
             return
 
         trades = self.bot.db.get_open_trades()
@@ -77,4 +77,6 @@ class PositionsHandler(BaseCommandHandler):
         ]
 
         # 6. Send/Edit
-        await self.edit_message_with_header(update, text, keyboard)
+        await self.edit_message_with_header(TelegramUpdate, text, keyboard)
+
+

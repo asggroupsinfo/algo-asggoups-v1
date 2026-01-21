@@ -8,8 +8,8 @@ Created: 2026-01-21
 Part of: TELEGRAM_V5_CORE
 """
 
-from telegram import Update
-from telegram.ext import ContextTypes
+import telegram as python_telegram_bot$([System.Environment]::NewLine)from python_telegram_bot import Update
+from telegram.ext import Co as TelegramUpdatentextTypes
 from ...core.base_command_handler import BaseCommandHandler
 
 class AnalyticsHandler(BaseCommandHandler):
@@ -18,22 +18,24 @@ class AnalyticsHandler(BaseCommandHandler):
         super().__init__(bot)
         self.command_name = "analytics"
 
-    async def execute(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def execute(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         if hasattr(self.bot, 'handle_analytics_menu'):
-            await self.bot.handle_analytics_menu(update, context)
+            await self.bot.handle_analytics_menu(TelegramUpdate, context)
 
-    async def handle_daily(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_daily(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         if hasattr(self.bot, 'handle_daily'):
-            await self.bot.handle_daily(update, context)
+            await self.bot.handle_daily(TelegramUpdate, context)
 
-    async def handle_weekly(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_weekly(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         if hasattr(self.bot, 'handle_weekly'):
-            await self.bot.handle_weekly(update, context)
+            await self.bot.handle_weekly(TelegramUpdate, context)
 
-    async def handle_compare(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_compare(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         if hasattr(self.bot, 'handle_compare'):
-            await self.bot.handle_compare(update, context)
+            await self.bot.handle_compare(TelegramUpdate, context)
 
-    async def handle_export(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle_export(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         if hasattr(self.bot, 'handle_export'):
-            await self.bot.handle_export(update, context)
+            await self.bot.handle_export(TelegramUpdate, context)
+
+

@@ -5,7 +5,7 @@ Implements the System Control submenu.
 src/telegram/menus/system_menu.py
 """
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+import telegram as python_telegram_bot$([System.Environment]::NewLine)from python_telegram_bot import InlineKeyboardButton, InlineKeyboardMarkup
 from ..core.base_menu_builder import BaseMenuBuilder
 from ..core.button_builder import ButtonBuilder as Btn
 

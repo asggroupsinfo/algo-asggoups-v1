@@ -8,7 +8,7 @@ Created: 2026-01-21
 Part of: TELEGRAM_V5_PLUGIN_LAYER
 """
 
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Update as TelegramUpdate, InlineKeyboardButton, InlineKeyboardMarkup
 from .button_builder import ButtonBuilder
 from .sticky_header_builder import StickyHeaderBuilder
 
@@ -24,7 +24,7 @@ class PluginSelectionMenu:
         else:
             self.header = StickyHeaderBuilder()
 
-    async def show_selection_menu(self, update: Update, command: str, args: list = None):
+    async def show_selection_menu(self, update: TelegramUpdate, command: str, args: list = None):
         """Show the plugin selection menu"""
         chat_id = update.effective_chat.id
 
@@ -62,3 +62,5 @@ class PluginSelectionMenu:
             await update.message.reply_text(text, reply_markup=reply_markup, parse_mode='HTML')
         elif update.callback_query:
             await update.callback_query.edit_message_text(text, reply_markup=reply_markup, parse_mode='HTML')
+
+

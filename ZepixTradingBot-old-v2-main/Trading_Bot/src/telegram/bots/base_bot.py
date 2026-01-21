@@ -9,8 +9,8 @@ Uses python-telegram-bot v20+ (Async)
 import logging
 import asyncio
 from typing import Optional, Dict, Any
-from telegram import Update, Bot
-from telegram.ext import Application, ApplicationBuilder, ContextTypes, CommandHandler
+import telegram as python_telegram_bot$([System.Environment]::NewLine)from python_telegram_bot import Update, Bot
+from telegram.ext import Applicatio as TelegramUpdaten, ApplicationBuilder, ContextTypes, CommandHandler
 
 logger = logging.getLogger(__name__)
 
@@ -84,7 +84,7 @@ class BaseIndependentBot:
         if self.app:
             self.app.add_handler(CommandHandler("ping", self._ping_handler))
             
-    async def _ping_handler(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def _ping_handler(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         """Default ping handler"""
         await update.message.reply_text(f"🏓 Pong! I am the **{self.bot_type}**.")
 
@@ -103,3 +103,5 @@ class BaseIndependentBot:
             )
         except Exception as e:
             logger.error(f"[{self.bot_type}] Send Error: {e}")
+
+

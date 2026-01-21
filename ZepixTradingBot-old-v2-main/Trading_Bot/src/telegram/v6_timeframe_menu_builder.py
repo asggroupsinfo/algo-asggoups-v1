@@ -9,7 +9,7 @@ Approach: Button-based GUI (zero typing required)
 import logging
 from typing import Dict, Any, Optional, List
 from datetime import datetime, timedelta
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+import telegram as python_telegram_bot$([System.Environment]::NewLine)from python_telegram_bot import InlineKeyboardButton, InlineKeyboardMarkup
 
 logger = logging.getLogger(__name__)
 

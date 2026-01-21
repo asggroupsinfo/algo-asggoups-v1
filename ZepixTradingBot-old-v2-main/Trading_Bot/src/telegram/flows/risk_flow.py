@@ -9,8 +9,8 @@ Created: 2026-01-21
 Part of: TELEGRAM_V5_ZERO_TYPING_UI
 """
 
-from telegram import Update
-from telegram.ext import ContextTypes
+import telegram as python_telegram_bot$([System.Environment]::NewLine)from python_telegram_bot import Update
+from telegram.ext import Co as TelegramUpdatentextTypes
 from .base_flow import BaseFlow
 import logging
 
@@ -22,14 +22,14 @@ class RiskFlow(BaseFlow):
     def flow_name(self) -> str:
         return "risk_flow"
 
-    async def start_set_lot(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def start_set_lot(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         chat_id = update.effective_chat.id
         state = self.state_manager.start_flow(chat_id, self.flow_name)
         state.add_data("action", "SET_LOT")
         state.step = 0
-        await self.show_step(update, context, 0)
+        await self.show_step(TelegramUpdate, context, 0)
 
-    async def show_step(self, update: Update, context: ContextTypes.DEFAULT_TYPE, step: int):
+    async def show_step(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE, step: int):
         chat_id = update.effective_chat.id
         header = self.header.build_header(style='compact')
 
@@ -58,7 +58,7 @@ class RiskFlow(BaseFlow):
         else:
             await self.bot.send_message(text, reply_markup=keyboard)
 
-    async def process_step(self, update: Update, context: ContextTypes.DEFAULT_TYPE, state):
+    async def process_step(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE, state):
         query = update.callback_query
         data = query.data
         chat_id = update.effective_chat.id
@@ -81,3 +81,5 @@ class RiskFlow(BaseFlow):
                     parse_mode='Markdown'
                 )
                 self.state_manager.clear_state(chat_id)
+
+

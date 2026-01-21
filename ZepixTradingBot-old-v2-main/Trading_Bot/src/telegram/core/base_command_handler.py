@@ -7,7 +7,7 @@ Part of: TELEGRAM_V5_CORE
 """
 
 from abc import ABC, abstractmethod
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Update as TelegramUpdate, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes
 from typing import Optional, Dict, Any
 import logging
@@ -40,7 +40,7 @@ class BaseCommandHandler(ABC):
         self.requires_plugin_selection = False
         self.auto_plugin_context = None
 
-    async def handle(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def handle(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         """
         Main handler method.
         Standardizes plugin selection flow.
@@ -59,22 +59,22 @@ class BaseCommandHandler(ABC):
             # 2. Check plugin selection requirement
             elif self.requires_plugin_selection:
                 if not self.plugin_context.has_active_context(chat_id):
-                    await self.show_plugin_selection(update, context)
+                    await self.show_plugin_selection(TelegramUpdate, context)
                     return
 
             # 3. Execute command logic
-            await self.execute(update, context)
+            await self.execute(TelegramUpdate, context)
 
         except Exception as e:
             logger.error(f"Error in {self.command_name}: {e}", exc_info=True)
-            await self.send_error_message(update, str(e))
+            await self.send_error_message(TelegramUpdate, str(e))
 
     @abstractmethod
-    async def execute(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def execute(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         """Execute command logic."""
         pass
 
-    async def show_plugin_selection(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def show_plugin_selection(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         """Show standard plugin selection screen"""
         keyboard = [
             [
@@ -120,7 +120,7 @@ class BaseCommandHandler(ABC):
         if msg and hasattr(self.bot, 'header_refresh_manager'):
             self.bot.header_refresh_manager.register_message(chat_id, msg.message_id)
 
-    async def edit_message_with_header(self, update: Update, content: str, keyboard=None, header_style='compact'):
+    async def edit_message_with_header(self, update: TelegramUpdate, content: str, keyboard=None, header_style='compact'):
         """Edit existing message with header"""
         header = self.sticky_header.build_header(style=header_style)
         full_text = f"{header}\n{content}"
@@ -149,7 +149,9 @@ class BaseCommandHandler(ABC):
                 update.effective_chat.id, content, keyboard, header_style
             )
 
-    async def send_error_message(self, update: Update, error_text: str):
+    async def send_error_message(self, update: TelegramUpdate, error_text: str):
         """Send standardized error message"""
         text = f"🚨 **ERROR**\n\n{error_text}\n\nPlease try again."
         await update.message.reply_text(text, parse_mode='Markdown')
+
+
