@@ -53,6 +53,32 @@ class BaseFlow(ABC):
     async def process_step(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE, state):
         """Process input for current step"""
         pass
+    
+    def _format_breadcrumb(self, steps: list, current_step: int) -> str:
+        """
+        Format visual breadcrumb trail for navigation
+        
+        Args:
+            steps: List of step names
+            current_step: Current step index (0-based)
+        
+        Returns:
+            Formatted breadcrumb string with icons
+        """
+        breadcrumb_parts = []
+        
+        for i, step in enumerate(steps):
+            if i < current_step:
+                # Completed step
+                breadcrumb_parts.append(f"✅ {step}")
+            elif i == current_step:
+                # Current step
+                breadcrumb_parts.append(f"▶️ {step}")
+            else:
+                # Pending step
+                breadcrumb_parts.append(f"⏸️ {step}")
+        
+        return " → ".join(breadcrumb_parts)
 
     async def cancel(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         """Cancel flow"""

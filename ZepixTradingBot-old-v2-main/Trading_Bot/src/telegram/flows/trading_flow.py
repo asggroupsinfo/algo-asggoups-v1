@@ -48,11 +48,16 @@ class TradingFlow(BaseFlow):
 
         # Ensure header is built
         header = self.header.build_header(style='compact')
+        
+        # Add breadcrumb trail
+        steps = ["Symbol", "Lot Size", "Confirm"]
+        breadcrumb = self._format_breadcrumb(steps, step)
 
         if step == 0:
             # Step 1: Symbol Selection
             text = (
                 f"{header}\n"
+                f"🧭 {breadcrumb}\n\n"
                 f"📊 **{direction} WIZARD (Step 1/3)**\n"
                 f"━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
                 f"Select a symbol to trade:"
@@ -73,6 +78,7 @@ class TradingFlow(BaseFlow):
             symbol = state.get_data("symbol")
             text = (
                 f"{header}\n"
+                f"🧭 {breadcrumb}\n\n"
                 f"📊 **{direction} {symbol} (Step 2/3)**\n"
                 f"━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
                 f"Select lot size:"
@@ -92,6 +98,9 @@ class TradingFlow(BaseFlow):
             lot = state.get_data("lot")
 
             text = (
+                f"{header}\n"
+                f"🧭 {breadcrumb}\n\n"
+                f"⚠️ **CONFIRM ORDER**\n"
                 f"{header}\n"
                 f"⚠️ **CONFIRM ORDER**\n"
                 f"━━━━━━━━━━━━━━━━━━━━━━━━\n\n"

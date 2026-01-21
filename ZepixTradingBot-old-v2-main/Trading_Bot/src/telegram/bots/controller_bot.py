@@ -17,7 +17,12 @@ import os
 import csv
 import io
 
+<<<<<<< HEAD
 from telegram import Update as TelegramUpdate, InlineKeyboardButton, InlineKeyboardMarkup
+=======
+from telegram import Update as TelegramUpdate
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+>>>>>>> e2430dd41a1f472887c871c0bfa7eb726ddd103f
 from telegram.ext import ContextTypes, CommandHandler, CallbackQueryHandler
 
 from .base_bot import BaseIndependentBot
@@ -455,13 +460,18 @@ class ControllerBot(BaseIndependentBot):
         await self.edit_message_with_header(TelegramUpdate, "🟢 <b>SYSTEM RESUMED</b>", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_system")]])
 
     async def handle_system_status(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
+<<<<<<< HEAD
         await self.handle_status(TelegramUpdate, context)
+=======
+        await self.handle_status(update, context)
+>>>>>>> e2430dd41a1f472887c871c0bfa7eb726ddd103f
 
     # --- Analytics Placeholders ---
     # Moved to AnalyticsHandler logic where applicable
 
     # --- Plugin Placeholders ---
     async def handle_plugin_status(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
+<<<<<<< HEAD
         await self.edit_message_with_header(TelegramUpdate, "🔌 <b>PLUGIN STATUS</b>\n\nV3: Active\nV6: Active", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_plugin")]])
 
     # --- Session Placeholders ---
@@ -471,6 +481,17 @@ class ControllerBot(BaseIndependentBot):
     # --- Voice Placeholders ---
     async def handle_voice_status(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         await self.edit_message_with_header(TelegramUpdate, "🔊 <b>VOICE STATUS</b>\n\nSystem: Ready", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_voice")]])
+=======
+        await self.edit_message_with_header(update, "🔌 <b>PLUGIN STATUS</b>\n\nV3: Active\nV6: Active", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_plugin")]])
+
+    # --- Session Placeholders ---
+    async def handle_session_status(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
+        await self.edit_message_with_header(update, "🕐 <b>SESSION STATUS</b>\n\nLondon: Open\nNew York: Open", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_session")]])
+
+    # --- Voice Placeholders ---
+    async def handle_voice_status(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
+        await self.edit_message_with_header(update, "🔊 <b>VOICE STATUS</b>\n\nSystem: Ready", [[InlineKeyboardButton("⬅️ Back", callback_data="menu_voice")]])
+>>>>>>> e2430dd41a1f472887c871c0bfa7eb726ddd103f
 
     async def handle_voice_test(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         # Trigger actual test if possible
@@ -592,7 +613,11 @@ class ControllerBot(BaseIndependentBot):
         await update.message.reply_text("🟢 Bot Resumed.")
         
     async def handle_pause_bot(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
+<<<<<<< HEAD
         await self.handle_stop_bot(TelegramUpdate, context)
+=======
+        await self.handle_stop_bot(update, context)
+>>>>>>> e2430dd41a1f472887c871c0bfa7eb726ddd103f
 
     async def handle_restart(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("🔄 Restarting...")
@@ -604,7 +629,11 @@ class ControllerBot(BaseIndependentBot):
         await update.message.reply_text("Version: 3.7.0")
 
     async def handle_dashboard(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
+<<<<<<< HEAD
         await self.handle_start(TelegramUpdate, context)
+=======
+        await self.handle_start(update, context)
+>>>>>>> e2430dd41a1f472887c871c0bfa7eb726ddd103f
         
     async def handle_v6_menu(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         if self.v6_menu_builder:
