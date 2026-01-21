@@ -131,6 +131,9 @@ class TelegramBot:
             "/view_logic_settings": self.handle_view_logic_settings,
             "/reset_timeframe_default": self.handle_reset_timeframe_default,
             "/panic": self.handle_panic_close,
+            
+            # Help command
+            "/help": self.handle_help,
         }
         
 
@@ -160,6 +163,11 @@ class TelegramBot:
         print("[INIT] Cleaning up webhooks on bot initialization...")
         self._cleanup_webhook_before_polling()
         print("[INIT] Webhook cleanup complete")
+        
+        # Setup menu button with commands
+        print("[INIT] Setting up menu button...")
+        self.setup_menu_button()
+        print("[INIT] Menu button setup complete")
 
     def set_dependencies(self, risk_manager: RiskManager, trading_engine: 'TradingEngine'):
         """Set dependent modules"""
@@ -410,6 +418,152 @@ class TelegramBot:
     
 
 
+    def send_chat_action(self, action: str = "typing"):
+        """Send chat action (typing, uploading, etc)
+        
+        Args:
+            action: Action type - 'typing', 'upload_photo', 'upload_document', etc
+        """
+        if not self.token or not self.chat_id:
+            return False
+        
+        try:
+            url = f"{self.base_url}/sendChatAction"
+            payload = {
+                "chat_id": self.chat_id,
+                "action": action
+            }
+            response = requests.post(url, json=payload, timeout=2)
+            return response.status_code == 200
+        except:
+            return False
+    
+    def setup_menu_button(self):
+        """Setup bot menu button with ALL commands organized by category"""
+        if not self.token:
+            return False
+        
+        try:
+            # COMPLETE CATEGORIZED COMMAND LIST
+            # All 80+ commands organized in 12 categories
+            
+            commands = [
+                # ==================== CATEGORY 1: MAIN CONTROLS ====================
+                {"command": "start", "description": "🚀 Start/Restart the bot"},
+                {"command": "status", "description": "📊 Bot status & overview"},
+                {"command": "dashboard", "description": "📱 Main dashboard"},
+                {"command": "pause", "description": "⏸️ Pause all trading"},
+                {"command": "resume", "description": "▶️ Resume trading"},
+                {"command": "panic", "description": "🚨 Emergency close all positions"},
+                
+                # ==================== CATEGORY 2: PERFORMANCE & ANALYTICS ====================
+                {"command": "performance", "description": "💰 Performance report"},
+                {"command": "performance_report", "description": "📈 Detailed performance"},
+                {"command": "stats", "description": "📊 Trading statistics"},
+                {"command": "trades", "description": "📋 View all trades"},
+                {"command": "pair_report", "description": "📊 Symbol pair analysis"},
+                {"command": "strategy_report", "description": "🎯 Strategy performance"},
+                
+                # ==================== CATEGORY 3: PLUGIN CONTROL ====================
+                {"command": "logic_control", "description": "⚙️ Plugin management"},
+                {"command": "logic_status", "description": "📊 Plugin status"},
+                {"command": "logic1_on", "description": "✅ Enable LOGIC1"},
+                {"command": "logic1_off", "description": "❌ Disable LOGIC1"},
+                {"command": "logic2_on", "description": "✅ Enable LOGIC2"},
+                {"command": "logic2_off", "description": "❌ Disable LOGIC2"},
+                {"command": "logic3_on", "description": "✅ Enable LOGIC3"},
+                {"command": "logic3_off", "description": "❌ Disable LOGIC3"},
+                {"command": "view_logic_settings", "description": "📋 View plugin settings"},
+                
+                # ==================== CATEGORY 4: TREND MANAGEMENT ====================
+                {"command": "set_trend", "description": "📈 Set trend manually"},
+                {"command": "set_auto", "description": "🔄 Auto trend detection"},
+                {"command": "show_trends", "description": "📊 Show all trends"},
+                {"command": "trend_matrix", "description": "🎯 Trend matrix view"},
+                {"command": "trend_mode", "description": "⚙️ Trend mode settings"},
+                {"command": "reset_timeframe_default", "description": "🔄 Reset timeframe defaults"},
+                
+                # ==================== CATEGORY 5: RISK MANAGEMENT ====================
+                {"command": "lot_size_status", "description": "💰 Current lot size"},
+                {"command": "set_lot_size", "description": "⚙️ Set lot size"},
+                {"command": "view_risk_caps", "description": "🛡️ View risk limits"},
+                {"command": "clear_loss_data", "description": "🗑️ Clear loss data"},
+                {"command": "clear_daily_loss", "description": "🗑️ Clear daily loss"},
+                
+                # ==================== CATEGORY 6: SL/TP SYSTEM ====================
+                {"command": "tp_system", "description": "🎯 TP system status"},
+                {"command": "tp_report", "description": "📊 TP performance report"},
+                {"command": "sl_hunt", "description": "🎯 SL Hunt settings"},
+                {"command": "sl_status", "description": "📊 SL system status"},
+                {"command": "sl_system_change", "description": "⚙️ Change SL system"},
+                {"command": "sl_system_on", "description": "✅ Enable SL system"},
+                {"command": "view_sl_config", "description": "📋 View SL configuration"},
+                {"command": "set_symbol_sl", "description": "⚙️ Set symbol-specific SL"},
+                
+                # ==================== CATEGORY 7: RE-ENTRY SYSTEM ====================
+                {"command": "exit_continuation", "description": "🔄 Exit continuation"},
+                {"command": "reentry_config", "description": "⚙️ Re-entry configuration"},
+                {"command": "set_monitor_interval", "description": "⏱️ Set monitor interval"},
+                {"command": "set_sl_offset", "description": "📏 Set SL offset"},
+                {"command": "set_cooldown", "description": "⏳ Set cooldown period"},
+                {"command": "set_recovery_time", "description": "🔄 Set recovery time"},
+                {"command": "set_max_levels", "description": "📊 Set max re-entry levels"},
+                {"command": "set_sl_reduction", "description": "📉 Set SL reduction %"},
+                {"command": "reset_reentry_config", "description": "🔄 Reset re-entry config"},
+                
+                # ==================== CATEGORY 8: PROFIT BOOKING SYSTEM ====================
+                {"command": "profit_stats", "description": "💰 Profit booking stats"},
+                {"command": "toggle_profit_booking", "description": "🔄 Toggle profit booking"},
+                {"command": "set_profit_targets", "description": "🎯 Set profit targets"},
+                {"command": "profit_chains", "description": "⛓️ View profit chains"},
+                {"command": "stop_profit_chain", "description": "⏸️ Stop profit chain"},
+                {"command": "stop_all_profit_chains", "description": "⏹️ Stop all chains"},
+                {"command": "close_profit_chain", "description": "❌ Close profit chain"},
+                {"command": "set_chain_multipliers", "description": "📊 Set chain multipliers"},
+                {"command": "set_sl_reductions", "description": "📉 Set SL reductions"},
+                {"command": "profit_config", "description": "⚙️ Profit system config"},
+                {"command": "chains", "description": "⛓️ Chain status"},
+                
+                # ==================== CATEGORY 9: PROFIT SL PROTECTION ====================
+                {"command": "profit_sl_status", "description": "📊 Profit SL status"},
+                {"command": "profit_sl_mode", "description": "⚙️ Profit SL mode"},
+                {"command": "enable_profit_sl", "description": "✅ Enable profit SL"},
+                {"command": "disable_profit_sl", "description": "❌ Disable profit SL"},
+                {"command": "set_sl1_1", "description": "📊 Set SL1.1 level"},
+                {"command": "set_sl2_1", "description": "📊 Set SL2.1 level"},
+                {"command": "set_profit_sl", "description": "⚙️ Configure profit SL"},
+                {"command": "reset_profit_sl", "description": "🔄 Reset profit SL"},
+                
+                # ==================== CATEGORY 10: AUTONOMOUS/FINE-TUNE SYSTEM ====================
+                {"command": "fine_tune", "description": "🎛️ Fine-tune dashboard"},
+                {"command": "autonomous_dashboard", "description": "🤖 Autonomous system"},
+                {"command": "autonomous_status", "description": "📊 Autonomous status"},
+                {"command": "profit_protection", "description": "🛡️ Profit protection"},
+                {"command": "sl_reduction", "description": "📉 SL reduction system"},
+                {"command": "recovery_windows", "description": "🔄 Recovery windows"},
+                {"command": "shield", "description": "🛡️ Reverse shield v3.0"},
+                
+                # ==================== CATEGORY 11: SIMULATION & TESTING ====================
+                {"command": "simulation_mode", "description": "🎮 Simulation mode"},
+                {"command": "signal_status", "description": "📡 Signal status"},
+                
+                # ==================== CATEGORY 12: HELP & INFO ====================
+                {"command": "help", "description": "🆘 Help & all commands"}
+            ]
+            
+            # Send commands to Telegram
+            url = f"{self.base_url}/setMyCommands"
+            payload = {"commands": commands}
+            response = requests.post(url, json=payload, timeout=5)
+            
+            if response.status_code == 200:
+                print(f"✅ Menu button configured with {len(commands)} commands in 12 categories")
+                return True
+            return False
+        except Exception as e:
+            print(f"⚠️ Menu button setup error: {e}")
+            return False
+    
     def send_message(self, message: str, reply_markup: dict = None, add_menu_button: bool = True, parse_mode: str = "HTML"):
         """Send message to Telegram with optional menu button and custom keyboard
         
@@ -537,6 +691,46 @@ class TelegramBot:
             return None
         except Exception as e:
             print(f"WARNING: Telegram send_message_with_keyboard error: {str(e)}")
+            return None
+    
+    def send_message_with_reply_keyboard(self, message: str, keyboard: list, one_time: bool = False, persistent: bool = False):
+        """Send message with reply keyboard (bottom buttons)
+        
+        Args:
+            message: Message text
+            keyboard: List of button rows [[{"text": "Button"}]]
+            one_time: Hide keyboard after button press
+            persistent: Keep keyboard always visible
+        """
+        if not self.token or not self.chat_id:
+            print("WARNING: Telegram credentials not configured")
+            return None
+        
+        try:
+            reply_markup = {
+                "keyboard": keyboard,
+                "resize_keyboard": True,
+                "one_time_keyboard": one_time,
+                "is_persistent": persistent,
+                "input_field_placeholder": "Tap a button or type..."
+            }
+            
+            url = f"{self.base_url}/sendMessage"
+            payload = {
+                "chat_id": self.chat_id,
+                "text": message,
+                "reply_markup": reply_markup,
+                "parse_mode": "HTML"
+            }
+            
+            response = requests.post(url, json=payload, timeout=2)
+            if response.status_code == 200:
+                result = response.json()
+                if result.get("ok"):
+                    return result.get("result", {}).get("message_id")
+            return None
+        except Exception as e:
+            print(f"WARNING: Reply keyboard error: {e}")
             return None
     
     def send_profit_recovery_notification(self, symbol, chain_id, level, current_price, sl_price, pnl=0.0):
@@ -5189,3 +5383,122 @@ _Use /dashboard to return to main view_"""
              
         else:
             self.send_message("Invalid command. Use /shield on|off")
+
+    def handle_help(self, message):
+        """Show comprehensive help with all 90+ commands organized by category"""
+        help_text = """
+📚 <b>ZEPIX TRADING BOT - COMPLETE COMMAND LIST</b>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+<b>🎯 CATEGORY 1: MAIN CONTROLS (6 commands)</b>
+/start - 🚀 Start/Restart the bot
+/status - 📊 Bot status & overview
+/dashboard - 📱 Main dashboard view
+/pause - ⏸️ Pause all trading
+/resume - ▶️ Resume trading
+/panic - 🚨 Emergency close all positions
+
+<b>📊 CATEGORY 2: PERFORMANCE & ANALYTICS (6 commands)</b>
+/performance - 💰 Performance report
+/stats - 📊 Trading statistics
+/trades - 📈 View trade history
+/sessions - 🕐 Session analysis
+/session_report - 📑 Detailed session report
+/performance_report - 📊 Full performance analysis
+
+<b>⚙️ CATEGORY 3: PLUGIN CONTROL (9 commands)</b>
+/logic_control - 🎛️ Plugin management dashboard
+/combinedlogic1_on - ✅ Enable LOGIC1 plugin
+/combinedlogic1_off - ❌ Disable LOGIC1 plugin
+/combinedlogic2_on - ✅ Enable LOGIC2 plugin
+/combinedlogic2_off - ❌ Disable LOGIC2 plugin
+/combinedlogic3_on - ✅ Enable LOGIC3 plugin
+/combinedlogic3_off - ❌ Disable LOGIC3 plugin
+/logic_status - 📊 View all plugin status
+/view_logic_settings - ⚙️ View logic configuration
+
+<b>📈 CATEGORY 4: TREND MANAGEMENT (6 commands)</b>
+/trend_mode - 🔄 Toggle trend analysis
+/set_trend - 📊 Set trend direction
+/show_trends - 👁️ Display current trends
+/trend_matrix - 📊 Show trend matrix
+/set_auto - 🤖 Enable auto trend detection
+/toggle_timeframe - ⏱️ Toggle timeframe
+
+<b>💎 CATEGORY 5: RISK MANAGEMENT (5 commands)</b>
+/view_risk_status - 📊 View risk settings
+/switch_tier - 🎚️ Switch risk tier
+/reset_risk_settings - ♻️ Reset risk config
+/clear_loss_data - 🗑️ Clear loss history
+/clear_daily_loss - 🗑️ Clear daily loss
+
+<b>🎯 CATEGORY 6: SL/TP SYSTEM (7 commands)</b>
+/tp_system - 🎯 TP system control
+/sl_hunt - 🎣 SL hunt protection
+/exit_continuation - 🔄 Exit continuation mode
+/tp_report - 📊 TP analysis report
+/view_sl_config - ⚙️ View SL configuration
+/sl_status - 📊 SL system status
+/sl_system_change - 🔄 Change SL system
+
+<b>🔄 CATEGORY 7: RE-ENTRY SYSTEM (9 commands)</b>
+/reentry_config - ⚙️ Re-entry configuration
+/set_monitor_interval - ⏱️ Set monitor interval
+/set_sl_offset - 📏 Set SL offset
+/set_cooldown - ⏰ Set cooldown period
+/set_recovery_time - ⌛ Set recovery time
+/set_max_levels - 📊 Set max re-entry levels
+/set_sl_reduction - 📉 Set SL reduction
+/reset_reentry_config - ♻️ Reset re-entry config
+/set_symbol_sl - 🎯 Set symbol-specific SL
+
+<b>💰 CATEGORY 8: PROFIT BOOKING (11 commands)</b>
+/profit_status - 💰 Profit booking status
+/profit_stats - 📊 Profit statistics
+/toggle_profit_booking - 🔄 Toggle profit booking
+/set_profit_targets - 🎯 Set profit targets
+/profit_chains - ⛓️ View profit chains
+/stop_profit_chain - ⏹️ Stop specific chain
+/stop_all_profit_chains - ⏹️ Stop all chains
+/set_chain_multipliers - 📈 Set chain multipliers
+/set_sl_reductions - 📉 Set SL reductions
+/profit_config - ⚙️ Profit configuration
+/chains_status - 📊 All chains status
+
+<b>🛡️ CATEGORY 9: PROFIT SL PROTECTION (8 commands)</b>
+/profit_sl_status - 📊 Profit SL status
+/profit_sl_mode - 🔄 Toggle profit SL mode
+/enable_profit_sl - ✅ Enable profit SL
+/disable_profit_sl - ❌ Disable profit SL
+/set_profit_sl - 🎯 Set profit SL levels
+/reset_profit_sl - ♻️ Reset profit SL
+/profit_protection - 🛡️ Profit protection settings
+/sl_reduction - 📉 SL reduction settings
+
+<b>🤖 CATEGORY 10: AUTONOMOUS & FINE-TUNE (7 commands)</b>
+/autonomous_status - 🤖 Autonomous mode status
+/autonomous_dashboard - 📱 Autonomous dashboard
+/fine_tune - 🎛️ Fine-tune settings
+/recovery_windows - ⏱️ Recovery time windows
+/set_auto - 🤖 Auto mode toggle
+/dual_order_status - 📊 Dual order status
+/toggle_dual_orders - 🔄 Toggle dual orders
+
+<b>🧪 CATEGORY 11: SIMULATION & TESTING (2 commands)</b>
+/simulation_mode - 🧪 Toggle simulation mode
+/signal_status - 📡 Signal processing status
+
+<b>📚 CATEGORY 12: REPORTS & INFO (6 commands)</b>
+/pair_report - 📊 Currency pair report
+/strategy_report - 📈 Strategy analysis
+/lot_size_status - 📊 Lot size status
+/set_lot_size - ⚙️ Set lot size
+/view_risk_caps - 🔒 View risk caps
+/shield - 🛡️ Reverse Shield control
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+<b>💡 TIP:</b> Tap the <b>(≡) menu button</b> next to the input field for quick access to all commands!
+
+<i>Total: 90+ commands across 12 categories</i>
+"""
+        self.send_message(help_text, parse_mode="HTML")

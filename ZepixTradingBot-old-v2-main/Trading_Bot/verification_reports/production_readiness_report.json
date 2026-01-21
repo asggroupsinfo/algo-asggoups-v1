@@ -1,0 +1,10 @@
+{
+  "timestamp": "2026-01-20",
+  "score": 100,
+  "max_score": 100,
+  "percentage": 100,
+  "status": "PRODUCTION_READY",
+  "passed": 11,
+  "warnings": 0,
+  "errors": 0
+}

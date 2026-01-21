@@ -1,0 +1,108 @@
+{
+  "timestamp": "2026-01-20",
+  "files_analyzed": [
+    "..\\Updates\\telegram_updates\\00_MASTER_PLAN.md",
+    "..\\Updates\\telegram_updates\\01_COMPLETE_COMMAND_INVENTORY.md",
+    "..\\Updates\\telegram_updates\\01_V6_NOTIFICATION_SYSTEM_PLAN.md",
+    "..\\Updates\\telegram_updates\\02_NOTIFICATION_SYSTEMS_COMPLETE.md",
+    "..\\Updates\\telegram_updates\\02_V6_TIMEFRAME_MENU_PLAN.md",
+    "..\\Updates\\telegram_updates\\03_MENU_SYSTEMS_ARCHITECTURE.md",
+    "..\\Updates\\telegram_updates\\03_PRIORITY_COMMAND_HANDLERS_PLAN.md",
+    "..\\Updates\\telegram_updates\\04_ANALYTICS_CAPABILITIES.md",
+    "..\\Updates\\telegram_updates\\04_PHASES_4_5_6_SUMMARY.md",
+    "..\\Updates\\telegram_updates\\05_IMPLEMENTATION_ROADMAP.md",
+    "..\\Updates\\telegram_updates\\05_V5_PLUGIN_INTEGRATION.md",
+    "..\\Updates\\telegram_updates\\06_V6_PRICE_ACTION_TELEGRAM.md",
+    "..\\Updates\\telegram_updates\\07_IMPROVEMENT_ROADMAP.md",
+    "..\\Updates\\telegram_updates\\08_TESTING_DOCUMENTATION.md",
+    "..\\Updates\\telegram_updates\\09_ERROR_HANDLING_GUIDE.md",
+    "..\\Updates\\telegram_updates\\10_DATABASE_SCHEMA.md",
+    "..\\Updates\\telegram_updates\\11_SERVICEAPI_DOCUMENTATION.md",
+    "..\\Updates\\telegram_updates\\12_VISUAL_CAPABILITIES_GUIDE.md",
+    "..\\Updates\\telegram_updates\\COMPLETE_TELEGRAM_DOCUMENTATION_INDEX.md",
+    "..\\Updates\\telegram_updates\\DEVIN_BATCH_IMPLEMENTATION_PROMPT.md",
+    "..\\Updates\\telegram_updates\\DEVIN_BATCH_PROGRESS.md",
+    "..\\Updates\\telegram_updates\\DEVIN_FINAL_TESTING_PROMPT.md",
+    "..\\Updates\\telegram_updates\\DEVIN_IMPLEMENTATION_PROMPT.md",
+    "..\\Updates\\telegram_updates\\DEVIN_TASK3_LIVE_BOT_TESTING.md",
+    "..\\Updates\\telegram_updates\\DUAL_ORDER_REENTRY_QUICK_REFERENCE.md",
+    "..\\Updates\\telegram_updates\\FINAL_TEST_REPORT.md",
+    "..\\Updates\\telegram_updates\\README.md",
+    "..\\Updates\\telegram_updates\\STATUS_DUAL_ORDER_REENTRY.md",
+    "..\\Updates\\telegram_updates\\TELEGRAM_V5_DUAL_ORDER_REENTRY_UPGRADE.md",
+    "..\\Updates\\telegram_updates\\TELEGRAM_V5_PLUGIN_SELECTION_UPGRADE.md",
+    "..\\Updates\\telegram_updates\\batch_plans\\BATCH_1_IMPLEMENTATION_PLAN.md",
+    "..\\Updates\\telegram_updates\\batch_plans\\BATCH_2_IMPLEMENTATION_PLAN.md",
+    "..\\Updates\\telegram_updates\\batch_plans\\BATCH_3_IMPLEMENTATION_PLAN.md",
+    "..\\Updates\\telegram_updates\\batch_plans\\BATCH_4_IMPLEMENTATION_PLAN.md",
+    "..\\Updates\\telegram_updates\\batch_plans\\BATCH_5_IMPLEMENTATION_PLAN.md"
+  ],
+  "implementation_status": {
+    "files_analyzed": 35,
+    "features_found": 44,
+    "features_implemented": 6,
+    "features_missing": 38,
+    "tests_created": 0
+  },
+  "critical_features": {
+    "V6 Notifications": {
+      "send_v6_entry_alert": false,
+      "send_v6_exit_alert": false,
+      "send_trend_pulse_alert": false,
+      "send_shadow_trade_alert": false,
+      "V6_ENTRY_15M_type": true,
+      "V6_ENTRY_30M_type": true,
+      "V6_ENTRY_1H_type": true,
+      "V6_ENTRY_4H_type": true
+    },
+    "V6 Commands": {
+      "handle_v6_control": false,
+      "handle_v6_status": false,
+      "handle_tf15m_on": false,
+      "handle_tf15m_off": false,
+      "handle_tf30m_on": false,
+      "handle_tf30m_off": false,
+      "handle_tf1h_on": false,
+      "handle_tf1h_off": false,
+      "handle_tf4h_on": false,
+      "handle_tf4h_off": false
+    },
+    "Analytics Commands": {
+      "handle_daily": false,
+      "handle_weekly": false,
+      "handle_monthly": false,
+      "handle_compare": false,
+      "handle_export": false,
+      "handle_pair_report": false,
+      "handle_strategy_report": false,
+      "handle_tp_report": false,
+      "handle_profit_stats": false
+    },
+    "Re-entry Commands": {
+      "handle_chains_status": false,
+      "handle_tp_cont": false,
+      "handle_sl_hunt": false,
+      "handle_recovery_stats": false,
+      "handle_autonomous": false
+    },
+    "Plugin Commands": {
+      "handle_plugin_toggle": false,
+      "handle_plugin_status": false,
+      "handle_v3_toggle": false,
+      "handle_v6_toggle": false
+    },
+    "Notification Preferences": {
+      "NotificationPreferences_class": true,
+      "notification_preferences_menu": false,
+      "handle_notifications_command": false
+    },
+    "Menu Systems": {
+      "V6ControlMenuHandler": false,
+      "AnalyticsMenuHandler": false,
+      "DualOrderMenuHandler": false,
+      "ReEntryMenuHandler": false,
+      "NotificationPreferencesMenu": true
+    }
+  },
+  "overall_percentage": 13.636363636363635
+}

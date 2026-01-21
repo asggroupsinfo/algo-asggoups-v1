@@ -343,4 +343,86 @@ class DualOrderManager:
             error_msg = f"Order placement error: {str(e)}"
             self.logger.error(error_msg)
             return {"success": False, "trade_id": None, "error": error_msg}
+    
+    # ==================== PER-PLUGIN/PER-LOGIC ROUTING METHODS ====================
+    
+    def get_order_routing_for_v3(self, logic: str) -> str:
+        """
+        Get order routing mode for V3 logic.
+        
+        Args:
+            logic: 'LOGIC1', 'LOGIC2', or 'LOGIC3'
+        
+        Returns:
+            str: 'order_a_only', 'order_b_only', or 'dual_orders'
+        """
+        routing = self.config.get("dual_order_config", {}) \
+            .get("v3_combined", {}) \
+            .get("per_logic_routing", {}) \
+            .get(logic, "dual_orders")
+        return routing.lower()
+    
+    def get_order_routing_for_v6(self, timeframe: str) -> str:
+        """
+        Get order routing mode for V6 timeframe.
+        
+        Args:
+            timeframe: '1M', '5M', '15M', '1H', or '4H'
+        
+        Returns:
+            str: 'order_a_only', 'order_b_only', or 'dual_orders'
+        """
+        routing = self.config.get("dual_order_config", {}) \
+            .get("v6_price_action", {}) \
+            .get("per_timeframe_routing", {}) \
+            .get(timeframe, "order_a_only")
+        return routing.lower()
+    
+    def update_order_routing(self, plugin: str, context: str, mode: str) -> bool:
+        """
+        Update order routing mode.
+        
+        Args:
+            plugin: 'v3_combined' or 'v6_price_action'
+            context: Logic name (V3) or Timeframe (V6)
+            mode: 'order_a_only', 'order_b_only', or 'dual_orders'
+        
+        Returns:
+            bool: Success
+        """
+        try:
+            # Ensure dual_order_config structure exists
+            if "dual_order_config" not in self.config.config:
+                self.config.config["dual_order_config"] = {"enabled": True}
+            
+            # Ensure plugin config exists
+            if plugin not in self.config.config["dual_order_config"]:
+                self.config.config["dual_order_config"][plugin] = {}
+            
+            # Determine routing key based on plugin
+            if plugin == "v3_combined":
+                routing_key = "per_logic_routing"
+            elif plugin == "v6_price_action":
+                routing_key = "per_timeframe_routing"
+            else:
+                self.logger.error(f"Invalid plugin: {plugin}")
+                return False
+            
+            # Ensure routing key exists
+            if routing_key not in self.config.config["dual_order_config"][plugin]:
+                self.config.config["dual_order_config"][plugin][routing_key] = {}
+            
+            # Update routing
+            self.config.config["dual_order_config"][plugin][routing_key][context] = mode
+            
+            # Save config
+            if hasattr(self.config, 'save_config'):
+                self.config.save_config()
+            
+            self.logger.info(f"[DualOrderManager] Order routing updated: {plugin} > {context} → {mode}")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"[DualOrderManager] Failed to update order routing: {e}")
+            return False
 

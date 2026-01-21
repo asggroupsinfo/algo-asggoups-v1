@@ -42,6 +42,8 @@ class V6PriceAction15mPlugin(BaseLogicPlugin, ISignalProcessor, IOrderExecutor):
     """
     
     TIMEFRAME = "15"
+    DISPLAY_NAME = "V6 15M"
+    BADGE = "🔶⏱️"
     ORDER_ROUTING = "ORDER_A_ONLY"
     RISK_MULTIPLIER = 1.2
     
@@ -117,6 +119,99 @@ class V6PriceAction15mPlugin(BaseLogicPlugin, ISignalProcessor, IOrderExecutor):
             ]
         }
     
+    # =========================================================================
+    # V5 PLUGIN TELEGRAM INTEGRATION (Section 4 from 05_V5_PLUGIN_INTEGRATION.md)
+    # =========================================================================
+    
+    async def on_signal_received(self, signal: Dict[str, Any]) -> None:
+        """
+        Called when V6 signal is received from TradingView.
+        Sends notification about signal reception.
+        
+        Args:
+            signal: Signal data from TradingView
+        """
+        try:
+            v6_alert = self._parse_alert(signal)
+            
+            await self.service_api.send_v6_signal_notification(
+                timeframe=self.TIMEFRAME,
+                symbol=v6_alert.ticker,
+                direction=v6_alert.direction,
+                pattern=v6_alert.type,
+                entry=v6_alert.entry,
+                sl=v6_alert.sl,
+                tp=v6_alert.tp2 if hasattr(v6_alert, 'tp2') else v6_alert.tp1
+            )
+        except Exception as e:
+            self.logger.error(f"[15M] on_signal_received error: {e}")
+    
+    async def on_trade_entry(self, trade_data: Dict[str, Any]) -> None:
+        """
+        Called when V6 trade is placed.
+        Sends entry notification with timeframe badge and pattern details.
+        
+        Args:
+            trade_data: Trade execution data
+        """
+        try:
+            await self.service_api.send_v6_entry_notification(
+                timeframe=self.TIMEFRAME,
+                symbol=trade_data.get('symbol', ''),
+                direction=trade_data.get('direction', ''),
+                entry_price=trade_data.get('entry_price', 0),
+                sl=trade_data.get('sl', 0),
+                tp=trade_data.get('tp', 0),
+                lot_size=trade_data.get('lot_size', 0),
+                pattern=trade_data.get('pattern', 'V6 15M Entry')
+            )
+        except Exception as e:
+            self.logger.error(f"[15M] on_trade_entry error: {e}")
+    
+    async def on_trade_exit(self, trade_data: Dict[str, Any], result: Dict[str, Any]) -> None:
+        """
+        Called when V6 trade is closed.
+        Sends exit notification with P&L and exit reason.
+        
+        Args:
+            trade_data: Original trade data
+            result: Exit result with P&L
+        """
+        try:
+            await self.service_api.send_v6_exit_notification(
+                timeframe=self.TIMEFRAME,
+                symbol=trade_data.get('symbol', ''),
+                direction=trade_data.get('direction', ''),
+                entry_price=trade_data.get('entry_price', 0),
+                exit_price=result.get('exit_price', 0),
+                pnl=result.get('pnl', 0),
+                exit_reason=result.get('exit_reason', 'manual'),
+                duration=result.get('duration'),
+                pips=result.get('pips')
+            )
+        except Exception as e:
+            self.logger.error(f"[15M] on_trade_exit error: {e}")
+    
+    async def on_enabled_changed(self, enabled: bool) -> None:
+        """
+        Called when plugin is enabled/disabled via Telegram.
+        Sends toggle notification.
+        
+        Args:
+            enabled: True if enabled, False if disabled
+        """
+        try:
+            await self.service_api.send_v6_timeframe_toggle_notification(
+                timeframe=self.TIMEFRAME,
+                enabled=enabled
+            )
+        except Exception as e:
+            self.logger.error(f"[15M] on_enabled_changed error: {e}")
+    
+    # =========================================================================
+    # END V5 TELEGRAM INTEGRATION
+    # =========================================================================
+    
     async def process_entry_signal(self, alert) -> Dict[str, Any]:
         """
         Process V6 15M entry signal.
@@ -140,6 +235,9 @@ class V6PriceAction15mPlugin(BaseLogicPlugin, ISignalProcessor, IOrderExecutor):
         try:
             v6_alert = self._parse_alert(alert)
             
+            # Send signal received notification
+            await self.on_signal_received(alert)
+            
             if v6_alert.tf != self.TIMEFRAME:
                 return self._skip_result("wrong_timeframe", f"Expected {self.TIMEFRAME}, got {v6_alert.tf}")
             
@@ -159,6 +257,17 @@ class V6PriceAction15mPlugin(BaseLogicPlugin, ISignalProcessor, IOrderExecutor):
             
             if result.get("status") == "success":
                 self._stats["trades_placed"] += 1
+                
+                # Send trade entry notification
+                await self.on_trade_entry({
+                    'symbol': v6_alert.ticker,
+                    'direction': v6_alert.direction,
+                    'entry_price': v6_alert.entry,
+                    'sl': v6_alert.sl,
+                    'tp': v6_alert.tp2 if hasattr(v6_alert, 'tp2') else v6_alert.tp1,
+                    'lot_size': lot_size,
+                    'pattern': v6_alert.type
+                })
             
             return result
             
@@ -200,6 +309,23 @@ class V6PriceAction15mPlugin(BaseLogicPlugin, ISignalProcessor, IOrderExecutor):
             )
             
             self._stats["trades_closed"] += 1
+            
+            # Send trade exit notification
+            if result:
+                await self.on_trade_exit(
+                    trade_data={
+                        'symbol': v6_alert.ticker,
+                        'direction': close_direction,
+                        'entry_price': 0  # Will be filled by actual position data
+                    },
+                    result={
+                        'exit_price': 0,  # Will be filled by actual position data
+                        'pnl': 0,  # Will be calculated
+                        'exit_reason': 'v6_signal',
+                        'duration': None,
+                        'pips': None
+                    }
+                )
             
             return {
                 "status": "success",

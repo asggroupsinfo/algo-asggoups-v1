@@ -1,0 +1,24 @@
+{
+  "certificate_id": "TELEGRAM-UI-20260120-163736",
+  "date": "2026-01-20T16:37:36.694202",
+  "bot_name": "ZepixTradingBot v2.0",
+  "grade": "A-",
+  "pass_rate": 89.47368421052632,
+  "total_checks": 95,
+  "passed": 85,
+  "failed": 10,
+  "categories": {
+    "basic_commands": "10/10",
+    "v6_commands": "10/10",
+    "analytics": "10/10",
+    "reentry": "6/6",
+    "plugins": "5/5",
+    "risk_management": "8/8",
+    "notifications": "15/15",
+    "menus": "2/2",
+    "zero_typing": "4/4",
+    "rich_formatting": "4/4"
+  },
+  "status": "VERIFIED & READY",
+  "ready_for_deployment": true
+}

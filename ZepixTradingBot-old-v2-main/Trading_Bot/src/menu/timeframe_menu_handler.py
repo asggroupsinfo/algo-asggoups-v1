@@ -223,3 +223,45 @@ def show_tf_help_content(self, user_id: int, message_id: int, help_type: str):
         self.bot.edit_message(text, message_id, keyboard, parse_mode="HTML")
     else:
         self.bot.send_message_with_keyboard(text, keyboard)
+
+def show_timeframe_menu(self, user_id: int, message_id: Optional[int] = None):
+    """
+    Show timeframe selection menu.
+    
+    Args:
+        user_id: Telegram user ID
+        message_id: Message ID to edit (optional)
+    """
+    text = """⏱️ <b>TIMEFRAME SELECTION</b>
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Select trading timeframe:
+"""
+    
+    timeframes = [
+        ("15M", "15m"),
+        ("30M", "30m"),
+        ("1H", "1h"),
+        ("4H", "4h"),
+        ("1D", "1d")
+    ]
+    
+    rows = []
+    row = []
+    for i, (label, value) in enumerate(timeframes):
+        row.append({"text": f"⏱️ {label}", "callback_data": f"timeframe_select_{value}"})
+        if (i + 1) % 2 == 0:
+            rows.append(row)
+            row = []
+    
+    if row:
+        rows.append(row)
+    
+    rows.append([{"text": "🔙 Back", "callback_data": "menu_main"}])
+    
+    keyboard = {"inline_keyboard": rows}
+    
+    if message_id:
+        self.bot.edit_message(text, message_id, keyboard, parse_mode="HTML")
+    else:
+        self.bot.send_message_with_keyboard(text, keyboard)

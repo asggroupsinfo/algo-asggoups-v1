@@ -1,0 +1,31 @@
+{
+  "controller_bot": {
+    "enabled": true,
+    "description": "Main command handler bot"
+  },
+  "notification_bot": {
+    "enabled": true,
+    "description": "Trade alert notifications"
+  },
+  "analytics_bot": {
+    "enabled": true,
+    "description": "Performance analytics and reports"
+  },
+  "notification_settings": {
+    "entry_alerts": true,
+    "exit_alerts": true,
+    "error_alerts": true,
+    "daily_summary": true,
+    "v6_alerts": true,
+    "trend_pulse_alerts": true,
+    "shadow_mode_alerts": true
+  },
+  "command_settings": {
+    "rate_limit_seconds": 2,
+    "admin_only_commands": [
+      "/stop",
+      "/restart",
+      "/config"
+    ]
+  }
+}

@@ -101,8 +101,11 @@ class V6ControlMenuHandler:
         
         Args:
             user_id: Telegram user ID
-            message_id: Message ID to edit
+            message_id: Message ID to edit (optional)
         """
+
+    
+
         v6_config = self._get_v6_config()
         v6_enabled = v6_config.get("enabled", False)
         
@@ -191,7 +194,11 @@ class V6ControlMenuHandler:
             self.bot.edit_message(text, message_id, keyboard, parse_mode="HTML")
         else:
             self.bot.send_message_with_keyboard(text, keyboard)
-    
+
+    def show_v6_control_menu(self, user_id: int, message_id: int = None):
+        """Alias for show_v6_main_menu for compatibility."""
+        return self.show_v6_main_menu(user_id, message_id or 0)
+
     def handle_toggle_system(self, user_id: int, message_id: int) -> bool:
         """
         Toggle V6 system enabled/disabled.

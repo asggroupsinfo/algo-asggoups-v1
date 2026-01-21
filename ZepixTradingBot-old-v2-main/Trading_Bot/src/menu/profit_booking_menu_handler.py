@@ -117,11 +117,21 @@ class ProfitBookingMenuHandler:
                 self.bot.send_message_with_keyboard(message, reply_markup, parse_mode="HTML")
                 
             logger.info(f"Profit Booking menu shown to user {user_id} (Mode: {current_mode})")
-            
+        
         except Exception as e:
             logger.error(f"Error showing profit booking menu: {str(e)}")
             import traceback
             traceback.print_exc()
+    
+    def show_profit_menu(self, user_id: int, message_id: Optional[int] = None):
+        """
+        Alias for show_profit_booking_menu() - for compatibility with documentation.
+        
+        Args:
+            user_id: Telegram user ID
+            message_id: Message ID to edit (optional)
+        """
+        return self.show_profit_booking_menu(user_id, message_id)
     
     def handle_sl_mode_change(self, mode: str, user_id: int, message_id: int):
         """

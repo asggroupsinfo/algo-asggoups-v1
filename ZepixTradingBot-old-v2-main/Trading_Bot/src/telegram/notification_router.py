@@ -48,10 +48,13 @@ class NotificationType(Enum):
     MT5_RECONNECT = "mt5_reconnect"
     DAILY_LOSS_LIMIT = "daily_loss_limit"
     
-    # Plugin Events
+    # Plugin Events (6 - V5 Enhanced)
     PLUGIN_LOADED = "plugin_loaded"
+    PLUGIN_DISABLED = "plugin_disabled"
+    PLUGIN_RELOADED = "plugin_reloaded"
     PLUGIN_ERROR = "plugin_error"
     CONFIG_RELOAD = "config_reload"
+    PLUGIN_COMPARISON = "plugin_comparison"
     
     # Alert Events
     ALERT_RECEIVED = "alert_received"
@@ -100,18 +103,20 @@ class NotificationType(Enum):
     RECOVERY_FAILED = "recovery_failed"
     PROFIT_ORDER_PROTECTION = "profit_order_protection"
     
-    # Re-entry System Events (5)
+    # Re-entry System Events (6)
     TP_REENTRY_STARTED = "tp_reentry_started"
     TP_REENTRY_EXECUTED = "tp_reentry_executed"
     TP_REENTRY_COMPLETED = "tp_reentry_completed"
+    SL_HUNT_STARTED = "sl_hunt_started"
     SL_HUNT_RECOVERY = "sl_hunt_recovery"
     EXIT_CONTINUATION = "exit_continuation"
     
-    # Signal Events (4)
+    # Signal Events (5)
     SIGNAL_RECEIVED = "signal_received"
     SIGNAL_IGNORED = "signal_ignored"
     SIGNAL_FILTERED = "signal_filtered"
     TREND_CHANGED = "trend_changed"
+    TREND_MANUAL_SET = "trend_manual_set"
     
     # Trade Events (3)
     PARTIAL_CLOSE = "partial_close"
@@ -187,10 +192,13 @@ DEFAULT_ROUTING_RULES: Dict[NotificationType, Dict] = {
     NotificationType.MT5_RECONNECT: {"target": TargetBot.NOTIFICATION, "priority": NotificationPriority.HIGH, "voice": False},
     NotificationType.DAILY_LOSS_LIMIT: {"target": TargetBot.ALL, "priority": NotificationPriority.CRITICAL, "voice": True},
     
-    # Plugin Events
+    # Plugin Events (V5 Enhanced)
     NotificationType.PLUGIN_LOADED: {"target": TargetBot.CONTROLLER, "priority": NotificationPriority.INFO, "voice": False},
+    NotificationType.PLUGIN_DISABLED: {"target": TargetBot.CONTROLLER, "priority": NotificationPriority.MEDIUM, "voice": False},
+    NotificationType.PLUGIN_RELOADED: {"target": TargetBot.CONTROLLER, "priority": NotificationPriority.MEDIUM, "voice": False},
     NotificationType.PLUGIN_ERROR: {"target": TargetBot.NOTIFICATION, "priority": NotificationPriority.HIGH, "voice": False},
     NotificationType.CONFIG_RELOAD: {"target": TargetBot.ANALYTICS, "priority": NotificationPriority.LOW, "voice": False},
+    NotificationType.PLUGIN_COMPARISON: {"target": TargetBot.ANALYTICS, "priority": NotificationPriority.LOW, "voice": False},
     
     # Alert Events
     NotificationType.ALERT_RECEIVED: {"target": TargetBot.CONTROLLER, "priority": NotificationPriority.INFO, "voice": False},
@@ -239,18 +247,20 @@ DEFAULT_ROUTING_RULES: Dict[NotificationType, Dict] = {
     NotificationType.RECOVERY_FAILED: {"target": TargetBot.NOTIFICATION, "priority": NotificationPriority.HIGH, "voice": True},
     NotificationType.PROFIT_ORDER_PROTECTION: {"target": TargetBot.NOTIFICATION, "priority": NotificationPriority.MEDIUM, "voice": False},
     
-    # Re-entry System Events (5) -> Notification Bot
+    # Re-entry System Events (6) -> Notification Bot
     NotificationType.TP_REENTRY_STARTED: {"target": TargetBot.NOTIFICATION, "priority": NotificationPriority.MEDIUM, "voice": False},
     NotificationType.TP_REENTRY_EXECUTED: {"target": TargetBot.NOTIFICATION, "priority": NotificationPriority.HIGH, "voice": True},
     NotificationType.TP_REENTRY_COMPLETED: {"target": TargetBot.NOTIFICATION, "priority": NotificationPriority.MEDIUM, "voice": False},
+    NotificationType.SL_HUNT_STARTED: {"target": TargetBot.NOTIFICATION, "priority": NotificationPriority.MEDIUM, "voice": False},
     NotificationType.SL_HUNT_RECOVERY: {"target": TargetBot.NOTIFICATION, "priority": NotificationPriority.HIGH, "voice": True},
     NotificationType.EXIT_CONTINUATION: {"target": TargetBot.NOTIFICATION, "priority": NotificationPriority.HIGH, "voice": True},
     
-    # Signal Events (4) -> Notification Bot
+    # Signal Events (5) -> Notification Bot
     NotificationType.SIGNAL_RECEIVED: {"target": TargetBot.NOTIFICATION, "priority": NotificationPriority.HIGH, "voice": False},
     NotificationType.SIGNAL_IGNORED: {"target": TargetBot.ANALYTICS, "priority": NotificationPriority.INFO, "voice": False},
     NotificationType.SIGNAL_FILTERED: {"target": TargetBot.ANALYTICS, "priority": NotificationPriority.INFO, "voice": False},
     NotificationType.TREND_CHANGED: {"target": TargetBot.NOTIFICATION, "priority": NotificationPriority.HIGH, "voice": False},
+    NotificationType.TREND_MANUAL_SET: {"target": TargetBot.CONTROLLER, "priority": NotificationPriority.MEDIUM, "voice": False},
     
     # Trade Events (3) -> Notification Bot
     NotificationType.PARTIAL_CLOSE: {"target": TargetBot.NOTIFICATION, "priority": NotificationPriority.MEDIUM, "voice": False},

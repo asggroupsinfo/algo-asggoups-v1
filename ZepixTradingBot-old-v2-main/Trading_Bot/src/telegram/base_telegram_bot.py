@@ -256,3 +256,130 @@ class BaseTelegramBot:
 
         t = threading.Thread(target=_poll, daemon=True)
         t.start()
+    
+    # ========================================
+    # ENHANCED UX METHODS (Phase 4)
+    # ========================================
+    
+    def send_chat_action(self, action: str = "typing", chat_id: str = None) -> bool:
+        """
+        Send chat action (typing indicator, etc.)
+        
+        Args:
+            action: Action type ('typing', 'upload_document', 'upload_photo', etc.)
+            chat_id: Target chat ID
+        
+        Returns:
+            True if successful
+        """
+        if not self._is_active:
+            return False
+        
+        target_chat = chat_id or self.chat_id
+        if not target_chat:
+            return False
+        
+        try:
+            url = f"{self.base_url}/sendChatAction"
+            payload = {
+                "chat_id": target_chat,
+                "action": action
+            }
+            response = self.session.post(url, json=payload, timeout=5)
+            return response.status_code == 200 and response.json().get("ok", False)
+        except Exception as e:
+            logger.debug(f"[{self.bot_name}] Chat action error: {e}")
+            return False
+    
+    def send_message_with_keyboard(
+        self,
+        text: str,
+        reply_markup: Dict = None,
+        chat_id: str = None,
+        parse_mode: str = "HTML"
+    ) -> Optional[int]:
+        """
+        Send message with inline keyboard (wrapper for send_message)
+        
+        Args:
+            text: Message text
+            reply_markup: Inline keyboard markup
+            chat_id: Target chat ID
+            parse_mode: Formatting mode
+        
+        Returns:
+            Message ID if successful
+        """
+        return self.send_message(text, chat_id, parse_mode, reply_markup)
+    
+    def set_my_commands(self, commands: list) -> bool:
+        """
+        Set bot command list (for autocomplete in Telegram)
+        
+        Args:
+            commands: List of dicts with 'command' and 'description'
+                Example: [{"command": "start", "description": "Start bot"}]
+        
+        Returns:
+            True if successful
+        """
+        if not self._is_active:
+            return False
+        
+        try:
+            url = f"{self.base_url}/setMyCommands"
+            payload = {"commands": commands}
+            response = self.session.post(url, json=payload, timeout=10)
+            
+            if response.status_code == 200 and response.json().get("ok", False):
+                logger.info(f"[{self.bot_name}] Updated command list ({len(commands)} commands)")
+                return True
+            
+            logger.error(f"[{self.bot_name}] Command list update failed")
+            return False
+        except Exception as e:
+            logger.error(f"[{self.bot_name}] Command list error: {e}")
+            return False
+    
+    @staticmethod
+    def create_reply_keyboard_markup(
+        keyboard: list,
+        resize_keyboard: bool = True,
+        one_time_keyboard: bool = False,
+        selective: bool = False
+    ) -> Dict:
+        """
+        Create ReplyKeyboardMarkup for persistent keyboard
+        
+        Args:
+            keyboard: List of button rows, each row is a list of button texts
+                Example: [["📊 Status", "📈 Analytics"], ["⚙️ Settings"]]
+            resize_keyboard: Auto-resize keyboard
+            one_time_keyboard: Hide after use
+            selective: Show only to specific users
+        
+        Returns:
+            ReplyKeyboardMarkup dict
+        
+        Example:
+            >>> keyboard = [["📊 Status", "📈 Analytics"], ["⚙️ Settings"]]
+            >>> markup = BaseTelegramBot.create_reply_keyboard_markup(keyboard)
+            >>> bot.send_message("Choose option:", reply_markup=markup)
+        """
+        return {
+            "keyboard": keyboard,
+            "resize_keyboard": resize_keyboard,
+            "one_time_keyboard": one_time_keyboard,
+            "selective": selective
+        }
+    
+    @staticmethod
+    def remove_reply_keyboard() -> Dict:
+        """
+        Remove persistent keyboard
+        
+        Returns:
+            ReplyKeyboardRemove dict
+        """
+        return {"remove_keyboard": True}
+

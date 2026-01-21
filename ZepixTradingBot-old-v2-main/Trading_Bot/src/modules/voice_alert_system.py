@@ -58,18 +58,23 @@ class VoiceAlertSystem:
     
     Processes alerts in a queue, generates TTS voice messages,
     and handles delivery failures with automatic retries.
+    
+    V3.1 Update: Compatible with both telegram.Bot and custom TelegramBot classes
     """
     
-    def __init__(self, bot: Bot, chat_id: str, sms_gateway=None):
+    def __init__(self, bot=None, chat_id: str = None, sms_gateway=None, telegram_bot=None):
         """
-        Initialize Voice Alert System V2.0 with Windows audio support.
+        Initialize Voice Alert System V3.1 with Windows audio support.
         
         Args:
-            bot: Telegram Bot instance
+            bot: Telegram Bot instance (from python-telegram-bot library)
             chat_id: Target Telegram chat ID
             sms_gateway: Optional SMS gateway for critical alerts
+            telegram_bot: Custom TelegramBot instance (from telegram_bot_fixed.py)
         """
-        self.bot = bot
+        # Support both bot types
+        self.bot = bot  # python-telegram-bot Bot
+        self.telegram_bot = telegram_bot  # Custom TelegramBot
         self.chat_id = chat_id
         self.sms_gateway = sms_gateway
         self.alert_queue: List[Dict] = []
@@ -266,7 +271,7 @@ class VoiceAlertSystem:
         """
         Send text message with notification sound via Telegram.
         
-        V2.0 Update: Ensures notifications are enabled for phone sound.
+        V3.1 Update: Supports both python-telegram-bot and custom TelegramBot
         
         Args:
             message: Message text
@@ -285,18 +290,30 @@ class VoiceAlertSystem:
             }
             
             emoji = emoji_map.get(priority.value, '📢')
-            formatted_message = f"{emoji} **{priority.value} ALERT**\n\n{message}"
+            formatted_message = f"{emoji} <b>{priority.value} ALERT</b>\n\n{message}"
             
-            # V2.0: IMPORTANT - disable_notification=False ensures phone makes sound
-            self.bot.send_message(
-                chat_id=self.chat_id,
-                text=formatted_message,
-                parse_mode='Markdown',
-                disable_notification=False  # Ensures notification sound on phone
-            )
+            # V3.1: Try custom TelegramBot first (telegram_bot_fixed.py)
+            if self.telegram_bot and hasattr(self.telegram_bot, 'send_message'):
+                try:
+                    self.telegram_bot.send_message(formatted_message, parse_mode='HTML')
+                    self.logger.info("Text notification sent via TelegramBot")
+                    return True
+                except Exception as e:
+                    self.logger.warning(f"TelegramBot send failed: {e}, trying Bot API...")
             
-            self.logger.info("Text notification sent successfully")
-            return True
+            # Fallback to python-telegram-bot Bot
+            if self.bot:
+                self.bot.send_message(
+                    chat_id=self.chat_id,
+                    text=formatted_message,
+                    parse_mode='HTML',
+                    disable_notification=False  # Ensures notification sound on phone
+                )
+                self.logger.info("Text notification sent via Bot API")
+                return True
+            
+            self.logger.error("No telegram bot available for text notification")
+            return False
         
         except TelegramError as e:
             self.logger.error(f"Telegram text send failed: {e}")

@@ -707,3 +707,110 @@ Percentage to reduce SL at each TP level.
         except Exception as e:
             logger.error(f"Error resetting to defaults: {str(e)}")
             self.bot.send_message(f"❌ Error: {str(e)}")
+    
+    def show_plugin_reentry_config(self, user_id: int, plugin_id: str, message_id: Optional[int] = None):
+        """
+        Show per-plugin re-entry configuration
+        
+        Args:
+            user_id: Telegram user ID
+            plugin_id: Plugin identifier (e.g., 'v3_combined', 'v6_price_action')
+            message_id: Message ID to edit (if updating)
+        """
+        try:
+            # Get per-plugin config or fall back to global
+            re_entry_config = self.config.get("re_entry_config", {})
+            per_plugin = re_entry_config.get("per_plugin", {})
+            global_config = re_entry_config.get("autonomous_config", {})
+            
+            # Get plugin-specific config (fallback to global)
+            plugin_config = per_plugin.get(plugin_id, global_config)
+            
+            # Get settings
+            enabled = plugin_config.get("enabled", False)
+            tp_cont = plugin_config.get("tp_continuation", {})
+            tp_enabled = tp_cont.get("enabled", False)
+            tp_cooldown = tp_cont.get("cooldown_seconds", 5)
+            tp_max = tp_cont.get("max_levels", 5)
+            
+            sl_hunt = plugin_config.get("sl_hunt_recovery", {})
+            sl_enabled = sl_hunt.get("enabled", False)
+            sl_cooldown = sl_hunt.get("cooldown_seconds", 30)
+            sl_max = sl_hunt.get("max_levels", 5)
+            
+            exit_cont = plugin_config.get("exit_continuation", {})
+            exit_enabled = exit_cont.get("enabled", False)
+            
+            # Determine plugin type
+            if "v3" in plugin_id.lower():
+                badge = "🔶"
+                name = "V3 COMBINED"
+                timeframes = "5m / 15m / 1h"
+            elif "v6" in plugin_id.lower():
+                badge = "🔶"
+                name = "V6 PRICE ACTION"
+                timeframes = "1m / 5m / 15m / 1h"
+            else:
+                badge = "🔧"
+                name = plugin_id.upper()
+                timeframes = "Unknown"
+            
+            # Build keyboard
+            keyboard = []
+            
+            # Master toggle
+            keyboard.append([self._toggle_button(
+                f"{badge} {name}", 
+                enabled, 
+                f"plugin_toggle_{plugin_id}"
+            )])
+            
+            # Feature toggles
+            keyboard.append([
+                self._toggle_button("🎯 TP Continuation", tp_enabled, f"plugin_tp_{plugin_id}"),
+                self._toggle_button("🛡 SL Hunt", sl_enabled, f"plugin_sl_{plugin_id}")
+            ])
+            
+            keyboard.append([
+                self._toggle_button("🔄 Exit Continuation", exit_enabled, f"plugin_exit_{plugin_id}")
+            ])
+            
+            # Settings & back
+            keyboard.append([
+                self._btn("⚙ Settings", f"plugin_settings_{plugin_id}"),
+                self._btn("🔙 Back", "reentry_view_status")
+            ])
+            
+            # Build message
+            status_icon = "🟢 ACTIVE" if enabled else "🔴 INACTIVE"
+            using_global = plugin_id not in per_plugin
+            
+            message = (
+                f"{badge} <b>{name} RE-ENTRY CONFIG</b>\n"
+                f"━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+                f"<b>Timeframes:</b> {timeframes}\n"
+                f"<b>Status:</b> {status_icon}\n"
+                f"<b>Config Source:</b> {'Global (inherited)' if using_global else 'Plugin-specific'}\n\n"
+                f"<b>Features:</b>\n"
+                f"• TP Continuation: {'ON ✅' if tp_enabled else 'OFF ❌'} ({tp_max} levels, {tp_cooldown}s)\n"
+                f"• SL Hunt: {'ON ✅' if sl_enabled else 'OFF ❌'} ({sl_max} levels, {sl_cooldown}s)\n"
+                f"• Exit Continuation: {'ON ✅' if exit_enabled else 'OFF ❌'}\n\n"
+                f"<b>💡 Tip:</b> Click buttons to toggle features"
+            )
+            
+            reply_markup = self._create_keyboard(keyboard)
+            
+            # Send or edit
+            if message_id:
+                self.bot.edit_message(message, message_id, reply_markup, parse_mode="HTML")
+            else:
+                self.bot.send_message_with_keyboard(message, reply_markup, parse_mode="HTML")
+            
+            logger.info(f"Per-plugin reentry config shown for {plugin_id}")
+            
+        except Exception as e:
+            logger.error(f"Error showing plugin reentry config: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            self.bot.send_message(f"❌ Error: {str(e)}")
+

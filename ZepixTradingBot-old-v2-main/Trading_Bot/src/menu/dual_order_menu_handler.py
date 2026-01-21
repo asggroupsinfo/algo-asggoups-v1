@@ -32,11 +32,29 @@ class DualOrderMenuHandler:
     """
     
     # Order modes
-    ORDER_MODES = ["order_a", "order_b", "both"]
+    ORDER_MODES = ["order_a_only", "order_b_only", "dual_orders"]
     ORDER_MODE_LABELS = {
-        "order_a": "Order A Only",
-        "order_b": "Order B Only",
-        "both": "Both Orders"
+        "order_a_only": "📊 Order A Only (Quick Profit)",
+        "order_b_only": "💎 Order B Only (Extended Profit)",
+        "dual_orders": "🔀 Both Orders (Dual)"
+    }
+    
+    # V3 Logics
+    V3_LOGICS = ["LOGIC1", "LOGIC2", "LOGIC3"]
+    V3_LOGIC_LABELS = {
+        "LOGIC1": "🧠 V3 Logic 1 (5m)",
+        "LOGIC2": "🧠 V3 Logic 2 (15m)",
+        "LOGIC3": "🧠 V3 Logic 3 (1h)"
+    }
+    
+    # V6 Timeframes
+    V6_TIMEFRAMES = ["1M", "5M", "15M", "1H", "4H"]
+    V6_TIMEFRAME_LABELS = {
+        "1M": "📊 V6 1M",
+        "5M": "📊 V6 5M",
+        "15M": "📊 V6 15M",
+        "1H": "📊 V6 1H",
+        "4H": "📊 V6 4H"
     }
     
     def __init__(self, telegram_bot, config: Dict[str, Any] = None):
@@ -45,26 +63,79 @@ class DualOrderMenuHandler:
         
         Args:
             telegram_bot: Telegram bot instance
-            config: Bot configuration dictionary
+            config: Bot configuration dictionary (Config object or dict)
         """
         self._bot = telegram_bot
-        self._config = config or {}
+        # Support both Config object and dict
+        if hasattr(telegram_bot, 'config'):
+            self._config_obj = telegram_bot.config  # Config object with save_config()
+            self._config = telegram_bot.config.config if hasattr(telegram_bot.config, 'config') else telegram_bot.config
+        else:
+            self._config_obj = None
+            self._config = config or {}
         logger.info("[DualOrderMenuHandler] Initialized")
     
     def set_config(self, config: Dict[str, Any]):
         """Update configuration reference"""
-        self._config = config
+        if hasattr(config, 'config'):
+            self._config_obj = config
+            self._config = config.config
+        else:
+            self._config = config
     
-    def _get_dual_order_config(self, plugin: str = None) -> Dict[str, Any]:
-        """Get dual order configuration for a plugin"""
-        dual_config = self._config.get("dual_order_system", {})
-        if plugin:
-            return dual_config.get("plugins", {}).get(plugin, {
-                "enabled": False,
-                "mode": "both",
-                "order_a": {"lot_multiplier": 1.0, "tp_pips": 20, "sl_pips": 15},
-                "order_b": {"lot_multiplier": 0.5, "tp_pips": 40, "sl_pips": 15}
-            })
+    def _save_config(self):
+        """Save config to file"""
+        if self._config_obj and hasattr(self._config_obj, 'save_config'):
+            self._config_obj.save_config()
+            logger.info("[DualOrderMenuHandler] Config saved to file")
+    
+    def _get_dual_order_config(self, plugin: str = None, context: str = None) -> Dict[str, Any]:
+        """
+        Get dual order configuration.
+        
+        Args:
+            plugin: "v3_combined" or "v6_price_action"
+            context: For V3: "LOGIC1", "LOGIC2", "LOGIC3"
+                    For V6: "1M", "5M", "15M", "1H", "4H"
+        
+        Returns:
+            Dict with config
+        """
+        if "dual_order_config" not in self._config:
+            self._config["dual_order_config"] = {
+                "enabled": True,
+                "v3_combined": {
+                    "enabled": True,
+                    "per_logic_routing": {
+                        "LOGIC1": "dual_orders",
+                        "LOGIC2": "dual_orders",
+                        "LOGIC3": "dual_orders"
+                    }
+                },
+                "v6_price_action": {
+                    "enabled": True,
+                    "per_timeframe_routing": {
+                        "1M": "order_b_only",
+                        "5M": "dual_orders",
+                        "15M": "order_a_only",
+                        "1H": "order_a_only",
+                        "4H": "order_a_only"
+                    }
+                }
+            }
+        
+        dual_config = self._config["dual_order_config"]
+        
+        if plugin and context:
+            # Get specific timeframe/logic routing
+            if plugin == "v3_combined":
+                return dual_config.get("v3_combined", {}).get("per_logic_routing", {}).get(context, "dual_orders")
+            elif plugin == "v6_price_action":
+                return dual_config.get("v6_price_action", {}).get("per_timeframe_routing", {}).get(context, "dual_orders")
+        elif plugin:
+            # Get plugin-level config
+            return dual_config.get(plugin, {})
+        
         return dual_config
     
     def _send_message(self, text: str, reply_markup: Dict = None, message_id: int = None):
@@ -84,11 +155,11 @@ class DualOrderMenuHandler:
     # =========================================================================
     
     def show_dual_order_menu(self, user_id: int, message_id: int = None):
-        """Show main dual order configuration menu"""
+        """Show main dual order plugin selection menu"""
         logger.info(f"[DualOrderMenuHandler] Showing dual order menu for user {user_id}")
         
         dual_config = self._get_dual_order_config()
-        system_enabled = dual_config.get("enabled", False)
+        system_enabled = dual_config.get("enabled", True)
         
         text = f"""💎 <b>DUAL ORDER SYSTEM</b>
 ━━━━━━━━━━━━━━━━━━━━━━━━
@@ -110,28 +181,167 @@ simultaneously with different TP targets:
             [
                 {"text": f"{'✅' if system_enabled else '❌'} Toggle System", "callback_data": "dual_toggle_system"}
             ],
-            # V3 Plugins
+            # Plugin selection
             [
-                {"text": "🧠 V3 Logic 1 (5m)", "callback_data": "dual_config_v3_logic1"},
-                {"text": "🧠 V3 Logic 2 (15m)", "callback_data": "dual_config_v3_logic2"}
-            ],
-            [
-                {"text": "🧠 V3 Logic 3 (1h)", "callback_data": "dual_config_v3_logic3"}
-            ],
-            # V6 Plugins
-            [
-                {"text": "📊 V6 15M", "callback_data": "dual_config_v6_15m"},
-                {"text": "📊 V6 30M", "callback_data": "dual_config_v6_30m"}
-            ],
-            [
-                {"text": "📊 V6 1H", "callback_data": "dual_config_v6_1h"},
-                {"text": "📊 V6 4H", "callback_data": "dual_config_v6_4h"}
+                {"text": "🧠 V3 Combined Logic", "callback_data": "dual_select_v3"},
+                {"text": "📊 V6 Price Action", "callback_data": "dual_select_v6"}
             ],
             # Navigation
             [
+                {"text": "← Back to Orders Menu", "callback_data": "menu_orders"},
                 {"text": "🏠 Main Menu", "callback_data": "menu_main"}
             ]
         ]
+        
+        reply_markup = {"inline_keyboard": keyboard}
+        self._send_message(text, reply_markup, message_id)
+    
+    def show_v3_logic_selection(self, user_id: int, message_id: int = None):
+        """Show V3 logic selection menu"""
+        logger.info(f"[DualOrderMenuHandler] Showing V3 logic selection for user {user_id}")
+        
+        v3_config = self._get_dual_order_config("v3_combined")
+        v3_enabled = v3_config.get("enabled", True)
+        routing = v3_config.get("per_logic_routing", {})
+        
+        text = f"""🧠 <b>V3 COMBINED LOGIC - DUAL ORDER CONFIG</b>
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔌 <b>V3 Status:</b> {'✅ ENABLED' if v3_enabled else '❌ DISABLED'}
+
+📊 <b>Current Routing:</b>
+• LOGIC1 (5m):  {self.ORDER_MODE_LABELS.get(routing.get('LOGIC1', 'dual_orders'), 'Dual Orders')}
+• LOGIC2 (15m): {self.ORDER_MODE_LABELS.get(routing.get('LOGIC2', 'dual_orders'), 'Dual Orders')}
+• LOGIC3 (1h):  {self.ORDER_MODE_LABELS.get(routing.get('LOGIC3', 'dual_orders'), 'Dual Orders')}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+<i>Select a logic to configure:</i>"""
+        
+        keyboard = []
+        
+        # V3 enable/disable
+        keyboard.append([
+            {"text": f"{'✅' if v3_enabled else '❌'} Toggle V3", "callback_data": "dual_toggle_v3"}
+        ])
+        
+        # Logic selection
+        for logic in self.V3_LOGICS:
+            current_mode = routing.get(logic, "dual_orders")
+            status = self.ORDER_MODE_LABELS.get(current_mode, "Dual Orders")
+            keyboard.append([
+                {"text": f"{self.V3_LOGIC_LABELS[logic]} → {status}", "callback_data": f"dual_v3_{logic}"}
+            ])
+        
+        # Navigation
+        keyboard.append([
+            {"text": "◀️ Back", "callback_data": "menu_dual_order_main"},
+            {"text": "🏠 Main Menu", "callback_data": "menu_main"}
+        ])
+        
+        reply_markup = {"inline_keyboard": keyboard}
+        self._send_message(text, reply_markup, message_id)
+    
+    def show_v6_timeframe_selection(self, user_id: int, message_id: int = None):
+        """Show V6 timeframe selection menu"""
+        logger.info(f"[DualOrderMenuHandler] Showing V6 timeframe selection for user {user_id}")
+        
+        v6_config = self._get_dual_order_config("v6_price_action")
+        v6_enabled = v6_config.get("enabled", True)
+        routing = v6_config.get("per_timeframe_routing", {})
+        
+        text = f"""📊 <b>V6 PRICE ACTION - DUAL ORDER CONFIG</b>
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔌 <b>V6 Status:</b> {'✅ ENABLED' if v6_enabled else '❌ DISABLED'}
+
+📊 <b>Current Routing:</b>
+• 1M:  {self.ORDER_MODE_LABELS.get(routing.get('1M', 'order_b_only'), 'Order B Only')}
+• 5M:  {self.ORDER_MODE_LABELS.get(routing.get('5M', 'dual_orders'), 'Dual Orders')}
+• 15M: {self.ORDER_MODE_LABELS.get(routing.get('15M', 'order_a_only'), 'Order A Only')}
+• 1H:  {self.ORDER_MODE_LABELS.get(routing.get('1H', 'order_a_only'), 'Order A Only')}
+• 4H:  {self.ORDER_MODE_LABELS.get(routing.get('4H', 'order_a_only'), 'Order A Only')}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+<i>Select a timeframe to configure:</i>"""
+        
+        keyboard = []
+        
+        # V6 enable/disable
+        keyboard.append([
+            {"text": f"{'✅' if v6_enabled else '❌'} Toggle V6", "callback_data": "dual_toggle_v6"}
+        ])
+        
+        # Timeframe selection (2 per row)
+        row = []
+        for idx, tf in enumerate(self.V6_TIMEFRAMES):
+            current_mode = routing.get(tf, "dual_orders")
+            status_icon = {"order_a_only": "📊", "order_b_only": "💎", "dual_orders": "🔀"}.get(current_mode, "🔀")
+            row.append({"text": f"{status_icon} {tf}", "callback_data": f"dual_v6_{tf}"})
+            if len(row) == 2 or idx == len(self.V6_TIMEFRAMES) - 1:
+                keyboard.append(row)
+                row = []
+        
+        # Navigation
+        keyboard.append([
+            {"text": "◀️ Back", "callback_data": "menu_dual_order_main"},
+            {"text": "🏠 Main Menu", "callback_data": "menu_main"}
+        ])
+        
+        reply_markup = {"inline_keyboard": keyboard}
+        self._send_message(text, reply_markup, message_id)
+    
+    def show_v3_logic_mode_selection(self, logic: str, user_id: int, message_id: int = None):
+        """Show mode selection for a V3 logic"""
+        logger.info(f"[DualOrderMenuHandler] Showing mode selection for V3 {logic}")
+        
+        current_mode = self._get_dual_order_config("v3_combined", logic)
+        
+        text = f"""📋 <b>V3 {logic} - SELECT ORDER MODE</b>
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Current Mode: <b>{self.ORDER_MODE_LABELS.get(current_mode, 'Dual Orders')}</b>
+
+Select new mode:"""
+        
+        keyboard = []
+        for mode in self.ORDER_MODES:
+            is_current = mode == current_mode
+            label = self.ORDER_MODE_LABELS.get(mode, mode)
+            emoji = "✅" if is_current else "⚪"
+            keyboard.append([{"text": f"{emoji} {label}", "callback_data": f"dual_set_v3_{logic}_{mode}"}])
+        
+        keyboard.append([
+            {"text": "◀️ Back", "callback_data": "dual_select_v3"},
+            {"text": "🏠 Main Menu", "callback_data": "menu_main"}
+        ])
+        
+        reply_markup = {"inline_keyboard": keyboard}
+        self._send_message(text, reply_markup, message_id)
+    
+    def show_v6_timeframe_mode_selection(self, timeframe: str, user_id: int, message_id: int = None):
+        """Show mode selection for a V6 timeframe"""
+        logger.info(f"[DualOrderMenuHandler] Showing mode selection for V6 {timeframe}")
+        
+        current_mode = self._get_dual_order_config("v6_price_action", timeframe)
+        
+        text = f"""📋 <b>V6 {timeframe} - SELECT ORDER MODE</b>
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+Current Mode: <b>{self.ORDER_MODE_LABELS.get(current_mode, 'Dual Orders')}</b>
+
+Select new mode:"""
+        
+        keyboard = []
+        for mode in self.ORDER_MODES:
+            is_current = mode == current_mode
+            label = self.ORDER_MODE_LABELS.get(mode, mode)
+            emoji = "✅" if is_current else "⚪"
+            keyboard.append([{"text": f"{emoji} {label}", "callback_data": f"dual_set_v6_{timeframe}_{mode}"}])
+        
+        keyboard.append([
+            {"text": "◀️ Back", "callback_data": "dual_select_v6"},
+            {"text": "🏠 Main Menu", "callback_data": "menu_main"}
+        ])
         
         reply_markup = {"inline_keyboard": keyboard}
         self._send_message(text, reply_markup, message_id)
@@ -236,27 +446,65 @@ Select new mode:"""
         """Handle dual order menu callback"""
         logger.info(f"[DualOrderMenuHandler] Handling callback: {callback_data}")
         
-        if callback_data == "menu_dual_order":
+        if callback_data == "menu_dual_order" or callback_data == "menu_dual_order_main":
             self.show_dual_order_menu(user_id, message_id)
             return True
         
-        if callback_data.startswith("dual_config_"):
-            plugin = callback_data.replace("dual_config_", "")
-            self.show_plugin_dual_order_config(plugin, user_id, message_id)
+        # Plugin selection
+        if callback_data == "dual_select_v3":
+            self.show_v3_logic_selection(user_id, message_id)
             return True
         
-        if callback_data.startswith("dual_mode_"):
-            plugin = callback_data.replace("dual_mode_", "")
-            self.show_mode_selection(plugin, user_id, message_id)
+        if callback_data == "dual_select_v6":
+            self.show_v6_timeframe_selection(user_id, message_id)
             return True
         
-        if callback_data.startswith("dual_toggle_"):
-            plugin = callback_data.replace("dual_toggle_", "")
-            self._toggle_plugin(plugin)
-            if plugin == "system":
-                self.show_dual_order_menu(user_id, message_id)
-            else:
-                self.show_plugin_dual_order_config(plugin, user_id, message_id)
+        # V3 logic selection
+        if callback_data.startswith("dual_v3_"):
+            logic = callback_data.replace("dual_v3_", "")
+            if logic in self.V3_LOGICS:
+                self.show_v3_logic_mode_selection(logic, user_id, message_id)
+                return True
+        
+        # V6 timeframe selection
+        if callback_data.startswith("dual_v6_"):
+            timeframe = callback_data.replace("dual_v6_", "")
+            if timeframe in self.V6_TIMEFRAMES:
+                self.show_v6_timeframe_mode_selection(timeframe, user_id, message_id)
+                return True
+        
+        # Set V3 logic mode
+        if callback_data.startswith("dual_set_v3_"):
+            parts = callback_data.replace("dual_set_v3_", "").rsplit("_", 1)
+            if len(parts) == 2:
+                logic, mode = parts
+                self._set_v3_logic_mode(logic, mode)
+                self.show_v3_logic_selection(user_id, message_id)
+                return True
+        
+        # Set V6 timeframe mode
+        if callback_data.startswith("dual_set_v6_"):
+            parts = callback_data.replace("dual_set_v6_", "").rsplit("_", 1)
+            if len(parts) == 2:
+                timeframe, mode = parts
+                self._set_v6_timeframe_mode(timeframe, mode)
+                self.show_v6_timeframe_selection(user_id, message_id)
+                return True
+        
+        # Toggle system/V3/V6
+        if callback_data == "dual_toggle_system":
+            self._toggle_system()
+            self.show_dual_order_menu(user_id, message_id)
+            return True
+        
+        if callback_data == "dual_toggle_v3":
+            self._toggle_v3()
+            self.show_v3_logic_selection(user_id, message_id)
+            return True
+        
+        if callback_data == "dual_toggle_v6":
+            self._toggle_v6()
+            self.show_v6_timeframe_selection(user_id, message_id)
             return True
         
         if callback_data.startswith("dual_set_mode_"):
@@ -269,8 +517,69 @@ Select new mode:"""
         
         return False
     
+    # =========================================================================
+    # HELPER METHODS
+    # =========================================================================
+    
+    def _toggle_system(self):
+        """Toggle system enabled state"""
+        if "dual_order_config" not in self._config:
+            self._config["dual_order_config"] = {"enabled": False}
+        current = self._config["dual_order_config"].get("enabled", True)
+        self._config["dual_order_config"]["enabled"] = not current
+        self._save_config()
+        logger.info(f"[DualOrderMenuHandler] Toggled system: {not current}")
+    
+    def _toggle_v3(self):
+        """Toggle V3 enabled state"""
+        if "dual_order_config" not in self._config:
+            self._config["dual_order_config"] = {}
+        if "v3_combined" not in self._config["dual_order_config"]:
+            self._config["dual_order_config"]["v3_combined"] = {"enabled": False}
+        current = self._config["dual_order_config"]["v3_combined"].get("enabled", True)
+        self._config["dual_order_config"]["v3_combined"]["enabled"] = not current
+        self._save_config()
+        logger.info(f"[DualOrderMenuHandler] Toggled V3: {not current}")
+    
+    def _toggle_v6(self):
+        """Toggle V6 enabled state"""
+        if "dual_order_config" not in self._config:
+            self._config["dual_order_config"] = {}
+        if "v6_price_action" not in self._config["dual_order_config"]:
+            self._config["dual_order_config"]["v6_price_action"] = {"enabled": False}
+        current = self._config["dual_order_config"]["v6_price_action"].get("enabled", True)
+        self._config["dual_order_config"]["v6_price_action"]["enabled"] = not current
+        self._save_config()
+        logger.info(f"[DualOrderMenuHandler] Toggled V6: {not current}")
+    
+    def _set_v3_logic_mode(self, logic: str, mode: str):
+        """Set order mode for a V3 logic"""
+        if "dual_order_config" not in self._config:
+            self._config["dual_order_config"] = {}
+        if "v3_combined" not in self._config["dual_order_config"]:
+            self._config["dual_order_config"]["v3_combined"] = {}
+        if "per_logic_routing" not in self._config["dual_order_config"]["v3_combined"]:
+            self._config["dual_order_config"]["v3_combined"]["per_logic_routing"] = {}
+        
+        self._config["dual_order_config"]["v3_combined"]["per_logic_routing"][logic] = mode
+        self._save_config()
+        logger.info(f"[DualOrderMenuHandler] Set V3 {logic} mode to {mode}")
+    
+    def _set_v6_timeframe_mode(self, timeframe: str, mode: str):
+        """Set order mode for a V6 timeframe"""
+        if "dual_order_config" not in self._config:
+            self._config["dual_order_config"] = {}
+        if "v6_price_action" not in self._config["dual_order_config"]:
+            self._config["dual_order_config"]["v6_price_action"] = {}
+        if "per_timeframe_routing" not in self._config["dual_order_config"]["v6_price_action"]:
+            self._config["dual_order_config"]["v6_price_action"]["per_timeframe_routing"] = {}
+        
+        self._config["dual_order_config"]["v6_price_action"]["per_timeframe_routing"][timeframe] = mode
+        self._save_config()
+        logger.info(f"[DualOrderMenuHandler] Set V6 {timeframe} mode to {mode}")
+    
     def _toggle_plugin(self, plugin: str):
-        """Toggle plugin enabled state"""
+        """Toggle plugin enabled state and save config"""
         if plugin == "system":
             if "dual_order_system" not in self._config:
                 self._config["dual_order_system"] = {"enabled": False, "plugins": {}}
@@ -285,9 +594,13 @@ Select new mode:"""
                 self._config["dual_order_system"]["plugins"][plugin] = {"enabled": False}
             current = self._config["dual_order_system"]["plugins"][plugin].get("enabled", False)
             self._config["dual_order_system"]["plugins"][plugin]["enabled"] = not current
+        
+        # Save config to file
+        self._save_config()
+        logger.info(f"[DualOrderMenuHandler] Toggled {plugin}: {not current}")
     
     def _set_mode(self, plugin: str, mode: str):
-        """Set order mode for a plugin"""
+        """Set order mode for a plugin and save config"""
         if "dual_order_system" not in self._config:
             self._config["dual_order_system"] = {"enabled": True, "plugins": {}}
         if "plugins" not in self._config["dual_order_system"]:
@@ -295,6 +608,10 @@ Select new mode:"""
         if plugin not in self._config["dual_order_system"]["plugins"]:
             self._config["dual_order_system"]["plugins"][plugin] = {"enabled": True}
         self._config["dual_order_system"]["plugins"][plugin]["mode"] = mode
+        
+        # Save config to file
+        self._save_config()
+        logger.info(f"[DualOrderMenuHandler] Set mode for {plugin}: {mode}")
 
 
 class ReentryMenuHandler:
@@ -311,9 +628,27 @@ class ReentryMenuHandler:
     # Re-entry types
     REENTRY_TYPES = ["tp_continuation", "sl_hunt_recovery", "exit_continuation"]
     REENTRY_TYPE_LABELS = {
-        "tp_continuation": "TP Continuation",
-        "sl_hunt_recovery": "SL Hunt Recovery",
-        "exit_continuation": "Exit Continuation"
+        "tp_continuation": "🎯 TP Continuation",
+        "sl_hunt_recovery": "🛡️ SL Hunt Recovery",
+        "exit_continuation": "🔄 Exit Continuation"
+    }
+    
+    # V3 Logics (same as DualOrderMenuHandler)
+    V3_LOGICS = ["LOGIC1", "LOGIC2", "LOGIC3"]
+    V3_LOGIC_LABELS = {
+        "LOGIC1": "🧠 V3 Logic 1 (5m)",
+        "LOGIC2": "🧠 V3 Logic 2 (15m)",
+        "LOGIC3": "🧠 V3 Logic 3 (1h)"
+    }
+    
+    # V6 Timeframes (same as DualOrderMenuHandler)
+    V6_TIMEFRAMES = ["1M", "5M", "15M", "1H", "4H"]
+    V6_TIMEFRAME_LABELS = {
+        "1M": "📊 V6 1M",
+        "5M": "📊 V6 5M",
+        "15M": "📊 V6 15M",
+        "1H": "📊 V6 1H",
+        "4H": "📊 V6 4H"
     }
     
     def __init__(self, telegram_bot, config: Dict[str, Any] = None):
@@ -322,26 +657,125 @@ class ReentryMenuHandler:
         
         Args:
             telegram_bot: Telegram bot instance
-            config: Bot configuration dictionary
+            config: Bot configuration dictionary (Config object or dict)
         """
         self._bot = telegram_bot
-        self._config = config or {}
-        logger.info("[ReentryMenuHandler] Initialized")
+        # Support both Config object and dict
+        if hasattr(telegram_bot, 'config'):
+            self._config_obj = telegram_bot.config  # Config object with save_config()
+            self._config = telegram_bot.config.config if hasattr(telegram_bot.config, 'config') else telegram_bot.config
+        else:
+            self._config_obj = None
+            self._config = config or {}
+        logger.info("[ReentryMenuHandler] Initialized (Per-Plugin Version)")
     
     def set_config(self, config: Dict[str, Any]):
         """Update configuration reference"""
-        self._config = config
+        if hasattr(config, 'config'):
+            self._config_obj = config
+            self._config = config.config
+        else:
+            self._config = config
     
-    def _get_reentry_config(self, plugin: str = None) -> Dict[str, Any]:
-        """Get re-entry configuration for a plugin"""
-        reentry_config = self._config.get("reentry_system", {})
-        if plugin:
-            return reentry_config.get("plugins", {}).get(plugin, {
-                "enabled": False,
-                "tp_continuation": {"enabled": True, "max_levels": 3, "cooldown_seconds": 60},
-                "sl_hunt_recovery": {"enabled": True, "max_levels": 2, "cooldown_seconds": 120},
-                "exit_continuation": {"enabled": False, "max_levels": 1, "cooldown_seconds": 180}
-            })
+    def _save_config(self):
+        """Save config to file"""
+        if self._config_obj and hasattr(self._config_obj, 'save_config'):
+            self._config_obj.save_config()
+            logger.info("[ReentryMenuHandler] Config saved to file")
+    
+    def _get_reentry_config(self, plugin: str = None, context: str = None, feature: str = None) -> Dict[str, Any]:
+        """
+        Get re-entry configuration.
+        
+        Args:
+            plugin: "v3_combined" or "v6_price_action"
+            context: For V3: "LOGIC1", "LOGIC2", "LOGIC3"
+                    For V6: "1M", "5M", "15M", "1H", "4H"
+            feature: "tp_continuation", "sl_hunt_recovery", "exit_continuation"
+        
+        Returns:
+            Dict with config or bool if feature specified
+        """
+        if "re_entry_config" not in self._config:
+            self._config["re_entry_config"] = {
+                "enabled": True,
+                "global": {
+                    "tp_reentry_enabled": True,
+                    "sl_hunt_reentry_enabled": True,
+                    "exit_continuation_enabled": True
+                },
+                "per_plugin": {
+                    "v3_combined": {
+                        "enabled": True,
+                        "per_logic_routing": {
+                            "LOGIC1": {
+                                "tp_continuation": {"enabled": True},
+                                "sl_hunt_recovery": {"enabled": True},
+                                "exit_continuation": {"enabled": True}
+                            },
+                            "LOGIC2": {
+                                "tp_continuation": {"enabled": True},
+                                "sl_hunt_recovery": {"enabled": True},
+                                "exit_continuation": {"enabled": True}
+                            },
+                            "LOGIC3": {
+                                "tp_continuation": {"enabled": True},
+                                "sl_hunt_recovery": {"enabled": False},
+                                "exit_continuation": {"enabled": True}
+                            }
+                        }
+                    },
+                    "v6_price_action": {
+                        "enabled": True,
+                        "per_timeframe_routing": {
+                            "1M": {
+                                "tp_continuation": {"enabled": False},
+                                "sl_hunt_recovery": {"enabled": True},
+                                "exit_continuation": {"enabled": False}
+                            },
+                            "5M": {
+                                "tp_continuation": {"enabled": True},
+                                "sl_hunt_recovery": {"enabled": True},
+                                "exit_continuation": {"enabled": True}
+                            },
+                            "15M": {
+                                "tp_continuation": {"enabled": True},
+                                "sl_hunt_recovery": {"enabled": False},
+                                "exit_continuation": {"enabled": True}
+                            },
+                            "1H": {
+                                "tp_continuation": {"enabled": True},
+                                "sl_hunt_recovery": {"enabled": False},
+                                "exit_continuation": {"enabled": True}
+                            },
+                            "4H": {
+                                "tp_continuation": {"enabled": True},
+                                "sl_hunt_recovery": {"enabled": False},
+                                "exit_continuation": {"enabled": False}
+                            }
+                        }
+                    }
+                }
+            }
+        
+        reentry_config = self._config["re_entry_config"]
+        
+        if plugin and context and feature:
+            # Get specific feature status for timeframe/logic
+            if plugin == "v3_combined":
+                return reentry_config.get("per_plugin", {}).get("v3_combined", {}).get("per_logic_routing", {}).get(context, {}).get(feature, {}).get("enabled", True)
+            elif plugin == "v6_price_action":
+                return reentry_config.get("per_plugin", {}).get("v6_price_action", {}).get("per_timeframe_routing", {}).get(context, {}).get(feature, {}).get("enabled", True)
+        elif plugin and context:
+            # Get all features for specific timeframe/logic
+            if plugin == "v3_combined":
+                return reentry_config.get("per_plugin", {}).get("v3_combined", {}).get("per_logic_routing", {}).get(context, {})
+            elif plugin == "v6_price_action":
+                return reentry_config.get("per_plugin", {}).get("v6_price_action", {}).get("per_timeframe_routing", {}).get(context, {})
+        elif plugin:
+            # Get plugin-level config
+            return reentry_config.get("per_plugin", {}).get(plugin, {})
+        
         return reentry_config
     
     def _send_message(self, text: str, reply_markup: Dict = None, message_id: int = None):
@@ -361,21 +795,22 @@ class ReentryMenuHandler:
     # =========================================================================
     
     def show_reentry_menu(self, user_id: int, message_id: int = None):
-        """Show main re-entry configuration menu"""
+        """Show main re-entry plugin selection menu"""
         logger.info(f"[ReentryMenuHandler] Showing re-entry menu for user {user_id}")
         
         reentry_config = self._get_reentry_config()
-        system_enabled = reentry_config.get("enabled", False)
+        system_enabled = reentry_config.get("enabled", True)
         
-        text = f"""🔄 <b>RE-ENTRY SYSTEM</b>
+        text = f"""🔄 <b>RE-ENTRY SYSTEM MANAGEMENT</b>
 ━━━━━━━━━━━━━━━━━━━━━━━━
 
 🔌 <b>System Status:</b> {'✅ ENABLED' if system_enabled else '❌ DISABLED'}
 
-📊 <b>Re-entry Types:</b>
-• <b>TP Continuation:</b> Re-enter after TP hit in same direction
-• <b>SL Hunt Recovery:</b> Re-enter after SL hit if trend continues
-• <b>Exit Continuation:</b> Re-enter after manual exit
+📊 <b>Description:</b>
+Configure re-entry behavior for different scenarios:
+• <b>🎯 TP Continuation:</b> Re-enter after TP hit
+• <b>🛡️ SL Hunt Recovery:</b> Recover from stop hunt
+• <b>🔄 Exit Continuation:</b> Re-enter after manual exit
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 <i>Select a plugin to configure:</i>"""
@@ -386,25 +821,14 @@ class ReentryMenuHandler:
             [
                 {"text": f"{'✅' if system_enabled else '❌'} Toggle System", "callback_data": "reentry_toggle_system"}
             ],
-            # V3 Plugins
+            # Plugin selection
             [
-                {"text": "🧠 V3 Logic 1 (5m)", "callback_data": "reentry_config_v3_logic1"},
-                {"text": "🧠 V3 Logic 2 (15m)", "callback_data": "reentry_config_v3_logic2"}
-            ],
-            [
-                {"text": "🧠 V3 Logic 3 (1h)", "callback_data": "reentry_config_v3_logic3"}
-            ],
-            # V6 Plugins
-            [
-                {"text": "📊 V6 15M", "callback_data": "reentry_config_v6_15m"},
-                {"text": "📊 V6 30M", "callback_data": "reentry_config_v6_30m"}
-            ],
-            [
-                {"text": "📊 V6 1H", "callback_data": "reentry_config_v6_1h"},
-                {"text": "📊 V6 4H", "callback_data": "reentry_config_v6_4h"}
+                {"text": "🧠 V3 Combined Logic", "callback_data": "reentry_select_v3"},
+                {"text": "📊 V6 Price Action", "callback_data": "reentry_select_v6"}
             ],
             # Navigation
             [
+                {"text": "← Back to Orders Menu", "callback_data": "menu_orders"},
                 {"text": "🏠 Main Menu", "callback_data": "menu_main"}
             ]
         ]
@@ -412,66 +836,234 @@ class ReentryMenuHandler:
         reply_markup = {"inline_keyboard": keyboard}
         self._send_message(text, reply_markup, message_id)
     
-    def show_plugin_reentry_config(self, plugin: str, user_id: int, message_id: int = None):
-        """Show re-entry configuration for a specific plugin"""
-        logger.info(f"[ReentryMenuHandler] Showing config for plugin {plugin}")
+    def show_v3_logic_reentry_selection(self, user_id: int, message_id: int = None):
+        """Show V3 logic selection for re-entry config"""
+        logger.info(f"[ReentryMenuHandler] Showing V3 logic selection for user {user_id}")
         
-        plugin_config = self._get_reentry_config(plugin)
-        enabled = plugin_config.get("enabled", False)
-        tp_cont = plugin_config.get("tp_continuation", {})
-        sl_hunt = plugin_config.get("sl_hunt_recovery", {})
-        exit_cont = plugin_config.get("exit_continuation", {})
+        v3_config = self._get_reentry_config("v3_combined")
+        v3_enabled = v3_config.get("enabled", True)
+        routing = v3_config.get("per_logic_routing", {})
         
-        # Format plugin name
-        plugin_names = {
-            "v3_logic1": "V3 Logic 1 (5m)",
-            "v3_logic2": "V3 Logic 2 (15m)",
-            "v3_logic3": "V3 Logic 3 (1h)",
-            "v6_15m": "V6 15M",
-            "v6_30m": "V6 30M",
-            "v6_1h": "V6 1H",
-            "v6_4h": "V6 4H"
-        }
-        plugin_name = plugin_names.get(plugin, plugin)
+        # Build status summary
+        status_lines = []
+        for logic in self.V3_LOGICS:
+            logic_config = routing.get(logic, {})
+            tp_on = logic_config.get("tp_continuation", {}).get("enabled", True)
+            sl_on = logic_config.get("sl_hunt_recovery", {}).get("enabled", True)
+            exit_on = logic_config.get("exit_continuation", {}).get("enabled", True)
+            count = sum([tp_on, sl_on, exit_on])
+            status_lines.append(f"• {logic}: {count}/3 enabled")
         
-        text = f"""🔄 <b>RE-ENTRY: {plugin_name}</b>
+        text = f"""🧠 <b>V3 COMBINED LOGIC - RE-ENTRY CONFIG</b>
 ━━━━━━━━━━━━━━━━━━━━━━━━
 
-🔌 <b>Status:</b> {'✅ ENABLED' if enabled else '❌ DISABLED'}
+🔌 <b>V3 Status:</b> {'✅ ENABLED' if v3_enabled else '❌ DISABLED'}
 
-📊 <b>TP Continuation:</b> {'✅' if tp_cont.get('enabled', False) else '❌'}
-  • Max Levels: {tp_cont.get('max_levels', 3)}
-  • Cooldown: {tp_cont.get('cooldown_seconds', 60)}s
+📊 <b>Current Status:</b>
+{chr(10).join(status_lines)}
 
-📊 <b>SL Hunt Recovery:</b> {'✅' if sl_hunt.get('enabled', False) else '❌'}
-  • Max Levels: {sl_hunt.get('max_levels', 2)}
-  • Cooldown: {sl_hunt.get('cooldown_seconds', 120)}s
+━━━━━━━━━━━━━━━━━━━━━━━━
+<i>Select a logic to configure:</i>"""
+        
+        keyboard = []
+        
+        # V3 enable/disable
+        keyboard.append([
+            {"text": f"{'✅' if v3_enabled else '❌'} Toggle V3", "callback_data": "reentry_toggle_v3"}
+        ])
+        
+        # Logic selection
+        for logic in self.V3_LOGICS:
+            logic_config = routing.get(logic, {})
+            tp_on = logic_config.get("tp_continuation", {}).get("enabled", True)
+            sl_on = logic_config.get("sl_hunt_recovery", {}).get("enabled", True)
+            exit_on = logic_config.get("exit_continuation", {}).get("enabled", True)
+            count = sum([tp_on, sl_on, exit_on])
+            status = f"{count}/3"
+            keyboard.append([
+                {"text": f"{self.V3_LOGIC_LABELS[logic]} [{status}]", "callback_data": f"reentry_v3_{logic}"}
+            ])
+        
+        # Navigation
+        keyboard.append([
+            {"text": "◀️ Back", "callback_data": "menu_reentry_main"},
+            {"text": "🏠 Main Menu", "callback_data": "menu_main"}
+        ])
+        
+        reply_markup = {"inline_keyboard": keyboard}
+        self._send_message(text, reply_markup, message_id)
+    
+    def show_v6_timeframe_reentry_selection(self, user_id: int, message_id: int = None):
+        """Show V6 timeframe selection for re-entry config"""
+        logger.info(f"[ReentryMenuHandler] Showing V6 timeframe selection for user {user_id}")
+        
+        v6_config = self._get_reentry_config("v6_price_action")
+        v6_enabled = v6_config.get("enabled", True)
+        routing = v6_config.get("per_timeframe_routing", {})
+        
+        # Build status summary
+        status_lines = []
+        for tf in self.V6_TIMEFRAMES:
+            tf_config = routing.get(tf, {})
+            tp_on = tf_config.get("tp_continuation", {}).get("enabled", True)
+            sl_on = tf_config.get("sl_hunt_recovery", {}).get("enabled", True)
+            exit_on = tf_config.get("exit_continuation", {}).get("enabled", True)
+            count = sum([tp_on, sl_on, exit_on])
+            status_lines.append(f"• {tf}: {count}/3 enabled")
+        
+        text = f"""📊 <b>V6 PRICE ACTION - RE-ENTRY CONFIG</b>
+━━━━━━━━━━━━━━━━━━━━━━━━
 
-📊 <b>Exit Continuation:</b> {'✅' if exit_cont.get('enabled', False) else '❌'}
-  • Max Levels: {exit_cont.get('max_levels', 1)}
-  • Cooldown: {exit_cont.get('cooldown_seconds', 180)}s
+🔌 <b>V6 Status:</b> {'✅ ENABLED' if v6_enabled else '❌ DISABLED'}
+
+📊 <b>Current Status:</b>
+{chr(10).join(status_lines)}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+<i>Select a timeframe to configure:</i>"""
+        
+        keyboard = []
+        
+        # V6 enable/disable
+        keyboard.append([
+            {"text": f"{'✅' if v6_enabled else '❌'} Toggle V6", "callback_data": "reentry_toggle_v6"}
+        ])
+        
+        # Timeframe selection (2 per row)
+        row = []
+        for idx, tf in enumerate(self.V6_TIMEFRAMES):
+            tf_config = routing.get(tf, {})
+            tp_on = tf_config.get("tp_continuation", {}).get("enabled", True)
+            sl_on = tf_config.get("sl_hunt_recovery", {}).get("enabled", True)
+            exit_on = tf_config.get("exit_continuation", {}).get("enabled", True)
+            count = sum([tp_on, sl_on, exit_on])
+            row.append({"text": f"{tf} [{count}/3]", "callback_data": f"reentry_v6_{tf}"})
+            if len(row) == 2 or idx == len(self.V6_TIMEFRAMES) - 1:
+                keyboard.append(row)
+                row = []
+        
+        # Navigation
+        keyboard.append([
+            {"text": "◀️ Back", "callback_data": "menu_reentry_main"},
+            {"text": "🏠 Main Menu", "callback_data": "menu_main"}
+        ])
+        
+        reply_markup = {"inline_keyboard": keyboard}
+        self._send_message(text, reply_markup, message_id)
+    
+    def show_v3_logic_feature_config(self, logic: str, user_id: int, message_id: int = None):
+        """Show re-entry feature toggles for a specific V3 logic"""
+        logger.info(f"[ReentryMenuHandler] Showing V3 {logic} feature config")
+        
+        # Get feature states
+        tp_enabled = self._get_reentry_config("v3_combined", logic, "tp_continuation")
+        sl_enabled = self._get_reentry_config("v3_combined", logic, "sl_hunt_recovery")
+        exit_enabled = self._get_reentry_config("v3_combined", logic, "exit_continuation")
+        
+        # Count enabled features
+        enabled_count = sum([tp_enabled, sl_enabled, exit_enabled])
+        
+        text = f"""🔄 <b>RE-ENTRY: V3 {logic}</b>
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 <b>Features Active:</b> {enabled_count}/3
+
+💡 <b>Click to toggle ON/OFF:</b>
+
+🎯 <b>TP Continuation:</b> {'✅ ON' if tp_enabled else '❌ OFF'}
+  Re-enter after TP hit to continue trend
+
+🛡️ <b>SL Hunt Recovery:</b> {'✅ ON' if sl_enabled else '❌ OFF'}
+  Recover from stop hunt spikes
+
+🔄 <b>Exit Continuation:</b> {'✅ ON' if exit_enabled else '❌ OFF'}
+  Re-enter after manual exit
 
 ━━━━━━━━━━━━━━━━━━━━━━━━"""
         
         # Build keyboard
         keyboard = [
-            # Toggle
+            # Feature toggles
             [
-                {"text": f"{'✅' if enabled else '❌'} Toggle Plugin", "callback_data": f"reentry_toggle_{plugin}"}
-            ],
-            # Re-entry type configs
-            [
-                {"text": f"{'✅' if tp_cont.get('enabled', False) else '❌'} TP Continuation", "callback_data": f"reentry_tp_{plugin}"}
+                {"text": f"{'🎯 ✅' if tp_enabled else '🎯 ❌'} TP Continuation", 
+                 "callback_data": f"reentry_toggle_v3_{logic}_tp_continuation"}
             ],
             [
-                {"text": f"{'✅' if sl_hunt.get('enabled', False) else '❌'} SL Hunt Recovery", "callback_data": f"reentry_sl_{plugin}"}
+                {"text": f"{'🛡️ ✅' if sl_enabled else '🛡️ ❌'} SL Hunt Recovery", 
+                 "callback_data": f"reentry_toggle_v3_{logic}_sl_hunt_recovery"}
             ],
             [
-                {"text": f"{'✅' if exit_cont.get('enabled', False) else '❌'} Exit Continuation", "callback_data": f"reentry_exit_{plugin}"}
+                {"text": f"{'🔄 ✅' if exit_enabled else '🔄 ❌'} Exit Continuation", 
+                 "callback_data": f"reentry_toggle_v3_{logic}_exit_continuation"}
             ],
             # Navigation
             [
-                {"text": "◀️ Back", "callback_data": "menu_reentry"},
+                {"text": "◀️ Back to V3 Selection", "callback_data": "reentry_select_v3"},
+                {"text": "🏠 Main Menu", "callback_data": "menu_main"}
+            ]
+        ]
+        
+        reply_markup = {"inline_keyboard": keyboard}
+        self._send_message(text, reply_markup, message_id)
+    
+    def show_v6_timeframe_feature_config(self, timeframe: str, user_id: int, message_id: int = None):
+        """Show re-entry feature toggles for a specific V6 timeframe"""
+        logger.info(f"[ReentryMenuHandler] Showing V6 {timeframe} feature config")
+        
+        # Get feature states
+        tp_enabled = self._get_reentry_config("v6_price_action", timeframe, "tp_continuation")
+        sl_enabled = self._get_reentry_config("v6_price_action", timeframe, "sl_hunt_recovery")
+        exit_enabled = self._get_reentry_config("v6_price_action", timeframe, "exit_continuation")
+        
+        # Count enabled features
+        enabled_count = sum([tp_enabled, sl_enabled, exit_enabled])
+        
+        # Timeframe icons
+        tf_icons = {
+            "1M": "⚡",
+            "5M": "🔥",
+            "15M": "📊",
+            "1H": "⏰",
+            "4H": "🌊"
+        }
+        icon = tf_icons.get(timeframe, "📈")
+        
+        text = f"""🔄 <b>RE-ENTRY: V6 {icon} {timeframe}</b>
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 <b>Features Active:</b> {enabled_count}/3
+
+💡 <b>Click to toggle ON/OFF:</b>
+
+🎯 <b>TP Continuation:</b> {'✅ ON' if tp_enabled else '❌ OFF'}
+  Re-enter after TP hit to continue trend
+
+🛡️ <b>SL Hunt Recovery:</b> {'✅ ON' if sl_enabled else '❌ OFF'}
+  Recover from stop hunt spikes
+
+🔄 <b>Exit Continuation:</b> {'✅ ON' if exit_enabled else '❌ OFF'}
+  Re-enter after manual exit
+
+━━━━━━━━━━━━━━━━━━━━━━━━"""
+        
+        # Build keyboard
+        keyboard = [
+            # Feature toggles
+            [
+                {"text": f"{'🎯 ✅' if tp_enabled else '🎯 ❌'} TP Continuation", 
+                 "callback_data": f"reentry_toggle_v6_{timeframe}_tp_continuation"}
+            ],
+            [
+                {"text": f"{'🛡️ ✅' if sl_enabled else '🛡️ ❌'} SL Hunt Recovery", 
+                 "callback_data": f"reentry_toggle_v6_{timeframe}_sl_hunt_recovery"}
+            ],
+            [
+                {"text": f"{'🔄 ✅' if exit_enabled else '🔄 ❌'} Exit Continuation", 
+                 "callback_data": f"reentry_toggle_v6_{timeframe}_exit_continuation"}
+            ],
+            # Navigation
+            [
+                {"text": "◀️ Back to V6 Selection", "callback_data": "reentry_select_v6"},
                 {"text": "🏠 Main Menu", "callback_data": "menu_main"}
             ]
         ]
@@ -487,70 +1079,149 @@ class ReentryMenuHandler:
         """Handle re-entry menu callback"""
         logger.info(f"[ReentryMenuHandler] Handling callback: {callback_data}")
         
-        if callback_data == "menu_reentry":
+        # Main menu
+        if callback_data == "menu_reentry" or callback_data == "menu_reentry_main":
             self.show_reentry_menu(user_id, message_id)
             return True
         
-        if callback_data.startswith("reentry_config_"):
-            plugin = callback_data.replace("reentry_config_", "")
-            self.show_plugin_reentry_config(plugin, user_id, message_id)
+        # Plugin selection
+        if callback_data == "reentry_select_v3":
+            self.show_v3_logic_reentry_selection(user_id, message_id)
             return True
         
-        if callback_data.startswith("reentry_toggle_"):
-            plugin = callback_data.replace("reentry_toggle_", "")
-            self._toggle_plugin(plugin)
-            if plugin == "system":
-                self.show_reentry_menu(user_id, message_id)
-            else:
-                self.show_plugin_reentry_config(plugin, user_id, message_id)
+        if callback_data == "reentry_select_v6":
+            self.show_v6_timeframe_reentry_selection(user_id, message_id)
             return True
         
-        if callback_data.startswith("reentry_tp_"):
-            plugin = callback_data.replace("reentry_tp_", "")
-            self._toggle_reentry_type(plugin, "tp_continuation")
-            self.show_plugin_reentry_config(plugin, user_id, message_id)
+        # V3 logic selection -> feature config
+        if callback_data.startswith("reentry_v3_"):
+            logic = callback_data.replace("reentry_v3_", "")
+            if logic in self.V3_LOGICS:
+                self.show_v3_logic_feature_config(logic, user_id, message_id)
+                return True
+        
+        # V6 timeframe selection -> feature config
+        if callback_data.startswith("reentry_v6_"):
+            timeframe = callback_data.replace("reentry_v6_", "")
+            if timeframe in self.V6_TIMEFRAMES:
+                self.show_v6_timeframe_feature_config(timeframe, user_id, message_id)
+                return True
+        
+        # V3 feature toggles
+        if callback_data.startswith("reentry_toggle_v3_"):
+            # Format: reentry_toggle_v3_LOGIC1_tp_continuation
+            parts = callback_data.replace("reentry_toggle_v3_", "").split("_")
+            if len(parts) >= 2:
+                logic = parts[0]  # LOGIC1, LOGIC2, LOGIC3
+                feature = "_".join(parts[1:])  # tp_continuation, sl_hunt_recovery, exit_continuation
+                self._toggle_v3_feature(logic, feature)
+                self.show_v3_logic_feature_config(logic, user_id, message_id)
+                return True
+        
+        # V6 feature toggles
+        if callback_data.startswith("reentry_toggle_v6_"):
+            # Format: reentry_toggle_v6_15M_tp_continuation
+            parts = callback_data.replace("reentry_toggle_v6_", "").split("_")
+            if len(parts) >= 2:
+                timeframe = parts[0]  # 1M, 5M, 15M, 1H, 4H
+                feature = "_".join(parts[1:])  # tp_continuation, sl_hunt_recovery, exit_continuation
+                self._toggle_v6_feature(timeframe, feature)
+                self.show_v6_timeframe_feature_config(timeframe, user_id, message_id)
+                return True
+        
+        # System toggles
+        if callback_data == "reentry_toggle_system":
+            self._toggle_system()
+            self.show_reentry_menu(user_id, message_id)
             return True
         
-        if callback_data.startswith("reentry_sl_"):
-            plugin = callback_data.replace("reentry_sl_", "")
-            self._toggle_reentry_type(plugin, "sl_hunt_recovery")
-            self.show_plugin_reentry_config(plugin, user_id, message_id)
+        if callback_data == "reentry_toggle_v3":
+            self._toggle_v3()
+            self.show_reentry_menu(user_id, message_id)
             return True
         
-        if callback_data.startswith("reentry_exit_"):
-            plugin = callback_data.replace("reentry_exit_", "")
-            self._toggle_reentry_type(plugin, "exit_continuation")
-            self.show_plugin_reentry_config(plugin, user_id, message_id)
+        if callback_data == "reentry_toggle_v6":
+            self._toggle_v6()
+            self.show_reentry_menu(user_id, message_id)
             return True
         
         return False
     
-    def _toggle_plugin(self, plugin: str):
-        """Toggle plugin enabled state"""
-        if plugin == "system":
-            if "reentry_system" not in self._config:
-                self._config["reentry_system"] = {"enabled": False, "plugins": {}}
-            current = self._config["reentry_system"].get("enabled", False)
-            self._config["reentry_system"]["enabled"] = not current
-        else:
-            if "reentry_system" not in self._config:
-                self._config["reentry_system"] = {"enabled": True, "plugins": {}}
-            if "plugins" not in self._config["reentry_system"]:
-                self._config["reentry_system"]["plugins"] = {}
-            if plugin not in self._config["reentry_system"]["plugins"]:
-                self._config["reentry_system"]["plugins"][plugin] = {"enabled": False}
-            current = self._config["reentry_system"]["plugins"][plugin].get("enabled", False)
-            self._config["reentry_system"]["plugins"][plugin]["enabled"] = not current
+    def _toggle_system(self):
+        """Toggle re-entry system on/off"""
+        if "re_entry_config" not in self._config:
+            self._config["re_entry_config"] = {"enabled": False}
+        current = self._config["re_entry_config"].get("enabled", False)
+        self._config["re_entry_config"]["enabled"] = not current
+        self._save_config()
+        logger.info(f"[ReentryMenuHandler] Toggled system: {not current}")
     
-    def _toggle_reentry_type(self, plugin: str, reentry_type: str):
-        """Toggle a specific re-entry type for a plugin"""
-        if "reentry_system" not in self._config:
-            self._config["reentry_system"] = {"enabled": True, "plugins": {}}
-        if "plugins" not in self._config["reentry_system"]:
-            self._config["reentry_system"]["plugins"] = {}
-        if plugin not in self._config["reentry_system"]["plugins"]:
-            self._config["reentry_system"]["plugins"][plugin] = {"enabled": True}
-        if reentry_type not in self._config["reentry_system"]["plugins"][plugin]:
-            self._config["reentry_system"]["plugins"][plugin][reentry_type] = {"enabled": False}
-        current = self._config["reentry_system"]["plugins"][plugin][reentry_type].get("enabled", False)
-        self._config["reentry_system"]["plugins"][plugin][reentry_type]["enabled"] = not current
+    def _toggle_v3(self):
+        """Toggle V3 re-entry on/off"""
+        if "re_entry_config" not in self._config:
+            self._config["re_entry_config"] = {"per_plugin": {}}
+        if "per_plugin" not in self._config["re_entry_config"]:
+            self._config["re_entry_config"]["per_plugin"] = {}
+        if "v3_combined" not in self._config["re_entry_config"]["per_plugin"]:
+            self._config["re_entry_config"]["per_plugin"]["v3_combined"] = {"enabled": False}
+        current = self._config["re_entry_config"]["per_plugin"]["v3_combined"].get("enabled", False)
+        self._config["re_entry_config"]["per_plugin"]["v3_combined"]["enabled"] = not current
+        self._save_config()
+        logger.info(f"[ReentryMenuHandler] Toggled V3: {not current}")
+    
+    def _toggle_v6(self):
+        """Toggle V6 re-entry on/off"""
+        if "re_entry_config" not in self._config:
+            self._config["re_entry_config"] = {"per_plugin": {}}
+        if "per_plugin" not in self._config["re_entry_config"]:
+            self._config["re_entry_config"]["per_plugin"] = {}
+        if "v6_price_action" not in self._config["re_entry_config"]["per_plugin"]:
+            self._config["re_entry_config"]["per_plugin"]["v6_price_action"] = {"enabled": False}
+        current = self._config["re_entry_config"]["per_plugin"]["v6_price_action"].get("enabled", False)
+        self._config["re_entry_config"]["per_plugin"]["v6_price_action"]["enabled"] = not current
+        self._save_config()
+        logger.info(f"[ReentryMenuHandler] Toggled V6: {not current}")
+    
+    def _toggle_v3_feature(self, logic: str, feature: str):
+        """Toggle a V3 logic re-entry feature"""
+        # Initialize config structure
+        if "re_entry_config" not in self._config:
+            self._config["re_entry_config"] = {"per_plugin": {}}
+        if "per_plugin" not in self._config["re_entry_config"]:
+            self._config["re_entry_config"]["per_plugin"] = {}
+        if "v3_combined" not in self._config["re_entry_config"]["per_plugin"]:
+            self._config["re_entry_config"]["per_plugin"]["v3_combined"] = {"per_logic_routing": {}}
+        if "per_logic_routing" not in self._config["re_entry_config"]["per_plugin"]["v3_combined"]:
+            self._config["re_entry_config"]["per_plugin"]["v3_combined"]["per_logic_routing"] = {}
+        if logic not in self._config["re_entry_config"]["per_plugin"]["v3_combined"]["per_logic_routing"]:
+            self._config["re_entry_config"]["per_plugin"]["v3_combined"]["per_logic_routing"][logic] = {}
+        if feature not in self._config["re_entry_config"]["per_plugin"]["v3_combined"]["per_logic_routing"][logic]:
+            self._config["re_entry_config"]["per_plugin"]["v3_combined"]["per_logic_routing"][logic][feature] = {"enabled": False}
+        
+        # Toggle
+        current = self._config["re_entry_config"]["per_plugin"]["v3_combined"]["per_logic_routing"][logic][feature].get("enabled", False)
+        self._config["re_entry_config"]["per_plugin"]["v3_combined"]["per_logic_routing"][logic][feature]["enabled"] = not current
+        self._save_config()
+        logger.info(f"[ReentryMenuHandler] Toggled V3 {logic} {feature}: {not current}")
+    
+    def _toggle_v6_feature(self, timeframe: str, feature: str):
+        """Toggle a V6 timeframe re-entry feature"""
+        # Initialize config structure
+        if "re_entry_config" not in self._config:
+            self._config["re_entry_config"] = {"per_plugin": {}}
+        if "per_plugin" not in self._config["re_entry_config"]:
+            self._config["re_entry_config"]["per_plugin"] = {}
+        if "v6_price_action" not in self._config["re_entry_config"]["per_plugin"]:
+            self._config["re_entry_config"]["per_plugin"]["v6_price_action"] = {"per_timeframe_routing": {}}
+        if "per_timeframe_routing" not in self._config["re_entry_config"]["per_plugin"]["v6_price_action"]:
+            self._config["re_entry_config"]["per_plugin"]["v6_price_action"]["per_timeframe_routing"] = {}
+        if timeframe not in self._config["re_entry_config"]["per_plugin"]["v6_price_action"]["per_timeframe_routing"]:
+            self._config["re_entry_config"]["per_plugin"]["v6_price_action"]["per_timeframe_routing"][timeframe] = {}
+        if feature not in self._config["re_entry_config"]["per_plugin"]["v6_price_action"]["per_timeframe_routing"][timeframe]:
+            self._config["re_entry_config"]["per_plugin"]["v6_price_action"]["per_timeframe_routing"][timeframe][feature] = {"enabled": False}
+        
+        # Toggle
+        current = self._config["re_entry_config"]["per_plugin"]["v6_price_action"]["per_timeframe_routing"][timeframe][feature].get("enabled", False)
+        self._config["re_entry_config"]["per_plugin"]["v6_price_action"]["per_timeframe_routing"][timeframe][feature]["enabled"] = not current
+        self._save_config()
+        logger.info(f"[ReentryMenuHandler] Toggled V6 {timeframe} {feature}: {not current}")

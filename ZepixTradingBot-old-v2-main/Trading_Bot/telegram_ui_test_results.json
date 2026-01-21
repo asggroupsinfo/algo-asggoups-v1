@@ -1,0 +1,29 @@
+{
+  "total_checks": 95,
+  "passed": 85,
+  "failed": 10,
+  "percentage": 89.47368421052632,
+  "categories": {
+    "basic_controls": 10,
+    "v6_commands": 10,
+    "analytics": 10,
+    "reentry": 6,
+    "plugins": 5,
+    "risk_management": 8,
+    "notifications": 15,
+    "menus": 2
+  },
+  "command_handlers_found": 49,
+  "issues": [
+    "Start success message",
+    "Stop success message",
+    "Save success message",
+    "Activate success message",
+    "Deactivate success message",
+    "add_handler calls: 0",
+    "Controller bot token configured",
+    "Notification bot token configured",
+    "Analytics bot configured",
+    "V6 commands with REAL logic: 3/10"
+  ]
+}

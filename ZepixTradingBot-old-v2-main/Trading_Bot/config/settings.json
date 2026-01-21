@@ -1,0 +1,25 @@
+{
+  "bot": {
+    "name": "ZepixTradingBot",
+    "version": "2.0.0",
+    "mode": "production"
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "logs/bot.log",
+    "max_size_mb": 10,
+    "backup_count": 5
+  },
+  "database": {
+    "path": "data/trading.db",
+    "backup_enabled": true,
+    "backup_interval_hours": 24
+  },
+  "features": {
+    "v3_combined": true,
+    "v6_price_action": true,
+    "dual_order_reentry": true,
+    "telegram_notifications": true,
+    "analytics": true
+  }
+}

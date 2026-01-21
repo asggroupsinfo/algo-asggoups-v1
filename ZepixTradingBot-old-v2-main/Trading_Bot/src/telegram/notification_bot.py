@@ -17,6 +17,10 @@ from typing import Dict, Any, Optional
 from datetime import datetime
 
 from .base_telegram_bot import BaseTelegramBot
+from .v6_notification_templates import (
+    create_progress_bar, format_pnl, format_win_rate,
+    create_v6_trade_actions_keyboard
+)
 
 logger = logging.getLogger(__name__)
 
@@ -367,3 +371,307 @@ class NotificationBot(BaseTelegramBot):
         )
         
         return self.send_message(message)
+    
+    # ========================================
+    # V6-Specific Notification Methods (Phase 1 Implementation)
+    # ========================================
+    
+    def send_v6_entry_alert(self, trade_data: Dict) -> Optional[int]:
+        """
+        Send V6 Price Action entry alert with timeframe and pattern details
+        
+        Args:
+            trade_data: Dict with V6-specific trade details
+                - All standard fields from send_entry_alert()
+                - timeframe: V6 timeframe (15M/30M/1H/4H) - REQUIRED
+                - pattern_strength: Strong BUY/SELL strength
+                - trend_pulse: Trend pulse strength (0-10)
+                - shadow_mode: Whether this is shadow mode
+                - pattern_type: Pattern that triggered entry
+        
+        Returns:
+            Message ID if successful
+        """
+        message = self._format_v6_entry_message(trade_data)
+        result = self.send_message(message)
+        
+        if self._voice_alerts_enabled and self._voice_alert_system:
+            try:
+                timeframe = trade_data.get('timeframe', 'unknown')
+                voice_text = f"V6 {timeframe} {trade_data.get('direction', 'trade')} on {trade_data.get('symbol', 'unknown')}"
+                if trade_data.get('shadow_mode'):
+                    voice_text += " in shadow mode"
+                self._voice_alert_system.speak(voice_text)
+            except Exception as e:
+                logger.error(f"[NotificationBot] V6 voice alert error: {e}")
+        
+        return result
+    
+    def _format_v6_entry_message(self, trade_data: Dict) -> str:
+        """Format V6-specific entry notification with timeframe and pattern details"""
+        symbol = trade_data.get('symbol', 'N/A')
+        direction = trade_data.get('direction', 'N/A')
+        entry_price = trade_data.get('entry_price', 0)
+        timeframe = trade_data.get('timeframe', 'N/A').upper()
+        shadow_mode = trade_data.get('shadow_mode', False)
+        
+        # V6-specific header
+        header = "👻 <b>V6 SHADOW MODE ENTRY</b>" if shadow_mode else "🎯 <b>V6 PRICE ACTION ENTRY</b>"
+        
+        message = (
+            f"{header}\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            f"⏱️ <b>Timeframe:</b> {timeframe}\n"
+            f"📊 <b>Symbol:</b> {symbol}\n"
+            f"📈 <b>Direction:</b> {direction}\n"
+            f"💰 <b>Entry Price:</b> {entry_price}\n\n"
+        )
+        
+        # Pattern details
+        if trade_data.get('pattern_type'):
+            message += f"🎨 <b>Pattern:</b> {trade_data['pattern_type']}\n"
+        
+        if trade_data.get('pattern_strength'):
+            message += f"💪 <b>Strength:</b> {trade_data['pattern_strength']}\n"
+        
+        # Trend Pulse (if available)
+        if trade_data.get('trend_pulse') is not None:
+            pulse = trade_data['trend_pulse']
+            pulse_emoji = "🟢" if pulse >= 7 else "🟡" if pulse >= 4 else "🔴"
+            message += f"{pulse_emoji} <b>Trend Pulse:</b> {pulse}/10\n"
+        
+        message += "\n<b>Order Details:</b>\n"
+        
+        # Order details
+        if trade_data.get('order_a_lot'):
+            message += (
+                f"├─ Order A: {trade_data.get('order_a_lot')} lots\n"
+                f"│  SL: {trade_data.get('order_a_sl', 'N/A')}\n"
+                f"│  TP: {trade_data.get('order_a_tp', 'N/A')}\n"
+            )
+        
+        if trade_data.get('order_b_lot'):
+            message += (
+                f"├─ Order B: {trade_data.get('order_b_lot')} lots\n"
+                f"│  SL: {trade_data.get('order_b_sl', 'N/A')}\n"
+                f"│  TP: {trade_data.get('order_b_tp', 'N/A')}\n"
+            )
+        
+        # Tickets
+        tickets = []
+        if trade_data.get('ticket_a'):
+            tickets.append(f"#{trade_data['ticket_a']}")
+        if trade_data.get('ticket_b'):
+            tickets.append(f"#{trade_data['ticket_b']}")
+        
+        if tickets:
+            message += f"\n<b>MT5 Tickets:</b> {', '.join(tickets)}\n"
+        
+        if shadow_mode:
+            message += "\n👻 <b>Note:</b> Shadow mode - No real orders placed\n"
+        
+        message += f"<b>Entry Time:</b> {datetime.now().strftime('%H:%M:%S')}"
+        
+        return message
+    
+    def send_v6_exit_alert(self, trade_data: Dict) -> Optional[int]:
+        """
+        Send V6 Price Action exit alert with pattern and timeframe details
+        
+        Args:
+            trade_data: Dict with V6-specific exit details
+                - All standard fields from send_exit_alert()
+                - timeframe: V6 timeframe (15M/30M/1H/4H)
+                - exit_pattern: Pattern that triggered exit
+                - shadow_mode: Whether this was shadow mode
+                - timeframe_pnl: P&L breakdown by timeframe (optional)
+        
+        Returns:
+            Message ID if successful
+        """
+        message = self._format_v6_exit_message(trade_data)
+        result = self.send_message(message)
+        
+        if self._voice_alerts_enabled and self._voice_alert_system:
+            try:
+                profit = trade_data.get('total_profit', 0)
+                timeframe = trade_data.get('timeframe', 'unknown')
+                voice_text = f"V6 {timeframe} closed. {'Profit' if profit >= 0 else 'Loss'}: {abs(profit):.0f} dollars"
+                self._voice_alert_system.speak(voice_text)
+            except Exception as e:
+                logger.error(f"[NotificationBot] V6 voice alert error: {e}")
+        
+        return result
+    
+    def _format_v6_exit_message(self, trade_data: Dict) -> str:
+        """Format V6-specific exit notification with pattern details"""
+        symbol = trade_data.get('symbol', 'N/A')
+        direction = trade_data.get('direction', 'N/A')
+        total_profit = trade_data.get('total_profit', 0)
+        total_pips = trade_data.get('total_pips', 0)
+        timeframe = trade_data.get('timeframe', 'N/A').upper()
+        shadow_mode = trade_data.get('shadow_mode', False)
+        
+        emoji = "🟢" if total_profit >= 0 else "🔴"
+        header = "👻 <b>V6 SHADOW MODE EXIT</b>" if shadow_mode else f"{emoji} <b>V6 PRICE ACTION EXIT</b>"
+        
+        message = (
+            f"{header}\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            f"⏱️ <b>Timeframe:</b> {timeframe}\n"
+            f"📊 <b>Symbol:</b> {symbol}\n"
+            f"📈 <b>Direction:</b> {direction}\n\n"
+        )
+        
+        # Exit pattern
+        if trade_data.get('exit_pattern'):
+            message += f"🎨 <b>Exit Pattern:</b> {trade_data['exit_pattern']}\n"
+        
+        # Price details
+        message += (
+            f"💰 <b>Entry:</b> {trade_data.get('entry_price', 0)}\n"
+            f"💰 <b>Exit:</b> {trade_data.get('exit_price', 0)}\n"
+            f"⏰ <b>Duration:</b> {trade_data.get('hold_time', 'N/A')}\n\n"
+        )
+        
+        # P&L breakdown
+        message += "<b>P&L Results:</b>\n"
+        
+        if trade_data.get('order_a_profit') is not None:
+            message += f"├─ Order A: ${trade_data['order_a_profit']:+.2f} ({trade_data.get('order_a_pips', 0):+.1f} pips)\n"
+        
+        if trade_data.get('order_b_profit') is not None:
+            message += f"├─ Order B: ${trade_data['order_b_profit']:+.2f} ({trade_data.get('order_b_pips', 0):+.1f} pips)\n"
+        
+        message += (
+            f"\n{emoji} <b>Total:</b> ${total_profit:+.2f} ({total_pips:+.1f} pips)\n"
+        )
+        
+        if trade_data.get('commission'):
+            message += f"💸 <b>Commission:</b> ${trade_data['commission']:.2f}\n"
+        
+        if trade_data.get('reason'):
+            message += f"\n📌 <b>Close Reason:</b> {trade_data['reason']}\n"
+        
+        if shadow_mode:
+            message += "\n👻 <b>Note:</b> Shadow mode - Virtual P&L only\n"
+        
+        message += f"<b>Exit Time:</b> {datetime.now().strftime('%H:%M:%S')}"
+        
+        return message
+    
+    def send_trend_pulse_alert(self, pulse_data: Dict) -> Optional[int]:
+        """
+        Send Trend Pulse detection notification
+        
+        Args:
+            pulse_data: Dict with trend pulse details
+                - symbol: Trading symbol
+                - timeframe: Affected timeframe
+                - pulse_strength: Pulse strength (0-10)
+                - direction: Trend direction (BULLISH/BEARISH)
+                - previous_strength: Previous pulse strength
+                - affected_timeframes: List of affected timeframes
+        
+        Returns:
+            Message ID if successful
+        """
+        symbol = pulse_data.get('symbol', 'N/A')
+        timeframe = pulse_data.get('timeframe', 'N/A').upper()
+        strength = pulse_data.get('pulse_strength', 0)
+        direction = pulse_data.get('direction', 'N/A')
+        previous = pulse_data.get('previous_strength', 0)
+        
+        # Determine emoji based on strength
+        if strength >= 8:
+            strength_emoji = "🟢🟢🟢"
+        elif strength >= 6:
+            strength_emoji = "🟢🟢"
+        elif strength >= 4:
+            strength_emoji = "🟡"
+        else:
+            strength_emoji = "🔴"
+        
+        # Direction emoji
+        dir_emoji = "📈" if direction == "BULLISH" else "📉" if direction == "BEARISH" else "➖"
+        
+        message = (
+            f"🌊 <b>TREND PULSE DETECTION</b>\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            f"📊 <b>Symbol:</b> {symbol}\n"
+            f"⏱️ <b>Timeframe:</b> {timeframe}\n\n"
+            f"{dir_emoji} <b>Direction:</b> {direction}\n"
+            f"{strength_emoji} <b>Pulse Strength:</b> {strength}/10\n"
+            f"📊 <b>Previous:</b> {previous}/10\n"
+            f"📈 <b>Change:</b> {strength - previous:+.0f}\n"
+        )
+        
+        # Affected timeframes
+        if pulse_data.get('affected_timeframes'):
+            tfs = ', '.join(pulse_data['affected_timeframes'])
+            message += f"\n🎯 <b>Affected TFs:</b> {tfs}\n"
+        
+        # Trading recommendation
+        if strength >= 7:
+            message += "\n✅ <b>Signal:</b> Strong trend - High confidence entries\n"
+        elif strength >= 5:
+            message += "\n🟡 <b>Signal:</b> Moderate trend - Standard entries\n"
+        else:
+            message += "\n⚠️ <b>Signal:</b> Weak trend - Use caution\n"
+        
+        message += f"<b>Detection Time:</b> {datetime.now().strftime('%H:%M:%S')}"
+        
+        return self.send_message(message)
+    
+    def send_shadow_mode_alert(self, shadow_data: Dict) -> Optional[int]:
+        """
+        Send Shadow Mode trade notification
+        
+        Args:
+            shadow_data: Dict with shadow mode details
+                - symbol: Trading symbol
+                - timeframe: V6 timeframe
+                - direction: Trade direction
+                - entry_price: Virtual entry price
+                - virtual_pnl: Current virtual P&L
+                - pattern: Pattern that would trigger trade
+                - message: Shadow mode message
+        
+        Returns:
+            Message ID if successful
+        """
+        symbol = shadow_data.get('symbol', 'N/A')
+        timeframe = shadow_data.get('timeframe', 'N/A').upper()
+        direction = shadow_data.get('direction', 'N/A')
+        entry_price = shadow_data.get('entry_price', 0)
+        virtual_pnl = shadow_data.get('virtual_pnl', 0)
+        
+        pnl_emoji = "🟢" if virtual_pnl >= 0 else "🔴"
+        
+        message = (
+            f"👻 <b>SHADOW MODE NOTIFICATION</b>\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            f"⚠️ <b>NO REAL MONEY USED</b>\n\n"
+            f"📊 <b>Symbol:</b> {symbol}\n"
+            f"⏱️ <b>Timeframe:</b> {timeframe}\n"
+            f"📈 <b>Direction:</b> {direction}\n"
+            f"💰 <b>Entry Price:</b> {entry_price}\n"
+        )
+        
+        if shadow_data.get('pattern'):
+            message += f"🎨 <b>Pattern:</b> {shadow_data['pattern']}\n"
+        
+        if virtual_pnl != 0:
+            message += f"\n{pnl_emoji} <b>Virtual P&L:</b> ${virtual_pnl:+.2f}\n"
+        
+        if shadow_data.get('message'):
+            message += f"\n📝 <b>Details:</b> {shadow_data['message']}\n"
+        
+        message += (
+            f"\n💡 <b>Purpose:</b> Testing V6 logic without risk\n"
+            f"🔧 <b>Action:</b> Monitor performance, adjust if needed\n"
+            f"<b>Time:</b> {datetime.now().strftime('%H:%M:%S')}"
+        )
+        
+        return self.send_message(message)
+

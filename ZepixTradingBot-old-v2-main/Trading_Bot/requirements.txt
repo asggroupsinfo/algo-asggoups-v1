@@ -11,7 +11,7 @@ numpy>=1.24.0
 python-dotenv>=1.0.0
 
 # Database
-sqlite3  # Built-in with Python
+# sqlite3 - Built-in with Python (no need to install)
 
 # Phase 2: Fixed Clock System
 pytz>=2023.3                    # IST timezone handling

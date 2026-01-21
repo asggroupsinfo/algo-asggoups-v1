@@ -225,6 +225,57 @@ class MenuManager:
         print(f"[SMART LOT PRESETS] Generated presets: {presets}", flush=True)
         return presets
     
+    def show_orders_submenu(self, user_id: int, message_id: Optional[int] = None):
+        """Display Orders & Re-entry submenu"""
+        
+        text = (
+            "💎 *ORDER MANAGEMENT & RE-ENTRY SYSTEM*\n"
+            "━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            "Configure how the bot handles orders and re-entry logic.\n\n"
+            "*🎯 Dual Order System*\n"
+            "• Configure Order A (Quick Profit) and Order B (Extended Profit)\n"
+            "• Set per-plugin order modes: A only, B only, or Both\n"
+            "• Independent control for each trading strategy\n\n"
+            "*🔄 Re-entry System*\n"
+            "• TP Continuation - Re-enter after Take Profit\n"
+            "• SL Hunt Recovery - Recover from Stop Loss\n"
+            "• Exit Continuation - Re-enter after manual exit\n"
+            "• Per-plugin configuration for granular control\n\n"
+            "Select an option below:"
+        )
+        
+        keyboard = []
+        
+        # Main options - Row 1
+        keyboard.append([
+            {"text": "💎 Dual Order Config", "callback_data": "menu_dual_order_main"},
+            {"text": "🔄 Re-entry Config", "callback_data": "menu_reentry_main"}
+        ])
+        
+        # Quick status/info - Row 2
+        keyboard.append([
+            {"text": "📊 Order Status", "callback_data": "orders_status"},
+            {"text": "📈 Re-entry Stats", "callback_data": "reentry_stats"}
+        ])
+        
+        keyboard.append([])  # Spacing
+        
+        # Navigation - Row 3
+        keyboard.append([
+            {"text": "🏠 Main Menu", "callback_data": "menu_main"},
+            {"text": "🔄 Refresh", "callback_data": "menu_orders"}
+        ])
+        
+        reply_markup = {"inline_keyboard": keyboard}
+        
+        # Update context
+        self.context.update_context(user_id, current_menu="menu_orders")
+        
+        if message_id:
+            return self.bot.edit_message(text, message_id, reply_markup)
+        else:
+            return self.bot.send_message(text, reply_markup)
+    
     def show_main_menu(self, user_id: int, message_id: Optional[int] = None):
         """Display main menu with categories and dynamic system status header"""
         
@@ -318,6 +369,60 @@ class MenuManager:
         # Main Categories - Row 8 (V6 Price Action - Telegram V5 Upgrade)
         cat_row8 = []
         cat_row8.append({"text": "📊 V6 Price Action", "callback_data": "menu_v6"})
+        
+    def handle_menu_callback(self, callback_query, callback_data: str):
+        """
+        Handle menu callback queries and route to appropriate handler.
+        
+        Args:
+            callback_query: Telegram callback query object
+            callback_data: Callback data string
+        
+        Returns:
+            bool: True if handled, False otherwise
+        """
+        user_id = callback_query.from_user.id
+        message_id = callback_query.message.message_id
+        
+        # Route to specialized handlers
+        if callback_data.startswith("menu_v6") or callback_data.startswith("v6_"):
+            return self._v6_handler.handle_callback(user_id, message_id, callback_data)
+        
+        elif callback_data.startswith("menu_analytics") or callback_data.startswith("analytics_"):
+            return self._analytics_handler.handle_callback(user_id, message_id, callback_data)
+        
+        elif callback_data.startswith("dual_order_") or callback_data.startswith("menu_dual") or callback_data.startswith("dual_"):
+            return self._dual_order_handler.handle_callback(callback_data, user_id, message_id)
+        
+        elif callback_data == "menu_orders":
+            # 💎 Orders menu - show orders & re-entry submenu
+            self.show_orders_submenu(user_id, message_id)
+            return True
+        
+        elif callback_data == "orders_status":
+            # Show order status (placeholder - you can enhance this)
+            text = "📊 *Order Status*\n\nFeature coming soon!"
+            reply_markup = {"inline_keyboard": [[{"text": "← Back", "callback_data": "menu_orders"}]]}
+            self.bot.edit_message(text, message_id, reply_markup)
+            return True
+        
+        elif callback_data == "reentry_stats":
+            # Show re-entry stats (placeholder - you can enhance this)
+            text = "📈 *Re-entry Statistics*\n\nFeature coming soon!"
+            reply_markup = {"inline_keyboard": [[{"text": "← Back", "callback_data": "menu_orders"}]]}
+            self.bot.edit_message(text, message_id, reply_markup)
+            return True
+        
+        elif callback_data.startswith("reentry_") or callback_data.startswith("menu_reentry"):
+            return self._reentry_handler.handle_callback(callback_data, user_id, message_id)
+        
+        elif callback_data == "menu_main":
+            self.show_main_menu(user_id, message_id)
+            return True
+        
+        # Default: unhandled
+        logger.warning(f"[MenuManager] Unhandled callback: {callback_data}")
+        return False
         cat_row8.append({"text": "📈 Analytics", "callback_data": "menu_analytics"})
         keyboard.append(cat_row8)
         

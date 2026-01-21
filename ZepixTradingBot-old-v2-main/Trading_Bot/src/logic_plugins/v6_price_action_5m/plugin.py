@@ -42,6 +42,8 @@ class V6PriceAction5mPlugin(BaseLogicPlugin, ISignalProcessor, IOrderExecutor):
     """
     
     TIMEFRAME = "5"
+    DISPLAY_NAME = "V6 5M"
+    BADGE = "🔶⏱️"
     ORDER_ROUTING = "DUAL_ORDERS"
     RISK_MULTIPLIER = 1.0
     
@@ -115,6 +117,69 @@ class V6PriceAction5mPlugin(BaseLogicPlugin, ISignalProcessor, IOrderExecutor):
                 "EXIT_BEARISH"
             ]
         }
+    
+    # =========================================================================
+    # V5 PLUGIN TELEGRAM INTEGRATION
+    # =========================================================================
+    
+    async def on_signal_received(self, signal: Dict[str, Any]) -> None:
+        try:
+            v6_alert = self._parse_alert(signal)
+            await self.service_api.send_v6_signal_notification(
+                timeframe="5m",
+                symbol=v6_alert.ticker,
+                direction=v6_alert.direction,
+                pattern=v6_alert.type,
+                entry=v6_alert.entry,
+                sl=v6_alert.sl,
+                tp=v6_alert.tp1
+            )
+        except Exception as e:
+            self.logger.error(f"[5M] on_signal_received error: {e}")
+    
+    async def on_trade_entry(self, trade_data: Dict[str, Any]) -> None:
+        try:
+            await self.service_api.send_v6_entry_notification(
+                timeframe="5m",
+                symbol=trade_data.get('symbol', ''),
+                direction=trade_data.get('direction', ''),
+                entry_price=trade_data.get('entry_price', 0),
+                sl=trade_data.get('sl', 0),
+                tp=trade_data.get('tp', 0),
+                lot_size=trade_data.get('lot_size', 0),
+                pattern=trade_data.get('pattern', 'V6 5M Momentum')
+            )
+        except Exception as e:
+            self.logger.error(f"[5M] on_trade_entry error: {e}")
+    
+    async def on_trade_exit(self, trade_data: Dict[str, Any], result: Dict[str, Any]) -> None:
+        try:
+            await self.service_api.send_v6_exit_notification(
+                timeframe="5m",
+                symbol=trade_data.get('symbol', ''),
+                direction=trade_data.get('direction', ''),
+                entry_price=trade_data.get('entry_price', 0),
+                exit_price=result.get('exit_price', 0),
+                pnl=result.get('pnl', 0),
+                exit_reason=result.get('exit_reason', 'manual'),
+                duration=result.get('duration'),
+                pips=result.get('pips')
+            )
+        except Exception as e:
+            self.logger.error(f"[5M] on_trade_exit error: {e}")
+    
+    async def on_enabled_changed(self, enabled: bool) -> None:
+        try:
+            await self.service_api.send_v6_timeframe_toggle_notification(
+                timeframe="5m",
+                enabled=enabled
+            )
+        except Exception as e:
+            self.logger.error(f"[5M] on_enabled_changed error: {e}")
+    
+    # =========================================================================
+    # END V5 TELEGRAM INTEGRATION
+    # =========================================================================
     
     async def process_entry_signal(self, alert) -> Dict[str, Any]:
         """

@@ -37,13 +37,8 @@ class TelegramBot:
         self.http409_count = 0  # Track consecutive 409 errors
         self.polling_enabled = True  # ENABLED - polling now works with proper webhook cleanup and DEBUG logging
         
-        # Initialize MenuManager
+        # MenuManager will be initialized later after all imports
         self.menu_manager = None
-        try:
-            self.menu_manager = MenuManager(self)
-            print("✅ TelegramBot: MenuManager initialized")
-        except Exception as e:
-            print(f"⚠️ TelegramBot: Failed to init MenuManager: {e}")
         
         self.command_handlers = {
             "/start": self.handle_start,
@@ -119,6 +114,15 @@ class TelegramBot:
             "/reset_profit_sl": self.handle_reset_profit_sl,
             # Dashboard command
             "/dashboard": self.handle_dashboard,
+            
+            # Voice Alert System Commands
+            "/voice_test": self.handle_voice_test,
+            "/voice_status": self.handle_voice_status,
+            
+            # Dual Order & Re-entry Commands (Per-Plugin)
+            "/dualorder": self.handle_dualorder_menu,
+            "/orders": self.handle_dualorder_menu,
+            "/reentry_config": self.handle_reentry_config_menu,
             
             # Fine-Tune System Commands
             "/fine_tune": self.handle_fine_tune,
@@ -3520,6 +3524,137 @@ class TelegramBot:
             self.send_message(f"❌ Error: {str(e)}")
     
     # ------------------------------------------------------------------
+    # VOICE ALERT SYSTEM COMMANDS
+    # ------------------------------------------------------------------
+    
+    def handle_voice_test(self, message):
+        """Test Voice Alert System - plays TTS on Windows and sends text notification"""
+        import asyncio
+        
+        if not self.trading_engine:
+            self.send_message("❌ TradingEngine not initialized yet")
+            return
+        
+        if not self.trading_engine.voice_alerts:
+            self.send_message(
+                "❌ <b>Voice Alert System Not Available</b>\n\n"
+                "Possible reasons:\n"
+                "• pyttsx3 not installed\n"
+                "• Windows TTS not available\n"
+                "• Telegram bot not configured\n\n"
+                "Run: <code>pip install pyttsx3</code>"
+            )
+            return
+        
+        # Send test alert
+        self.send_message("🔊 <b>Testing Voice Alert System...</b>")
+        
+        try:
+            # Create async task for voice alert
+            from src.modules.voice_alert_system import AlertPriority
+            
+            async def test_voice():
+                await self.trading_engine.voice_alerts.send_voice_alert(
+                    "Voice Alert System Test. Trading bot is working correctly.",
+                    AlertPriority.HIGH
+                )
+            
+            # Run in event loop
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            try:
+                loop.run_until_complete(test_voice())
+            finally:
+                loop.close()
+            
+            self.send_message(
+                "✅ <b>Voice Alert Test Complete</b>\n\n"
+                "If you heard audio on your Windows speakers,\n"
+                "the Voice Alert System is working!\n\n"
+                "• Windows TTS: ✅\n"
+                "• Text notification: ✅"
+            )
+        except Exception as e:
+            self.send_message(f"❌ <b>Voice Alert Test Failed</b>\n\nError: {str(e)}")
+    
+    def handle_voice_status(self, message):
+        """Show Voice Alert System status"""
+        if not self.trading_engine:
+            self.send_message("❌ TradingEngine not initialized yet")
+            return
+        
+        voice = self.trading_engine.voice_alerts
+        
+        if not voice:
+            self.send_message(
+                "🔇 <b>Voice Alert System Status</b>\n"
+                "━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+                "Status: ❌ NOT INITIALIZED\n\n"
+                "Install pyttsx3: <code>pip install pyttsx3</code>"
+            )
+            return
+        
+        # Get status details
+        windows_tts = "✅ Ready" if voice.windows_player else "❌ Not available"
+        telegram_bot_status = "✅ Connected" if (voice.telegram_bot or voice.bot) else "❌ Not connected"
+        queue_status = voice.get_queue_status()
+        
+        msg = (
+            "🔊 <b>Voice Alert System Status</b>\n"
+            "━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+            f"<b>Windows TTS:</b> {windows_tts}\n"
+            f"<b>Telegram:</b> {telegram_bot_status}\n"
+            f"<b>Chat ID:</b> {voice.chat_id or 'Not set'}\n\n"
+            f"<b>Queue:</b>\n"
+            f"  • Pending: {queue_status.get('total_queued', 0)}\n"
+            f"  • Processing: {'Yes' if queue_status.get('is_processing') else 'No'}\n\n"
+            "<b>Priority Levels:</b>\n"
+            "  🚨 CRITICAL → TTS + Text + SMS\n"
+            "  🔴 HIGH → TTS + Text\n"
+            "  🟡 MEDIUM → TTS + Text\n"
+            "  🟢 LOW → TTS + Text\n\n"
+            "Test with: /voice_test"
+        )
+        
+        keyboard = [
+            [{"text": "🔊 Test Voice", "callback_data": "voice_test"}],
+            [{"text": "🏠 Main Menu", "callback_data": "menu_main"}]
+        ]
+        
+        self.send_message(msg, reply_markup={"inline_keyboard": keyboard})
+    
+    # ------------------------------------------------------------------
+    # DUAL ORDER & RE-ENTRY COMMANDS (Per-Plugin Configuration)
+    # ------------------------------------------------------------------
+    
+    def handle_dualorder_menu(self, message):
+        """Show Dual Order System menu for per-plugin configuration"""
+        if self.menu_manager and hasattr(self.menu_manager, '_dual_order_handler'):
+            user_id = message.get("from", {}).get("id") if isinstance(message, dict) else None
+            self.menu_manager._dual_order_handler.show_dual_order_menu(user_id)
+        else:
+            self.send_message(
+                "💎 <b>DUAL ORDER SYSTEM</b>\n"
+                "━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+                "❌ Menu handler not initialized.\n"
+                "Please restart bot or use the button menu."
+            )
+    
+    def handle_reentry_config_menu(self, message):
+        """Show Re-entry Configuration menu for per-plugin settings"""
+        if self.menu_manager and hasattr(self.menu_manager, '_reentry_handler'):
+            user_id = message.get("from", {}).get("id") if isinstance(message, dict) else None
+            # Use the per-plugin ReentryMenuHandler from dual_order_menu_handler.py
+            self.menu_manager._reentry_handler.show_reentry_menu(user_id)
+        else:
+            self.send_message(
+                "🔄 <b>RE-ENTRY CONFIGURATION</b>\n"
+                "━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+                "❌ Menu handler not initialized.\n"
+                "Please restart bot or use the button menu."
+            )
+    
+    # ------------------------------------------------------------------
     # FINE-TUNE & AUTONOMOUS COMMANDS
     # ------------------------------------------------------------------
     
@@ -4078,6 +4213,10 @@ Use /dashboard to return to main view"""
             
             elif callback_data == "action_dashboard":
                 self.handle_dashboard({"message_id": message_id})
+            
+            elif callback_data == "voice_test":
+                # Voice Alert System test callback
+                self.handle_voice_test({"message_id": message_id})
             
             elif callback_data == "action_pause_resume":
                 if self.trading_engine:

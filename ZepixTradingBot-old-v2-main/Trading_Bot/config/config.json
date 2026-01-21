@@ -5,6 +5,9 @@
     "telegram_analytics_token": "8513021073:AAHxk9Z9CxKpc2UKNVn1vhYUIGshDJ2L1Ys",
     "telegram_chat_id": 2139792302,
     "allowed_telegram_user": 2139792302,
+    "telegram": {
+        "admin_chat_id": 2139792302
+    },
     "mt5_login": 308646228,
     "mt5_password": "Fast@@2801@@!!!",
     "mt5_server": "XMGlobal-MT5 6",
@@ -29,7 +32,7 @@
             "4h",
             "1d"
         ],
-        "order_b_fixed_sl_risk": 10.00,
+        "order_b_fixed_sl_risk": 10.0,
         "aggressive_reversal_signals": [
             "Liquidity_Trap_Reversal",
             "Golden_Pocket_Flip",
@@ -72,25 +75,25 @@
         "v6_price_action_1m": {
             "enabled": true,
             "priority": 2,
-            "shadow_mode": true,
+            "shadow_mode": false,
             "config_path": "src/logic_plugins/v6_price_action_1m/config.json"
         },
         "v6_price_action_5m": {
             "enabled": true,
             "priority": 2,
-            "shadow_mode": true,
+            "shadow_mode": false,
             "config_path": "src/logic_plugins/v6_price_action_5m/config.json"
         },
         "v6_price_action_15m": {
             "enabled": true,
             "priority": 2,
-            "shadow_mode": true,
+            "shadow_mode": false,
             "config_path": "src/logic_plugins/v6_price_action_15m/config.json"
         },
         "v6_price_action_1h": {
             "enabled": true,
             "priority": 2,
-            "shadow_mode": true,
+            "shadow_mode": false,
             "config_path": "src/logic_plugins/v6_price_action_1h/config.json"
         }
     },
@@ -349,6 +352,89 @@
                 "send_chain_resume": true
             },
             "enabled": true
+        },
+        "per_plugin": {
+            "comment": "Per-plugin re-entry configuration overrides. If not specified, uses autonomous_config above.",
+            "v3_combined": {
+                "enabled": true,
+                "tp_continuation": {
+                    "enabled": true,
+                    "cooldown_seconds": 5,
+                    "max_levels": 5
+                },
+                "sl_hunt_recovery": {
+                    "enabled": true,
+                    "max_attempts": 1,
+                    "recovery_window_minutes": 30
+                },
+                "exit_continuation": {
+                    "enabled": false
+                },
+                "per_logic_routing": {
+                    "LOGIC3": {
+                        "exit_continuation": {
+                            "enabled": true
+                        }
+                    },
+                    "LOGIC1": {
+                        "tp_continuation": {
+                            "enabled": true
+                        }
+                    }
+                }
+            },
+            "v6_price_action_1m": {
+                "enabled": true,
+                "tp_continuation": {
+                    "enabled": true,
+                    "cooldown_seconds": 3,
+                    "max_levels": 3
+                },
+                "sl_hunt_recovery": {
+                    "enabled": true,
+                    "max_attempts": 1,
+                    "recovery_window_minutes": 15
+                }
+            },
+            "v6_price_action_5m": {
+                "enabled": true,
+                "tp_continuation": {
+                    "enabled": true,
+                    "cooldown_seconds": 5,
+                    "max_levels": 4
+                },
+                "sl_hunt_recovery": {
+                    "enabled": true,
+                    "max_attempts": 1,
+                    "recovery_window_minutes": 20
+                }
+            },
+            "v6_price_action_15m": {
+                "enabled": true,
+                "tp_continuation": {
+                    "enabled": true,
+                    "cooldown_seconds": 10,
+                    "max_levels": 5
+                },
+                "sl_hunt_recovery": {
+                    "enabled": true,
+                    "max_attempts": 1,
+                    "recovery_window_minutes": 30
+                }
+            },
+            "v6_price_action_1h": {
+                "enabled": true,
+                "tp_continuation": {
+                    "enabled": true,
+                    "cooldown_seconds": 15,
+                    "max_levels": 5
+                },
+                "sl_hunt_recovery": {
+                    "enabled": true,
+                    "max_attempts": 1,
+                    "recovery_window_minutes": 60
+                }
+            }
         }
     },
     "rr_ratio": 1.5,
@@ -967,7 +1053,13 @@
     "symbol_sl_reductions": {},
     "account_balance": 10000,
     "dual_order_config": {
-        "enabled": true
+        "enabled": true,
+        "v3_combined": {
+            "per_logic_routing": {
+                "LOGIC2": "order_a_only",
+                "LOGIC1": "order_a_only"
+            }
+        }
     },
     "profit_booking_config": {
         "enabled": true,

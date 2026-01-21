@@ -1,0 +1,235 @@
+{
+  "total_tests": 38,
+  "passed": 38,
+  "failed": 0,
+  "details": [
+    {
+      "category": "V6 Notifications",
+      "feature": "send_v6_entry_alert",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "V6 Notifications",
+      "feature": "send_v6_exit_alert",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "V6 Notifications",
+      "feature": "send_trend_pulse_alert",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "V6 Notifications",
+      "feature": "send_shadow_trade_alert",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "V6 Types",
+      "feature": "V6_ENTRY_15M",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "V6 Types",
+      "feature": "V6_ENTRY_30M",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "V6 Types",
+      "feature": "V6_ENTRY_1H",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "V6 Types",
+      "feature": "V6_ENTRY_4H",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "V6 Commands",
+      "feature": "handle_v6_control",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "V6 Commands",
+      "feature": "handle_v6_status",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "V6 Commands",
+      "feature": "handle_tf1m_on",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "V6 Commands",
+      "feature": "handle_tf1m_off",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "V6 Commands",
+      "feature": "handle_tf5m_on",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "V6 Commands",
+      "feature": "handle_tf5m_off",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "V6 Commands",
+      "feature": "handle_tf15m_on",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "V6 Commands",
+      "feature": "handle_tf15m_off",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "V6 Commands",
+      "feature": "handle_tf1h_on",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "V6 Commands",
+      "feature": "handle_tf1h_off",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "Analytics",
+      "feature": "handle_daily",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "Analytics",
+      "feature": "handle_weekly",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "Analytics",
+      "feature": "handle_monthly",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "Analytics",
+      "feature": "handle_compare",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "Analytics",
+      "feature": "handle_export",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "Analytics",
+      "feature": "handle_pair_report",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "Analytics",
+      "feature": "handle_strategy_report",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "Analytics",
+      "feature": "handle_tp_report",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "Analytics",
+      "feature": "handle_profit_stats",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "Re-entry",
+      "feature": "handle_chains_status",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "Re-entry",
+      "feature": "handle_tp_cont",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "Re-entry",
+      "feature": "handle_sl_hunt",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "Re-entry",
+      "feature": "handle_recovery_stats",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "Re-entry",
+      "feature": "handle_autonomous",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "Plugin Control",
+      "feature": "handle_plugin_toggle",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "Plugin Control",
+      "feature": "handle_plugin_status",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "Plugin Control",
+      "feature": "handle_v3_toggle",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "Plugin Control",
+      "feature": "handle_v6_toggle",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "Menu Systems",
+      "feature": "NotificationPreferences",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    },
+    {
+      "category": "Notification System",
+      "feature": "NotificationPreferences class",
+      "status": "PASSED",
+      "message": "Feature implemented correctly"
+    }
+  ]
+}

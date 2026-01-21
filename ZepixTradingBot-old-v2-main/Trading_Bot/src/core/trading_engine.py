@@ -22,7 +22,8 @@ from src.managers.autonomous_system_manager import AutonomousSystemManager
 from src.utils.optimized_logger import logger
 from src.core.plugin_system.plugin_registry import PluginRegistry
 from src.core.plugin_system.service_api import ServiceAPI
-from src.telegram.multi_telegram_manager import MultiTelegramManager
+# from src.telegram.multi_telegram_manager import MultiTelegramManager # REMOVED LEAGCY
+from src.telegram.core.multi_bot_manager import MultiBotManager
 from src.core.shadow_mode_manager import ShadowModeManager, ExecutionMode
 from src.modules.voice_alert_system import VoiceAlertSystem, AlertPriority
 from src.modules.fixed_clock_system import get_clock_system
@@ -31,12 +32,12 @@ import uuid
 
 class TradingEngine:
     def __init__(self, config: Config, risk_manager: RiskManager, 
-                 mt5_client: MT5Client, telegram_bot, 
+                 mt5_client: MT5Client, telegram_bot: MultiBotManager, 
                  alert_processor: AlertProcessor):
         self.config = config
         self.risk_manager = risk_manager
         self.mt5_client = mt5_client
-        self.telegram_bot = telegram_bot
+        self.telegram_bot = telegram_bot # Injected MultiBotManager
         self.alert_processor = alert_processor
         
         # Track bot uptime
@@ -52,8 +53,11 @@ class TradingEngine:
         # Database for trade history
         self.db = TradeDatabase()
         
-        # Session Manager is now accessed via self.telegram_bot.session_manager
-        self.session_manager = self.telegram_bot.session_manager
+        # Session Manager access (New Arch)
+        # self.session_manager = self.telegram_bot.session_manager 
+        # Note: SessionManager might not be directly attached to MultiBotManager yet.
+        # We'll assume it's passed or handled via global config for now to avoid breaking.
+        self.session_manager = None 
         
         # Core managers
         self.pip_calculator = PipCalculator(config)
@@ -63,8 +67,9 @@ class TradingEngine:
         
         # V6 Trend Pulse Manager (separate from V3 TimeframeTrendManager)
         # Uses SQL database (market_trends table) instead of JSON file
-        from src.core.trend_pulse_manager import TrendPulseManager
-        self.trend_pulse_manager = TrendPulseManager(database=self.db)
+        # from src.core.trend_pulse_manager import TrendPulseManager
+        # self.trend_pulse_manager = TrendPulseManager(database=self.db)
+        self.trend_pulse_manager = None # Deferred init
         
         # NEW: Dual order and profit booking managers
         self.profit_booking_manager = ProfitBookingManager(
@@ -124,8 +129,8 @@ class TradingEngine:
         self.shadow_manager = ShadowModeManager(shadow_config)
         
         # Plan 07: Initialize Multi-Telegram Manager (3-Bot System)
-        self.telegram_manager: Optional[MultiTelegramManager] = None
-        self._init_telegram_manager()
+        # self.telegram_manager: Optional[MultiTelegramManager] = None
+        # self._init_telegram_manager() # REMOVED - internal init
         
         # Phase 9: Initialize Voice Alert System (Legacy Restoration)
         self.voice_alerts: Optional[VoiceAlertSystem] = None
@@ -137,15 +142,17 @@ class TradingEngine:
     def _init_voice_alerts(self):
         """Initialize Voice Alert System (Phase 9: Legacy Restoration)"""
         try:
-            if self.telegram_bot and hasattr(self.telegram_bot, 'bot'):
+            if self.telegram_bot:
                 chat_id = self.config.get("telegram_chat_id", "")
+                
+                # V3.1: Pass telegram_bot directly - VoiceAlertSystem supports it now
                 self.voice_alerts = VoiceAlertSystem(
-                    bot=self.telegram_bot.bot,
+                    telegram_bot=self.telegram_bot,
                     chat_id=chat_id
                 )
-                logger.info("Voice Alert System initialized successfully")
+                logger.info("✅ Voice Alert System initialized successfully")
             else:
-                logger.warning("Voice Alert System not initialized - Telegram bot not available")
+                logger.info("[VoiceAlerts] Skipped - Telegram bot not configured")
         except Exception as e:
             logger.error(f"Failed to initialize Voice Alert System: {e}")
             self.voice_alerts = None
@@ -164,62 +171,57 @@ class TradingEngine:
             except Exception as e:
                 logger.error(f"Voice alert failed: {e}")
     
-    def _init_telegram_manager(self):
-        """Initialize the 3-bot Telegram system if config available"""
-        telegram_config = self.config.get("telegram")
-        if not telegram_config:
-            # Fallback to root config if tokens are present there
-            if self.config.get("telegram_token"):
-                telegram_config = self.config
-        
-        if telegram_config:
-            try:
-                self.telegram_manager = MultiTelegramManager(telegram_config)
-                # Connect legacy bot for backward compatibility
-                if self.telegram_bot:
-                    self.telegram_manager.set_legacy_bot(self.telegram_bot)
-                logger.info("3-bot Telegram system initialized")
-            except Exception as e:
-                logger.warning(f"Failed to initialize 3-bot Telegram system: {e}")
-                self.telegram_manager = None
+    # def _init_telegram_manager(self):
+    #     """Initialize the 3-bot Telegram system if config available"""
+    #     telegram_config = self.config.get("telegram")
+    #     if not telegram_config:
+    #         # Fallback to root config if tokens are present there
+    #         if self.config.get("telegram_token"):
+    #             telegram_config = self.config
+    #     
+    #     if telegram_config:
+    #         try:
+    #             self.telegram_manager = MultiTelegramManager(telegram_config)
+    #             # Connect legacy bot for backward compatibility
+    #             if self.telegram_bot:
+    #                 self.telegram_manager.set_legacy_bot(self.telegram_bot)
+    #             logger.info("3-bot Telegram system initialized")
+    #         except Exception as e:
+    #             logger.warning(f"Failed to initialize 3-bot Telegram system: {e}")
+    #             self.telegram_manager = None
     
     # ==================== Plan 07: Notification Methods ====================
     
     async def send_notification(self, notification_type: str, message: str, **kwargs):
         """
-        Send notification through Telegram system (3-bot or legacy)
-        
-        Args:
-            notification_type: Type of notification (e.g., 'trade_opened', 'sl_hit')
-            message: Notification message
-            **kwargs: Additional arguments
+        Send notification through V6 Telegram system
+        Router handles dispatch to correct bot (Controller/Notification/Analytics)
         """
-        if self.telegram_manager:
-            await self.telegram_manager.send_notification_async(notification_type, message, **kwargs)
-        elif self.telegram_bot:
-            # Fallback to legacy bot
-            self.telegram_bot.send_message(message)
+        if self.telegram_bot: # This is now MultiBotManager which has router
+            # We use send_alert for general notifications
+            await self.telegram_bot.send_alert(f"{notification_type.upper()}: {message}")
+        else:
+            logger.warning("Telegram system not available for notification")
     
     async def on_trade_opened(self, trade_data: Dict[str, Any]):
         """
         Called when a trade is opened - sends notification through 3-bot system
         Also triggers voice alert (Phase 9: Legacy Restoration)
-        
-        Args:
-            trade_data: Dict with trade details
         """
         symbol = trade_data.get('symbol', 'UNKNOWN')
         direction = trade_data.get('direction', 'UNKNOWN')
         price = trade_data.get('price', 0)
         
         # Send Telegram notification
-        if self.telegram_manager:
-            await self.telegram_manager.send_trade_notification({
-                'type': 'trade_opened',
-                **trade_data
-            })
-        elif self.telegram_bot:
-            self.telegram_bot.send_message(f"Trade Opened: {direction} {symbol}")
+        if self.telegram_bot:
+            msg = (
+                f"⚡ **TRADE OPENED**\n"
+                f"━━━━━━━━━━━━━━\n"
+                f"**Symbol:** `{symbol}`\n"
+                f"**Type:** {direction}\n"
+                f"**Entry:** {price}\n"
+            )
+            await self.telegram_bot.send_alert(msg)
         
         # Phase 9: Send voice alert
         voice_message = f"Trade opened. {direction} {symbol} at {price:.5f}"
@@ -229,22 +231,21 @@ class TradingEngine:
         """
         Called when a trade is closed - sends notification through 3-bot system
         Also triggers voice alert (Phase 9: Legacy Restoration)
-        
-        Args:
-            trade_data: Dict with trade details
         """
         symbol = trade_data.get('symbol', 'UNKNOWN')
         profit = trade_data.get('profit', 0)
         reason = trade_data.get('reason', 'closed')
         
         # Send Telegram notification
-        if self.telegram_manager:
-            await self.telegram_manager.send_trade_notification({
-                'type': 'trade_closed',
-                **trade_data
-            })
-        elif self.telegram_bot:
-            self.telegram_bot.send_message(f"Trade Closed: {symbol} P/L: ${profit:.2f}")
+        if self.telegram_bot:
+            msg = (
+                f"🔒 **TRADE CLOSED**\n"
+                f"━━━━━━━━━━━━━━\n"
+                f"**Symbol:** `{symbol}`\n"
+                f"**Profit:** ${profit:.2f}\n"
+                f"**Reason:** {reason}\n"
+            )
+            await self.telegram_bot.send_alert(msg)
         
         # Phase 9: Send voice alert based on close reason
         if 'sl' in reason.lower() or 'stop' in reason.lower():
@@ -781,6 +782,32 @@ class TradingEngine:
                 f"📊 Final Lots: Order A={order_a_lot:.2f} | Order B={order_b_lot:.2f} | "
                 f"Total={final_base_lot:.2f}"
             )
+            
+            # --- RISK VALIDATION WITH SMART LOT ADJUSTMENT ---
+            # Calculate SL Pips if not expressly provided
+            # (Allows Risk Manager to use exact pip count for accurate risk)
+            
+            validation = self.risk_manager.validate_dual_orders(
+                symbol=symbol,
+                lot_size=order_a_lot, # Pass single leg (method doubles it)
+                account_balance=account_balance,
+                entry_price=alert.price,
+                sl_price=alert.sl_price
+            )
+            
+            if not validation['valid']:
+                if 'smart_lot' in validation and validation['smart_lot'] > 0:
+                    logger.warning(f"⚠️ Risk Check: {validation['reason']}")
+                    logger.info(f"💡 Smart Lot Adjustment: Reducing {order_a_lot:.2f} -> {validation['smart_lot']:.2f}")
+                    
+                    # Update lots to safe size
+                    order_a_lot = validation['smart_lot']
+                    order_b_lot = validation['smart_lot']
+                    final_base_lot = order_a_lot * 2
+                else:
+                    logger.error(f"❌ Trade Blocked: {validation['reason']}")
+                    return {"status": "error", "message": validation['reason']}
+            # -----------------------------------------------
             
             # Step 5: Place hybrid dual orders
             result = await self._place_hybrid_dual_orders_v3(

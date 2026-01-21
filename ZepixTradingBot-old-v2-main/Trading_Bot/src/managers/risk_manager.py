@@ -255,7 +255,7 @@ class RiskManager:
         self.mt5_client = mt5_client
     
     def validate_dual_orders(self, symbol: str, lot_size: float, 
-                            account_balance: float) -> Dict[str, Any]:
+                            account_balance: float, **kwargs) -> Dict[str, Any]:
         """
         Validate if account can handle 2x lot size risk for dual orders
         Returns: {"valid": bool, "reason": str}
@@ -277,24 +277,62 @@ class RiskManager:
         # Get symbol config
         symbol_config = self.config["symbol_config"][symbol]
         volatility = symbol_config["volatility"]
-        
-        # Get SL pips (approximate - actual calculation done in pip_calculator)
-        # For validation, we use a conservative estimate
         # Get pip value (support both keys)
         pip_value_std = symbol_config.get("pip_value_per_std_lot")
         if pip_value_std is None:
              pip_value_std = symbol_config.get("pip_value", 10.0)
              
-        pip_value = pip_value_std * (lot_size * 2)  # 2x lot size
+        # 2. Risk Evaluation with REAL SL Data (User Requirement)
+        # We now require sl_pips to be passed for accurate calculation. 
+        # If not provided, we fallback to ATR or config (but prefer real data).
         
-        # Estimate SL pips (RELAXED ESTIMATES to avoid blocking valid trades)
-        # The real validation happens later with actual SL
-        sl_estimates = {"LOW": 30, "MEDIUM": 45, "HIGH": 60}
-        estimated_sl_pips = sl_estimates.get(volatility, 60)
+        calculated_sl_pips = kwargs.get('sl_pips')
+        if calculated_sl_pips is not None:
+            try:
+                calculated_sl_pips = float(calculated_sl_pips)
+            except (ValueError, TypeError):
+                logger.warning(f"[RISK] Invalid SL pips format: {calculated_sl_pips}")
+                calculated_sl_pips = None
+
         
+        if not calculated_sl_pips:
+             # Fallback: Try to calculate from prices if provided
+             entry = kwargs.get('entry_price')
+             sl = kwargs.get('sl_price')
+             if entry and sl:
+                 symbol_config = self.config["symbol_config"].get(symbol, {})
+                 pip_size = symbol_config.get("pip_size", 0.01 if "JPY" in symbol else 0.0001)
+                 calculated_sl_pips = abs(entry - sl) / pip_size
         
-        # Calculate expected loss for 2 orders
-        expected_loss = estimated_sl_pips * pip_value
+        # If still no SL, use volatility estimate (last resort/legacy)
+        if not calculated_sl_pips:
+            sl_estimates = {"LOW": 30, "MEDIUM": 50, "HIGH": 70}
+            calculated_sl_pips = sl_estimates.get(volatility, 60)
+            logger.warning(f"[RISK] Using estimated SL ({calculated_sl_pips} pips) for {symbol}. Real SL preferred.")
+
+        # Calculate expected loss for 2x lot size (Order A + Order B)
+        # Formula: Pips * PipValue * TotalLots
+        total_lots = lot_size * 2
+        
+        # Calculate pip value for the TOTAL position size
+        # Note: pip_value_std is for 1.0 standard lot
+        expected_loss = calculated_sl_pips * pip_value_std * total_lots
+        
+        # Smart Lot Adjustment Check
+        daily_remaining = risk_params["daily_loss_limit"] - self.daily_loss
+        lifetime_remaining = risk_params["max_total_loss"] - self.lifetime_loss
+        
+        if expected_loss > daily_remaining:
+            # Calculate max safe lot
+            max_safe_loss = daily_remaining * 0.95 # 5% buffer
+            max_total_lot = max_safe_loss / (calculated_sl_pips * pip_value_std)
+            formatted_lot = round(max_total_lot / 2, 2) # Split for dual orders
+            
+            return {
+                "valid": False, 
+                "reason": f"Risk exceeds daily limit. Smart Adjust: Reduce to {formatted_lot} lots",
+                "smart_lot": formatted_lot
+            }
 
         # DEBUG PRINTS FOR USER
         print(f"\n[DEBUG RISK] Validating {symbol} Dual Orders")

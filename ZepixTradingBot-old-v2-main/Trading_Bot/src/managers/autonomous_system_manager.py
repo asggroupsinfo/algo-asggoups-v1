@@ -56,9 +56,9 @@ class AutonomousSystemManager:
                 risk_manager, db, self.rs_notification
             )
             
-            print("✅ Fine-Tune managers & Reverse Shield v3.0 initialized")
+            logger.info("Fine-Tune managers & Reverse Shield v3.0 initialized")
         except ImportError as e:
-            print(f"⚠️ Warning: Could not initialize Fine-Tune managers: {e}")
+            logger.warning(f"Warning: Could not initialize Fine-Tune managers: {e}")
             self.recovery_monitor = None
             self.profit_protection = None
             self.sl_optimizer = None

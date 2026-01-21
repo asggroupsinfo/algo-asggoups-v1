@@ -7,14 +7,18 @@ This bot handles all analytics and reporting:
 - Trade history
 - Trend analysis
 - Plugin performance
+- ON-DEMAND ANALYTICS COMMANDS (Phase 4)
 
-Version: 1.0.0
-Date: 2026-01-14
+Version: 2.0.0
+Date: 2026-01-20
+Phase 4 Implementation: Analytics Command Interface
 """
 
 import logging
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional, List, Callable
 from datetime import datetime, timedelta
+import csv
+import io
 
 from .base_telegram_bot import BaseTelegramBot
 
@@ -32,6 +36,7 @@ class AnalyticsBot(BaseTelegramBot):
     - Trend analysis reports
     - Plugin performance reports
     - Weekly/Monthly summaries
+    - ON-DEMAND ANALYTICS COMMANDS (Phase 4)
     """
     
     def __init__(self, token: str, chat_id: str = None):
@@ -40,7 +45,48 @@ class AnalyticsBot(BaseTelegramBot):
         self._report_cache: Dict[str, Any] = {}
         self._last_report_time: Dict[str, datetime] = {}
         
-        logger.info("[AnalyticsBot] Initialized")
+        # Phase 4: Command handlers for on-demand analytics
+        self._command_handlers: Dict[str, Callable] = {}
+        self._analytics_queries = None  # Will be initialized via set_dependencies()
+        self._trading_engine = None
+        
+        # Register analytics commands (Phase 4)
+        self._wire_analytics_commands()
+        
+        logger.info("[AnalyticsBot] Initialized with command handling (Phase 4)")
+    
+    def set_dependencies(self, trading_engine=None, analytics_queries=None):
+        """Set dependencies for command handling (Phase 4)"""
+        self._trading_engine = trading_engine
+        self._analytics_queries = analytics_queries
+        
+        if analytics_queries:
+            logger.info("[AnalyticsBot] Analytics queries engine connected")
+    
+    def _wire_analytics_commands(self):
+        """Wire analytics command handlers (Phase 4)"""
+        self._command_handlers["/performance"] = self.handle_performance
+        self._command_handlers["/daily"] = self.handle_daily
+        self._command_handlers["/weekly"] = self.handle_weekly
+        self._command_handlers["/monthly"] = self.handle_monthly
+        self._command_handlers["/compare"] = self.handle_compare
+        self._command_handlers["/export"] = self.handle_export
+        self._command_handlers["/dashboard"] = self.handle_dashboard
+        self._command_handlers["/pair_report"] = self.handle_pair_report
+        self._command_handlers["/strategy_report"] = self.handle_strategy_report
+        self._command_handlers["/tp_report"] = self.handle_tp_report
+        self._command_handlers["/v6_performance"] = self.handle_v6_performance
+        
+        logger.info(f"[AnalyticsBot] Wired {len(self._command_handlers)} analytics commands")
+    
+    def handle_command(self, command: str, message: Dict = None) -> Optional[int]:
+        """Handle analytics command (Phase 4 entry point)"""
+        handler = self._command_handlers.get(command)
+        if handler:
+            return handler(message)
+        else:
+            logger.warning(f"[AnalyticsBot] Unknown command: {command}")
+            return None
     
     def send_performance_report(self, report_data: Dict) -> Optional[int]:
         """

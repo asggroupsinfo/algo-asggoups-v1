@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-01-20",
+  "passed": 20,
+  "warnings": 1,
+  "critical_failures": 0,
+  "details": {
+    "passed": [
+      "\u2705 send_v6_entry_alert - FULLY IMPLEMENTED",
+      "\u2705 send_v6_exit_alert - FULLY IMPLEMENTED",
+      "\u2705 send_trend_pulse_alert - FULLY IMPLEMENTED",
+      "\u2705 send_shadow_trade_alert - FULLY IMPLEMENTED",
+      "\u2705 handle_v6_control - IMPLEMENTED",
+      "\u2705 handle_v6_status - IMPLEMENTED",
+      "\u2705 handle_tf1h_on - IMPLEMENTED",
+      "\u2705 handle_daily - IMPLEMENTED",
+      "\u2705 handle_chains_status - IMPLEMENTED",
+      "\u2705 handle_autonomous - IMPLEMENTED",
+      "\u2705 handle_plugin_status - IMPLEMENTED",
+      "\u2705 handle_compare - IMPLEMENTED",
+      "\u2705 CommandHandler(\"v6_control\" is WIRED",
+      "\u2705 CommandHandler(\"v6_status\" is WIRED",
+      "\u2705 CommandHandler(\"daily\" is WIRED",
+      "\u2705 CommandHandler(\"chains\" is WIRED",
+      "\u2705 CommandHandler(\"autonomous\" is WIRED",
+      "\u2705 handle_v6_control has meaningful logic",
+      "\u2705 src/telegram/bots/notification_bot.py - Valid Python syntax",
+      "\u2705 src/telegram/bots/controller_bot.py - Valid Python syntax"
+    ],
+    "warnings": [
+      "\u26a0\ufe0f Only 3/4 V6 types found"
+    ],
+    "critical_failures": []
+  }
+}

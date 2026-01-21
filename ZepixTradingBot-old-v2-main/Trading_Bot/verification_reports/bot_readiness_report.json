@@ -1,0 +1,365 @@
+{
+  "timestamp": "2026-01-20T15:48:38.538178",
+  "total_checks": 56,
+  "passed": 38,
+  "failed": 16,
+  "warnings": [
+    {
+      "check": "V6 integration",
+      "warning": "V6 plugin not integrated in trading engine"
+    },
+    {
+      "check": "Database not initialized",
+      "warning": "Run bot first to create database"
+    }
+  ],
+  "pass_rate": 67.85714285714286,
+  "all_checks": [
+    {
+      "name": "File exists: src/main.py",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "File exists: src/core/trading_engine.py",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Missing file: src/telegram/telegram_service.py",
+      "status": "❌ CRITICAL",
+      "details": "Required file not found"
+    },
+    {
+      "name": "File exists: src/telegram/bots/controller_bot.py",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "File exists: src/telegram/bots/notification_bot.py",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "File exists: src/telegram/bots/analytics_bot.py",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "File exists: src/telegram/notification_router.py",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Missing file: config/config.yaml",
+      "status": "❌ CRITICAL",
+      "details": "Required file not found"
+    },
+    {
+      "name": "Missing file: config/.env",
+      "status": "❌ CRITICAL",
+      "details": "Required file not found"
+    },
+    {
+      "name": "Syntax OK: src/main.py",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Syntax OK: src/core/trading_engine.py",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Syntax OK: src/telegram/bots/controller_bot.py",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Syntax OK: src/telegram/bots/notification_bot.py",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Syntax OK: src/telegram/bots/analytics_bot.py",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Syntax OK: src/telegram/notification_router.py",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Import OK: MetaTrader5 (MetaTrader5)",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Import OK: telegram (python-telegram-bot)",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Missing package: pyyaml",
+      "status": "❌ CRITICAL",
+      "details": "Run: pip install pyyaml"
+    },
+    {
+      "name": "Import OK: pandas (pandas)",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Import OK: numpy (numpy)",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Missing package: loguru",
+      "status": "❌ CRITICAL",
+      "details": "Run: pip install loguru"
+    },
+    {
+      "name": "Missing .env file",
+      "status": "❌ CRITICAL",
+      "details": "Create config/.env with required variables"
+    },
+    {
+      "name": "Missing config.yaml",
+      "status": "❌ CRITICAL",
+      "details": "Create config/config.yaml"
+    },
+    {
+      "name": "V6 Notification method: send_v6_entry_alert",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "V6 Notification method: send_v6_exit_alert",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "V6 Notification method: send_trend_pulse_alert",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "V6 Notification method: send_shadow_trade_alert",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Command handler: handle_v6_control",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Command handler: handle_v6_status",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Command handler: handle_tf1m_on",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Command handler: handle_tf5m_on",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Command handler: handle_tf15m_on",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Command handler: handle_tf1h_on",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Command handler: handle_daily",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Command handler: handle_weekly",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Command handler: handle_monthly",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Command handler: handle_compare",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Command handler: handle_chains_status",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Command handler: handle_autonomous",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Missing notification type: V6_ENTRY_1M",
+      "status": "❌ CRITICAL",
+      "details": "Add V6_ENTRY_1M to notification_router.py"
+    },
+    {
+      "name": "Missing notification type: V6_ENTRY_5M",
+      "status": "❌ CRITICAL",
+      "details": "Add V6_ENTRY_5M to notification_router.py"
+    },
+    {
+      "name": "Notification type: V6_ENTRY_15M",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Notification type: V6_ENTRY_1H",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Trading method: execute_trade",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Missing trading method: check_exit_conditions",
+      "status": "❌ CRITICAL",
+      "details": "Critical method not found"
+    },
+    {
+      "name": "Missing trading method: update_trailing_stop",
+      "status": "❌ CRITICAL",
+      "details": "Critical method not found"
+    },
+    {
+      "name": "Missing trading method: handle_trade_exit",
+      "status": "❌ CRITICAL",
+      "details": "Critical method not found"
+    },
+    {
+      "name": "V6 integration",
+      "status": "⚠️ WARNING",
+      "details": "V6 plugin not integrated in trading engine"
+    },
+    {
+      "name": "Re-entry system detected",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Database not initialized",
+      "status": "⚠️ WARNING",
+      "details": "Run bot first to create database"
+    },
+    {
+      "name": "Log directory exists: logs",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Log files found: 18",
+      "status": "✅ PASS",
+      "details": ""
+    },
+    {
+      "name": "Import trading_engine",
+      "status": "❌ CRITICAL",
+      "details": "cannot import name 'Application' from 'telegram.ext' (C:\\Users\\Ansh Shivaay Gupta\\AppData\\Roaming\\Python\\Python312\\site-packages\\telegram\\ext\\__init__.py)"
+    },
+    {
+      "name": "Import telegram_service",
+      "status": "❌ CRITICAL",
+      "details": "cannot import name 'telegram_service' from 'telegram' (C:\\Users\\Ansh Shivaay Gupta\\AppData\\Roaming\\Python\\Python312\\site-packages\\telegram\\__init__.py)"
+    },
+    {
+      "name": "Import controller_bot",
+      "status": "❌ CRITICAL",
+      "details": "No module named 'telegram.bots'"
+    },
+    {
+      "name": "Import notification_bot",
+      "status": "❌ CRITICAL",
+      "details": "No module named 'telegram.bots'"
+    }
+  ],
+  "critical_errors": [
+    {
+      "check": "Missing file: src/telegram/telegram_service.py",
+      "error": "Required file not found"
+    },
+    {
+      "check": "Missing file: config/config.yaml",
+      "error": "Required file not found"
+    },
+    {
+      "check": "Missing file: config/.env",
+      "error": "Required file not found"
+    },
+    {
+      "check": "Missing package: pyyaml",
+      "error": "Run: pip install pyyaml"
+    },
+    {
+      "check": "Missing package: loguru",
+      "error": "Run: pip install loguru"
+    },
+    {
+      "check": "Missing .env file",
+      "error": "Create config/.env with required variables"
+    },
+    {
+      "check": "Missing config.yaml",
+      "error": "Create config/config.yaml"
+    },
+    {
+      "check": "Missing notification type: V6_ENTRY_1M",
+      "error": "Add V6_ENTRY_1M to notification_router.py"
+    },
+    {
+      "check": "Missing notification type: V6_ENTRY_5M",
+      "error": "Add V6_ENTRY_5M to notification_router.py"
+    },
+    {
+      "check": "Missing trading method: check_exit_conditions",
+      "error": "Critical method not found"
+    },
+    {
+      "check": "Missing trading method: update_trailing_stop",
+      "error": "Critical method not found"
+    },
+    {
+      "check": "Missing trading method: handle_trade_exit",
+      "error": "Critical method not found"
+    },
+    {
+      "check": "Import trading_engine",
+      "error": "cannot import name 'Application' from 'telegram.ext' (C:\\Users\\Ansh Shivaay Gupta\\AppData\\Roaming\\Python\\Python312\\site-packages\\telegram\\ext\\__init__.py)"
+    },
+    {
+      "check": "Import telegram_service",
+      "error": "cannot import name 'telegram_service' from 'telegram' (C:\\Users\\Ansh Shivaay Gupta\\AppData\\Roaming\\Python\\Python312\\site-packages\\telegram\\__init__.py)"
+    },
+    {
+      "check": "Import controller_bot",
+      "error": "No module named 'telegram.bots'"
+    },
+    {
+      "check": "Import notification_bot",
+      "error": "No module named 'telegram.bots'"
+    }
+  ]
+}

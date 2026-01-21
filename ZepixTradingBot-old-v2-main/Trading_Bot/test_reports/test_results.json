@@ -1,0 +1,3433 @@
+{
+  "timestamp": "2026-01-20T15:43:27.827407",
+  "total_files": 35,
+  "total_tests": 379,
+  "total_passed": 379,
+  "total_failed": 0,
+  "overall_percentage": 100.0,
+  "results": [
+    {
+      "file_number": 1,
+      "file_name": "00_MASTER_PLAN.md",
+      "file_path": "..\\Updates\\telegram_updates\\00_MASTER_PLAN.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 12,
+      "tests_passed": 12,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.647607"
+    },
+    {
+      "file_number": 2,
+      "file_name": "01_COMPLETE_COMMAND_INVENTORY.md",
+      "file_path": "..\\Updates\\telegram_updates\\01_COMPLETE_COMMAND_INVENTORY.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": false,
+        "command": true
+      },
+      "required_features": 9,
+      "tests_passed": 9,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.656152"
+    },
+    {
+      "file_number": 3,
+      "file_name": "01_V6_NOTIFICATION_SYSTEM_PLAN.md",
+      "file_path": "..\\Updates\\telegram_updates\\01_V6_NOTIFICATION_SYSTEM_PLAN.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": false,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 10,
+      "tests_passed": 10,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.664814"
+    },
+    {
+      "file_number": 4,
+      "file_name": "02_NOTIFICATION_SYSTEMS_COMPLETE.md",
+      "file_path": "..\\Updates\\telegram_updates\\02_NOTIFICATION_SYSTEMS_COMPLETE.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 12,
+      "tests_passed": 12,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.672875"
+    },
+    {
+      "file_number": 5,
+      "file_name": "02_V6_TIMEFRAME_MENU_PLAN.md",
+      "file_path": "..\\Updates\\telegram_updates\\02_V6_TIMEFRAME_MENU_PLAN.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": false,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 10,
+      "tests_passed": 10,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.681698"
+    },
+    {
+      "file_number": 6,
+      "file_name": "03_MENU_SYSTEMS_ARCHITECTURE.md",
+      "file_path": "..\\Updates\\telegram_updates\\03_MENU_SYSTEMS_ARCHITECTURE.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 12,
+      "tests_passed": 12,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.689745"
+    },
+    {
+      "file_number": 7,
+      "file_name": "03_PRIORITY_COMMAND_HANDLERS_PLAN.md",
+      "file_path": "..\\Updates\\telegram_updates\\03_PRIORITY_COMMAND_HANDLERS_PLAN.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": false,
+        "command": true
+      },
+      "required_features": 9,
+      "tests_passed": 9,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.695711"
+    },
+    {
+      "file_number": 8,
+      "file_name": "04_ANALYTICS_CAPABILITIES.md",
+      "file_path": "..\\Updates\\telegram_updates\\04_ANALYTICS_CAPABILITIES.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": false,
+        "command": true
+      },
+      "required_features": 9,
+      "tests_passed": 9,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.701979"
+    },
+    {
+      "file_number": 9,
+      "file_name": "04_PHASES_4_5_6_SUMMARY.md",
+      "file_path": "..\\Updates\\telegram_updates\\04_PHASES_4_5_6_SUMMARY.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 12,
+      "tests_passed": 12,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.708479"
+    },
+    {
+      "file_number": 10,
+      "file_name": "05_IMPLEMENTATION_ROADMAP.md",
+      "file_path": "..\\Updates\\telegram_updates\\05_IMPLEMENTATION_ROADMAP.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 12,
+      "tests_passed": 12,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.713258"
+    },
+    {
+      "file_number": 11,
+      "file_name": "05_V5_PLUGIN_INTEGRATION.md",
+      "file_path": "..\\Updates\\telegram_updates\\05_V5_PLUGIN_INTEGRATION.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 12,
+      "tests_passed": 12,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.720176"
+    },
+    {
+      "file_number": 12,
+      "file_name": "06_V6_PRICE_ACTION_TELEGRAM.md",
+      "file_path": "..\\Updates\\telegram_updates\\06_V6_PRICE_ACTION_TELEGRAM.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": false,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 10,
+      "tests_passed": 10,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.727882"
+    },
+    {
+      "file_number": 13,
+      "file_name": "07_IMPROVEMENT_ROADMAP.md",
+      "file_path": "..\\Updates\\telegram_updates\\07_IMPROVEMENT_ROADMAP.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 12,
+      "tests_passed": 12,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.732128"
+    },
+    {
+      "file_number": 14,
+      "file_name": "08_TESTING_DOCUMENTATION.md",
+      "file_path": "..\\Updates\\telegram_updates\\08_TESTING_DOCUMENTATION.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 12,
+      "tests_passed": 12,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.738563"
+    },
+    {
+      "file_number": 15,
+      "file_name": "09_ERROR_HANDLING_GUIDE.md",
+      "file_path": "..\\Updates\\telegram_updates\\09_ERROR_HANDLING_GUIDE.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": false,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 9,
+      "tests_passed": 9,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.745287"
+    },
+    {
+      "file_number": 16,
+      "file_name": "10_DATABASE_SCHEMA.md",
+      "file_path": "..\\Updates\\telegram_updates\\10_DATABASE_SCHEMA.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": false,
+        "command": false
+      },
+      "required_features": 6,
+      "tests_passed": 6,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.749777"
+    },
+    {
+      "file_number": 17,
+      "file_name": "11_SERVICEAPI_DOCUMENTATION.md",
+      "file_path": "..\\Updates\\telegram_updates\\11_SERVICEAPI_DOCUMENTATION.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": false
+      },
+      "required_features": 9,
+      "tests_passed": 9,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.755835"
+    },
+    {
+      "file_number": 18,
+      "file_name": "12_VISUAL_CAPABILITIES_GUIDE.md",
+      "file_path": "..\\Updates\\telegram_updates\\12_VISUAL_CAPABILITIES_GUIDE.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 12,
+      "tests_passed": 12,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.761158"
+    },
+    {
+      "file_number": 19,
+      "file_name": "COMPLETE_TELEGRAM_DOCUMENTATION_INDEX.md",
+      "file_path": "..\\Updates\\telegram_updates\\COMPLETE_TELEGRAM_DOCUMENTATION_INDEX.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 12,
+      "tests_passed": 12,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.764766"
+    },
+    {
+      "file_number": 20,
+      "file_name": "DEVIN_BATCH_IMPLEMENTATION_PROMPT.md",
+      "file_path": "..\\Updates\\telegram_updates\\DEVIN_BATCH_IMPLEMENTATION_PROMPT.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 12,
+      "tests_passed": 12,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.767432"
+    },
+    {
+      "file_number": 21,
+      "file_name": "DEVIN_BATCH_PROGRESS.md",
+      "file_path": "..\\Updates\\telegram_updates\\DEVIN_BATCH_PROGRESS.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 12,
+      "tests_passed": 12,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.770101"
+    },
+    {
+      "file_number": 22,
+      "file_name": "DEVIN_FINAL_TESTING_PROMPT.md",
+      "file_path": "..\\Updates\\telegram_updates\\DEVIN_FINAL_TESTING_PROMPT.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 12,
+      "tests_passed": 12,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.775271"
+    },
+    {
+      "file_number": 23,
+      "file_name": "DEVIN_IMPLEMENTATION_PROMPT.md",
+      "file_path": "..\\Updates\\telegram_updates\\DEVIN_IMPLEMENTATION_PROMPT.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": false,
+        "plugin": false,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 9,
+      "tests_passed": 9,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.777924"
+    },
+    {
+      "file_number": 24,
+      "file_name": "DEVIN_TASK3_LIVE_BOT_TESTING.md",
+      "file_path": "..\\Updates\\telegram_updates\\DEVIN_TASK3_LIVE_BOT_TESTING.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": false,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 10,
+      "tests_passed": 10,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.783383"
+    },
+    {
+      "file_number": 25,
+      "file_name": "DUAL_ORDER_REENTRY_QUICK_REFERENCE.md",
+      "file_path": "..\\Updates\\telegram_updates\\DUAL_ORDER_REENTRY_QUICK_REFERENCE.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": false,
+        "re_entry": true,
+        "plugin": true,
+        "notification": false,
+        "command": true
+      },
+      "required_features": 6,
+      "tests_passed": 6,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.787035"
+    },
+    {
+      "file_number": 26,
+      "file_name": "FINAL_TEST_REPORT.md",
+      "file_path": "..\\Updates\\telegram_updates\\FINAL_TEST_REPORT.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 12,
+      "tests_passed": 12,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.790025"
+    },
+    {
+      "file_number": 27,
+      "file_name": "README.md",
+      "file_path": "..\\Updates\\telegram_updates\\README.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 12,
+      "tests_passed": 12,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.791735"
+    },
+    {
+      "file_number": 28,
+      "file_name": "STATUS_DUAL_ORDER_REENTRY.md",
+      "file_path": "..\\Updates\\telegram_updates\\STATUS_DUAL_ORDER_REENTRY.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 12,
+      "tests_passed": 12,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.797794"
+    },
+    {
+      "file_number": 29,
+      "file_name": "TELEGRAM_V5_DUAL_ORDER_REENTRY_UPGRADE.md",
+      "file_path": "..\\Updates\\telegram_updates\\TELEGRAM_V5_DUAL_ORDER_REENTRY_UPGRADE.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": false,
+        "command": true
+      },
+      "required_features": 9,
+      "tests_passed": 9,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.803466"
+    },
+    {
+      "file_number": 30,
+      "file_name": "TELEGRAM_V5_PLUGIN_SELECTION_UPGRADE.md",
+      "file_path": "..\\Updates\\telegram_updates\\TELEGRAM_V5_PLUGIN_SELECTION_UPGRADE.md",
+      "category": "main",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 12,
+      "tests_passed": 12,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.808917"
+    },
+    {
+      "file_number": 31,
+      "file_name": "batch_plans/BATCH_1_IMPLEMENTATION_PLAN.md",
+      "file_path": "..\\Updates\\telegram_updates\\batch_plans\\BATCH_1_IMPLEMENTATION_PLAN.md",
+      "category": "batch_plans",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 12,
+      "tests_passed": 12,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.811094"
+    },
+    {
+      "file_number": 32,
+      "file_name": "batch_plans/BATCH_2_IMPLEMENTATION_PLAN.md",
+      "file_path": "..\\Updates\\telegram_updates\\batch_plans\\BATCH_2_IMPLEMENTATION_PLAN.md",
+      "category": "batch_plans",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 12,
+      "tests_passed": 12,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.815674"
+    },
+    {
+      "file_number": 33,
+      "file_name": "batch_plans/BATCH_3_IMPLEMENTATION_PLAN.md",
+      "file_path": "..\\Updates\\telegram_updates\\batch_plans\\BATCH_3_IMPLEMENTATION_PLAN.md",
+      "category": "batch_plans",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 12,
+      "tests_passed": 12,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.818927"
+    },
+    {
+      "file_number": 34,
+      "file_name": "batch_plans/BATCH_4_IMPLEMENTATION_PLAN.md",
+      "file_path": "..\\Updates\\telegram_updates\\batch_plans\\BATCH_4_IMPLEMENTATION_PLAN.md",
+      "category": "batch_plans",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 12,
+      "tests_passed": 12,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.822809"
+    },
+    {
+      "file_number": 35,
+      "file_name": "batch_plans/BATCH_5_IMPLEMENTATION_PLAN.md",
+      "file_path": "..\\Updates\\telegram_updates\\batch_plans\\BATCH_5_IMPLEMENTATION_PLAN.md",
+      "category": "batch_plans",
+      "keywords": {
+        "v6": true,
+        "analytics": true,
+        "re_entry": true,
+        "plugin": true,
+        "notification": true,
+        "command": true
+      },
+      "required_features": 12,
+      "tests_passed": 12,
+      "tests_failed": 0,
+      "pass_percentage": 100.0,
+      "status": "✅ PASSED",
+      "test_details": [
+        {
+          "feature": "V6 Notification: send_v6_entry_alert",
+          "search_string": "send_v6_entry_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Notification: send_v6_exit_alert",
+          "search_string": "send_v6_exit_alert",
+          "source_file": "src/telegram/bots/notification_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Type: V6_ENTRY_1H",
+          "search_string": "V6_ENTRY_1H",
+          "source_file": "src/telegram/notification_router.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_control",
+          "search_string": "handle_v6_control",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /v6_status",
+          "search_string": "handle_v6_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "V6 Command: /tf1h_on",
+          "search_string": "handle_tf1h_on",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /daily",
+          "search_string": "handle_daily",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /weekly",
+          "search_string": "handle_weekly",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Analytics: /compare",
+          "search_string": "handle_compare",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /chains",
+          "search_string": "handle_chains_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Re-entry: /autonomous",
+          "search_string": "handle_autonomous",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        },
+        {
+          "feature": "Plugin: /plugin_status",
+          "search_string": "handle_plugin_status",
+          "source_file": "src/telegram/bots/controller_bot.py",
+          "implemented": true,
+          "status": "✅ PASS"
+        }
+      ],
+      "timestamp": "2026-01-20T15:43:27.825329"
+    }
+  ]
+}

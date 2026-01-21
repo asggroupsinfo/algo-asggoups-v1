@@ -1,0 +1,50 @@
+{
+  "v3_combined": {
+    "enabled": true,
+    "risk_per_trade": 0.02,
+    "max_trades_per_day": 10,
+    "timeframes": ["H1", "H4"]
+  },
+  "v6_price_action": {
+    "enabled": true,
+    "mode": "LIVE",
+    "timeframes": {
+      "1m": {
+        "enabled": false,
+        "pairs": ["EURUSD", "GBPUSD"]
+      },
+      "5m": {
+        "enabled": false,
+        "pairs": ["EURUSD", "GBPUSD", "USDJPY"]
+      },
+      "15m": {
+        "enabled": true,
+        "pairs": ["EURUSD", "GBPUSD", "USDJPY", "AUDUSD"]
+      },
+      "1h": {
+        "enabled": true,
+        "pairs": ["EURUSD", "GBPUSD", "USDJPY", "AUDUSD", "USDCAD"]
+      }
+    },
+    "risk_per_trade": 0.015,
+    "max_trades_per_timeframe": 3
+  },
+  "dual_order_reentry": {
+    "enabled": true,
+    "tp_continuation": {
+      "enabled": true,
+      "max_chains": 5,
+      "risk_multiplier": 1.0
+    },
+    "sl_hunt_recovery": {
+      "enabled": true,
+      "max_recovery_attempts": 3,
+      "recovery_multiplier": 1.5
+    }
+  },
+  "risk_management": {
+    "max_daily_loss_percent": 5.0,
+    "max_drawdown_percent": 10.0,
+    "stop_trading_on_daily_loss": true
+  }
+}

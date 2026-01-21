@@ -377,11 +377,11 @@ def build_trade_action_keyboard() -> ReplyKeyboardMarkup:
 
 ---
 
-## 📱 MENU BUTTON SETUP
+"## 📱 MENU BUTTON SETUP
 
 ### **What is Menu Button?**
 
-The permanent button (≡) next to the input field that gives quick access.
+The permanent button (≡) next to the input field that gives quick access."
 
 ### **Setup Code (Bot Initialization)**
 

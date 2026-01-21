@@ -1,0 +1,224 @@
+{
+  "timestamp": "2026-01-20T16:13:52.020601",
+  "total_tests": 36,
+  "passed": 1,
+  "failed": 35,
+  "tests": [
+    {
+      "category": "V6 Notifications",
+      "name": "V6 Entry Alert has all required components",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x81 in position 2075: character maps to <undefined>"
+    },
+    {
+      "category": "V6 Notifications",
+      "name": "V6 Exit Alert has P&L and ROI",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x81 in position 2075: character maps to <undefined>"
+    },
+    {
+      "category": "V6 Notifications",
+      "name": "Timeframe identification tags present",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x81 in position 2075: character maps to <undefined>"
+    },
+    {
+      "category": "V6 Notifications",
+      "name": "Trend Pulse visualization implemented",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x81 in position 2075: character maps to <undefined>"
+    },
+    {
+      "category": "V6 Notifications",
+      "name": "Shadow mode flags present",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x81 in position 2075: character maps to <undefined>"
+    },
+    {
+      "category": "V6 Commands",
+      "name": "Main V6 control menu (handle_v6_control)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "V6 Commands",
+      "name": "V6 status dashboard (handle_v6_status)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "V6 Commands",
+      "name": "1M timeframe enable (handle_tf1m_on)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "V6 Commands",
+      "name": "1M timeframe disable (handle_tf1m_off)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "V6 Commands",
+      "name": "5M timeframe enable (handle_tf5m_on)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "V6 Commands",
+      "name": "5M timeframe disable (handle_tf5m_off)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "V6 Commands",
+      "name": "15M timeframe enable (handle_tf15m_on)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "V6 Commands",
+      "name": "15M timeframe disable (handle_tf15m_off)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "V6 Commands",
+      "name": "1H timeframe enable (handle_tf1h_on)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "V6 Commands",
+      "name": "1H timeframe disable (handle_tf1h_off)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "Analytics",
+      "name": "Daily performance report (handle_daily)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "Analytics",
+      "name": "Weekly performance (handle_weekly)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "Analytics",
+      "name": "Monthly performance (handle_monthly)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "Analytics",
+      "name": "V3 vs V6 comparison (handle_compare)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "Analytics",
+      "name": "Data export (handle_export)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "Analytics",
+      "name": "Per-pair statistics (handle_pair_report)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "Analytics",
+      "name": "Strategy breakdown (handle_strategy_report)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "Analytics",
+      "name": "TP analysis (handle_tp_report)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "Analytics",
+      "name": "Profit chain stats (handle_profit_stats)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "Re-entry",
+      "name": "Profit chain status (handle_chains_status)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "Re-entry",
+      "name": "TP continuation (handle_tp_cont)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "Re-entry",
+      "name": "SL hunt recovery (handle_sl_hunt)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "Re-entry",
+      "name": "Recovery statistics (handle_recovery_stats)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "Re-entry",
+      "name": "Autonomous dashboard (handle_autonomous)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "Plugin Control",
+      "name": "Plugin toggle menu (handle_plugin_toggle)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "Plugin Control",
+      "name": "Plugin status overview (handle_plugin_status)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "Plugin Control",
+      "name": "V3 Combined control (handle_v3_toggle)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "Plugin Control",
+      "name": "V6 timeframe control (handle_v6_toggle)",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "Command Wiring",
+      "name": "Critical commands properly wired",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "Error Handling",
+      "name": "Try-except blocks present in critical files",
+      "status": "ERROR",
+      "message": "'charmap' codec can't decode byte 0x8f in position 10129: character maps to <undefined>"
+    },
+    {
+      "category": "Configuration",
+      "name": "All config files valid JSON",
+      "status": "PASS",
+      "message": "Success"
+    }
+  ]
+}

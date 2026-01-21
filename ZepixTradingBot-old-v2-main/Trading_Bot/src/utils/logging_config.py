@@ -1,12 +1,17 @@
 """
 Centralized Logging Configuration for Zepix Trading Bot v2.0
 Provides LogLevel enum and LoggingConfig class for intelligent logging control
+
+Enhanced with error-specific logging based on:
+Updates/telegram_updates/09_ERROR_HANDLING_GUIDE.md
 """
 
 import logging
+import logging.handlers
 import os
 from enum import Enum
 from datetime import datetime
+from pathlib import Path
 
 
 class LogLevel(Enum):
@@ -99,6 +104,88 @@ class LoggingConfig:
                 print("[LOGGING CONFIG] No saved log level, using default INFO")
         except Exception as e:
             print(f"[LOGGING CONFIG] Could not load log level from config: {e}, using default INFO")
+
+
+def setup_error_logging(log_dir: str = "logs"):
+    """
+    Setup enhanced error logging with separate error log file.
+    Based on: Updates/telegram_updates/09_ERROR_HANDLING_GUIDE.md
+    
+    Creates:
+    - logs/bot.log: All logs (INFO and above)
+    - logs/errors.log: Error logs only (ERROR and above)
+    
+    Args:
+        log_dir: Directory for log files
+    """
+    try:
+        # Create log directory
+        Path(log_dir).mkdir(parents=True, exist_ok=True)
+        
+        # Define log format - matches document specification
+        log_format = '%(asctime)s | %(levelname)-8s | %(name)s | %(message)s'
+        date_format = '%Y-%m-%d %H:%M:%S'
+        
+        # Create formatter
+        formatter = logging.Formatter(log_format, datefmt=date_format)
+        
+        # Setup root logger
+        root_logger = logging.getLogger()
+        root_logger.setLevel(logging.DEBUG)
+        
+        # Clear existing handlers
+        root_logger.handlers.clear()
+        
+        # 1. Console handler (INFO and above)
+        console_handler = logging.StreamHandler()
+        console_handler.setLevel(logging.INFO)
+        console_handler.setFormatter(formatter)
+        root_logger.addHandler(console_handler)
+        
+        # 2. Main log file handler (INFO and above)
+        bot_log_file = os.path.join(log_dir, 'bot.log')
+        file_handler = logging.handlers.RotatingFileHandler(
+            bot_log_file,
+            maxBytes=10*1024*1024,  # 10MB
+            backupCount=5,
+            encoding='utf-8'
+        )
+        file_handler.setLevel(logging.INFO)
+        file_handler.setFormatter(formatter)
+        root_logger.addHandler(file_handler)
+        
+        # 3. Error log file handler (ERROR and above only)
+        error_log_file = os.path.join(log_dir, 'errors.log')
+        error_handler = logging.handlers.RotatingFileHandler(
+            error_log_file,
+            maxBytes=5*1024*1024,  # 5MB
+            backupCount=3,
+            encoding='utf-8'
+        )
+        error_handler.setLevel(logging.ERROR)
+        error_handler.setFormatter(formatter)
+        root_logger.addHandler(error_handler)
+        
+        logging.info("✅ Enhanced error logging configured")
+        logging.info(f"   - Main log: {bot_log_file}")
+        logging.info(f"   - Error log: {error_log_file}")
+        
+    except Exception as e:
+        print(f"Error setting up error logging: {e}")
+
+
+def get_error_logger(name: str = None):
+    """
+    Get logger instance for error handling
+    
+    Args:
+        name: Logger name (typically __name__)
+    
+    Returns:
+        Logger instance
+    """
+    return logging.getLogger(name or __name__)
+
 
 
 # Global logging configuration instance

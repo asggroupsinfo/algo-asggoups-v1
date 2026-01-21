@@ -569,3 +569,83 @@ Select export format:
             "analytics_export": self.export_analytics,
             "analytics_export_csv": self.handle_export_csv,
         }
+    
+    def show_comparison_report(self, user_id: int, message_id: int = None):
+        """
+        Show V3 vs V6 comparison report.
+        
+        This method provides a comparison between V3 Combined Logic and V6 Price Action
+        plugins, showing performance metrics for each.
+        
+        Args:
+            user_id: Telegram user ID
+            message_id: Message ID to edit (optional)
+        """
+        logger.info(f"[AnalyticsMenuHandler] Showing comparison report for user {user_id}")
+        
+        data = self._get_analytics_data()
+        by_logic = data.get("by_logic", {})
+        
+        # Get V3 stats
+        v3_stats = by_logic.get("v3_combined", {
+            "trades": 0,
+            "win_rate": 0.0,
+            "total_pnl": 0.0,
+            "avg_win": 0.0,
+            "avg_loss": 0.0
+        })
+        
+        # Get V6 stats
+        v6_stats = by_logic.get("v6_price_action", {
+            "trades": 0,
+            "win_rate": 0.0,
+            "total_pnl": 0.0,
+            "avg_win": 0.0,
+            "avg_loss": 0.0
+        })
+        
+        # Determine winner
+        if v3_stats.get("total_pnl", 0) > v6_stats.get("total_pnl", 0):
+            winner = "🔷 V3 Combined"
+        elif v6_stats.get("total_pnl", 0) > v3_stats.get("total_pnl", 0):
+            winner = "🔶 V6 Price Action"
+        else:
+            winner = "TIE"
+        
+        text = f"""🔄 <b>V3 vs V6 COMPARISON</b>
+━━━━━━━━━━━━━━━━━━━━━━━━
+
+<b>🔷 V3 Combined Logic:</b>
+  • Trades: {v3_stats.get('trades', 0)}
+  • Win Rate: {v3_stats.get('win_rate', 0):.1f}%
+  • P&L: ${v3_stats.get('total_pnl', 0):.2f}
+  • Avg Win: ${v3_stats.get('avg_win', 0):.2f}
+  • Avg Loss: ${v3_stats.get('avg_loss', 0):.2f}
+
+<b>🔶 V6 Price Action:</b>
+  • Trades: {v6_stats.get('trades', 0)}
+  • Win Rate: {v6_stats.get('win_rate', 0):.1f}%
+  • P&L: ${v6_stats.get('total_pnl', 0):.2f}
+  • Avg Win: ${v6_stats.get('avg_win', 0):.2f}
+  • Avg Loss: ${v6_stats.get('avg_loss', 0):.2f}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+<b>🏆 Winner: {winner}</b>
+━━━━━━━━━━━━━━━━━━━━━━━━
+"""
+        
+        keyboard = [
+            [
+                {"text": "🔷 V3 Details", "callback_data": "analytics_v3_detail"},
+                {"text": "🔶 V6 Details", "callback_data": "analytics_v6_detail"}
+            ],
+            [
+                {"text": "📊 By Timeframe", "callback_data": "analytics_v6_timeframe"}
+            ],
+            [
+                {"text": "🔙 Back", "callback_data": "menu_analytics"}
+            ]
+        ]
+        
+        reply_markup = {"inline_keyboard": keyboard}
+        self._send_message(text, reply_markup, message_id)

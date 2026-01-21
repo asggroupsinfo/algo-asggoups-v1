@@ -5,8 +5,13 @@ from typing import List, Dict, Any
 
 class TradeDatabase:
     def __init__(self):
-        self.conn = sqlite3.connect('data/trading_bot.db', check_same_thread=False)
+        self.conn = sqlite3.connect('data/trading_bot.db', check_same_thread=False, timeout=30.0)
+        # Enable WAL mode for better concurrency (as per 10_DATABASE_SCHEMA.md)
+        self.conn.execute("PRAGMA journal_mode=WAL")
+        # Enable foreign key constraints
+        self.conn.execute("PRAGMA foreign_keys=ON")
         self.create_tables()
+        self.create_indexes()  # Create indexes for query performance
 
     def create_tables(self):
         cursor = self.conn.cursor()
@@ -589,3 +594,46 @@ class TradeDatabase:
             session['breakdown'] = dict(zip(cols, breakdown))
         
         return session
+    
+    def create_indexes(self):
+        """
+        Create database indexes for query performance optimization
+        As documented in 10_DATABASE_SCHEMA.md Section: Database Optimization
+        """
+        cursor = self.conn.cursor()
+        
+        # Indexes for trades table (most frequently queried)
+        indexes = [
+            # Symbol index for symbol-based queries
+            ("idx_trades_symbol", "CREATE INDEX IF NOT EXISTS idx_trades_symbol ON trades(symbol)"),
+            
+            # Status index for filtering open/closed trades
+            ("idx_trades_status", "CREATE INDEX IF NOT EXISTS idx_trades_status ON trades(status)"),
+            
+            # Close time index for date-based queries
+            ("idx_trades_close_time", "CREATE INDEX IF NOT EXISTS idx_trades_close_time ON trades(close_time)"),
+            
+            # Chain ID index for re-entry chain tracking
+            ("idx_trades_chain_id", "CREATE INDEX IF NOT EXISTS idx_trades_chain_id ON trades(chain_id)"),
+            
+            # Logic type index for plugin performance comparison
+            ("idx_trades_logic_type", "CREATE INDEX IF NOT EXISTS idx_trades_logic_type ON trades(logic_type)"),
+            
+            # Session ID index for session tracking
+            ("idx_trades_session_id", "CREATE INDEX IF NOT EXISTS idx_trades_session_id ON trades(session_id)"),
+            
+            # Composite index for frequently combined queries (status + close_time)
+            ("idx_trades_status_close", "CREATE INDEX IF NOT EXISTS idx_trades_status_close ON trades(status, close_time)"),
+            
+            # Composite index for plugin analysis (logic_type + status)
+            ("idx_trades_logic_status", "CREATE INDEX IF NOT EXISTS idx_trades_logic_status ON trades(logic_type, status)"),
+        ]
+        
+        for index_name, index_sql in indexes:
+            try:
+                cursor.execute(index_sql)
+            except sqlite3.OperationalError as e:
+                # Index might already exist, skip
+                pass
+        
+        self.conn.commit()
