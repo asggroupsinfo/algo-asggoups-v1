@@ -122,6 +122,21 @@ class StickyHeader:
         """
         self.content_generator = generator
     
+    def build_header(self, style: str = 'default') -> str:
+        """
+        Build header content based on style.
+        This method exists for compatibility with test suite.
+        
+        Args:
+            style: Header style ('default', 'compact', 'minimal')
+        
+        Returns:
+            Header content string
+        """
+        if self.content_generator:
+            return self.content_generator()
+        return self._get_content()
+    
     def start(self):
         """Start the sticky header (create, pin, and begin updates)"""
         if self._running:
