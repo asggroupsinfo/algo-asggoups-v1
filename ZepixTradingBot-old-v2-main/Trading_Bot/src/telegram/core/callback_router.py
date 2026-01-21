@@ -10,8 +10,9 @@ Part of: TELEGRAM_V5_CORE
 """
 
 import logging
-import telegram as python_telegram_bot$([System.Environment]::NewLine)from python_telegram_bot import Update
-from telegram.ext import Co as TelegramUpdatentextTypes
+import telegram as python_telegram_bot
+from telegram import Update as TelegramUpdate
+from telegram.ext import ContextTypes
 
 logger = logging.getLogger(__name__)
 
@@ -200,5 +201,6 @@ class CallbackRouter:
         # e.g. handle_trading_command(action) - not standard in python-telegram-bot
 
         await update.callback_query.edit_message_text(f"🛠️ {data} not implemented yet.")
+
 
 

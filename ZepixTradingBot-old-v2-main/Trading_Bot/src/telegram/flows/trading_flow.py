@@ -12,7 +12,7 @@ Created: 2026-01-21
 Part of: TELEGRAM_V5_ZERO_TYPING_UI
 """
 
-from telegram.ext import Update as TelegramUpdate, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update as TelegramUpdate, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes
 from .base_flow import BaseFlow
 import logging

@@ -10,7 +10,7 @@ Handles Trade Alerts and Broadcasts.
 import logging
 import asyncio
 from typing import Dict, Any, Optional
-import telegram as python_telegram_bot$([System.Environment]::NewLine)from python_telegram_bot import InlineKeyboardButton, InlineKeyboardMarkup
+import telegram as python_telegram_bot; from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes, CommandHandler
 from .base_bot import BaseIndependentBot
 

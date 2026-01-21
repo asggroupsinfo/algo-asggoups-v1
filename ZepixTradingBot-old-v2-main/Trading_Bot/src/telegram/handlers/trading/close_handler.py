@@ -8,7 +8,7 @@ Created: 2026-01-21
 Part of: TELEGRAM_V5_CORE
 """
 
-from telegram.ext import Update as TelegramUpdate, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update as TelegramUpdate, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes
 from ...core.base_command_handler import BaseCommandHandler
 

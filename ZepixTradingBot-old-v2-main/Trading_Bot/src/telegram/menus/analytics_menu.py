@@ -5,7 +5,7 @@ Implements the Analytics submenu.
 src/telegram/menus/analytics_menu.py
 """
 
-import telegram as python_telegram_bot$([System.Environment]::NewLine)from python_telegram_bot import InlineKeyboardMarkup
+import telegram as python_telegram_bot; from telegram import InlineKeyboardMarkup
 from ..core.base_menu_builder import BaseMenuBuilder
 from ..core.button_builder import ButtonBuilder as Btn
 

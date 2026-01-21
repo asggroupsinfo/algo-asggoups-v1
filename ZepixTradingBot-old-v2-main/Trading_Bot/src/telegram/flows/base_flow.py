@@ -8,7 +8,7 @@ Part of: TELEGRAM_V5_ZERO_TYPING_UI
 
 from abc import ABC, abstractmethod
 from typing import Dict, Any, Optional
-from telegram.ext import Update as TelegramUpdate, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update as TelegramUpdate, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes
 from ..core.conversation_state_manager import state_manager
 from ..core.button_builder import ButtonBuilder

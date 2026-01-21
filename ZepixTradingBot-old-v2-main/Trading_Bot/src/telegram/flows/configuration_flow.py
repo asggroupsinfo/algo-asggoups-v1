@@ -1,4 +1,4 @@
-"""
+﻿"""
 Configuration Flow - Zero-Typing Settings Wizard
 
 Implements wizards for multi-step configuration.
@@ -8,8 +8,9 @@ Created: 2026-01-21
 Part of: TELEGRAM_V5_ZERO_TYPING_UI
 """
 
-import telegram as python_telegram_bot$([System.Environment]::NewLine)from python_telegram_bot import Update
-from telegram.ext import Co as TelegramUpdatentextTypes
+import telegram as python_telegram_bot
+from telegram import Update as TelegramUpdate
+from telegram.ext import ContextTypes
 from .base_flow import BaseFlow
 
 class ConfigurationFlow(BaseFlow):
@@ -39,5 +40,6 @@ class ConfigurationFlow(BaseFlow):
             self.state_manager.clear_state(update.effective_chat.id)
         elif "flow_config_cancel" in data:
             await self.cancel(TelegramUpdate, context)
+
 
 

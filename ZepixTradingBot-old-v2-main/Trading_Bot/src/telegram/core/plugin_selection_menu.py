@@ -8,7 +8,7 @@ Created: 2026-01-21
 Part of: TELEGRAM_V5_PLUGIN_LAYER
 """
 
-from telegram.ext import Update as TelegramUpdate, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update as TelegramUpdate, InlineKeyboardButton, InlineKeyboardMarkup
 from .button_builder import ButtonBuilder
 from .sticky_header_builder import StickyHeaderBuilder
 

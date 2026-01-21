@@ -7,7 +7,7 @@ Part of: TELEGRAM_V5_CORE
 """
 
 from abc import ABC, abstractmethod
-from telegram.ext import Update as TelegramUpdate, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update as TelegramUpdate, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ContextTypes
 from typing import Optional, Dict, Any
 import logging

@@ -1,4 +1,4 @@
-"""
+﻿"""
 Settings Handler - System Config
 
 Implements general settings.
@@ -8,8 +8,9 @@ Created: 2026-01-21
 Part of: TELEGRAM_V5_CORE
 """
 
-import telegram as python_telegram_bot$([System.Environment]::NewLine)from python_telegram_bot import Update
-from telegram.ext import Co as TelegramUpdatentextTypes
+import telegram as python_telegram_bot
+from telegram import Update as TelegramUpdate
+from telegram.ext import ContextTypes
 from ...core.base_command_handler import BaseCommandHandler
 
 class SettingsHandler(BaseCommandHandler):
@@ -31,5 +32,6 @@ class SettingsHandler(BaseCommandHandler):
     async def handle_mt5(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         if hasattr(self.bot, 'handle_mt5'):
             await self.bot.handle_mt5(TelegramUpdate, context)
+
 
 

@@ -16,7 +16,7 @@ Version: 1.0
 Created: 2026-01-11
 """
 
-from telegram.ext import Update as TelegramUpdate, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update as TelegramUpdate, InlineKeyboardButton, InlineKeyboardMarkup
 from typing import Optional
 import logging
 import sys

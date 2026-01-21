@@ -1,4 +1,4 @@
-"""
+﻿"""
 Session Handler - Trading Hours Management
 
 Implements session control: London, New York, etc.
@@ -8,8 +8,9 @@ Created: 2026-01-21
 Part of: TELEGRAM_V5_CORE
 """
 
-import telegram as python_telegram_bot$([System.Environment]::NewLine)from python_telegram_bot import Update
-from telegram.ext import Co as TelegramUpdatentextTypes
+import telegram as python_telegram_bot
+from telegram import Update as TelegramUpdate
+from telegram.ext import ContextTypes
 from ...core.base_command_handler import BaseCommandHandler
 
 class SessionHandler(BaseCommandHandler):
@@ -33,5 +34,6 @@ class SessionHandler(BaseCommandHandler):
     async def handle_tokyo(self, update: TelegramUpdate, context: ContextTypes.DEFAULT_TYPE):
         if hasattr(self.bot, 'handle_tokyo'):
             await self.bot.handle_tokyo(TelegramUpdate, context)
+
 
 

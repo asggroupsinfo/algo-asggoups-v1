@@ -8,7 +8,8 @@ Part of: TELEGRAM_V5_CORE
 
 from abc import ABC, abstractmethod
 from typing import List, Dict
-import telegram as python_telegram_bot$([System.Environment]::NewLine)from python_telegram_bot import InlineKeyboardButton, InlineKeyboardMarkup, Update
+import telegram as python_telegram_bot
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update as TelegramUpdate
 from telegram.ext import ContextTypes
 from .button_builder import ButtonBuilder
 

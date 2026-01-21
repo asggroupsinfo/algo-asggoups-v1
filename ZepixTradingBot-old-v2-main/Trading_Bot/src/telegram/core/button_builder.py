@@ -9,7 +9,7 @@ Created: 2026-01-21
 Part of: TELEGRAM_V5_ZERO_TYPING_UI
 """
 
-import telegram as python_telegram_bot$([System.Environment]::NewLine)from python_telegram_bot import InlineKeyboardButton, InlineKeyboardMarkup
+import telegram as python_telegram_bot; from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from typing import List, Dict, Union, Optional
 import logging
 

@@ -9,8 +9,9 @@ Uses python-telegram-bot v20+ (Async)
 import logging
 import asyncio
 from typing import Optional, Dict, Any
-import telegram as python_telegram_bot$([System.Environment]::NewLine)from python_telegram_bot import Update, Bot
-from telegram.ext import Applicatio as TelegramUpdaten, ApplicationBuilder, ContextTypes, CommandHandler
+import telegram as python_telegram_bot
+from telegram import Update as TelegramUpdate, Bot
+from telegram.ext import Application, ApplicationBuilder, ContextTypes, CommandHandler
 
 logger = logging.getLogger(__name__)
 
